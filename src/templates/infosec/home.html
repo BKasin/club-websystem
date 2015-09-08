@@ -1,0 +1,13 @@
+{% extends "infosec/base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block title %}Welcome | {{ block.super }}{% endblock %}
+
+{% block contentarea %}
+{% if request.user.is_authenticated %}
+<h1>You are logged in!</h1>
+{% else %}
+<h1>Welcome</h1>
+{% endif %}
+{% endblock %}
