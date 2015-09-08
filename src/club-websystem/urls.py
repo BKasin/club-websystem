@@ -7,7 +7,7 @@ from django.contrib import admin
 urlpatterns = [
     # Examples:
     url(r'^$', 'mainsite.views.home', name='home'),
-    url(r'^contact/$', 'mainsite.views.contact', name='contact'),
+    url(r'^about/$', 'mainsite.views.about', name='about'),
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('registration.backends.default.urls')),

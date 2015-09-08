@@ -1,0 +1,44 @@
+h1, .h1 {
+    font-size: 36px;
+    text-align:center;
+}
+h2, .h2 {
+    font-size: 22px;
+}
+h3, .h3 {
+    font-size: 16px;
+    font-style: italic;
+}
+h4, .h4 {
+    font-size: 14px;
+    font-style: italic;
+}
+
+.dropdown-header {
+    text-align:center;
+    font-style:italic;
+}
+
+.eventtable>thead>tr>th {
+    border-bottom:1px solid #337ab7;
+}
+.eventtable>tbody>tr>td {
+    border-top:1px solid #337ab7;
+}
+
+tr.event_generic td {
+    background-color:white;
+}
+tr.event_ours td, .eventlegend_ours {
+    background-color:#B6D7A8;
+}
+tr.event_acm td, .eventlegend_acm {
+    background-color:#CFE2F3;
+}
+tr.event_external td {
+    background-color:#F9F9F9;
+}
+
+.eventlegend {
+    padding:3px;
+}

@@ -9,7 +9,7 @@ def home(request):
   context = {}
   return render(request, "infosec/home.html", context)
 
-def contact(request):
+def about(request):
 	title = 'Contact Us'
 	title_align_center = True
 	form = ContactForm(request.POST or None)
@@ -43,4 +43,4 @@ def contact(request):
 		"title": title,
 		"title_align_center": title_align_center,
 	}
-	return render(request, "infosec/contact.html", context)
+	return render(request, "infosec/about.html", context)

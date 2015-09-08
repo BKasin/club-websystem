@@ -1,58 +1,58 @@
 {% load staticfiles %}
-<nav class="navbar navbar-inverse navbar-static-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="{% url 'home' %}"><img alt="Brand" src="/static/img/clublogo.png" width="195" height="46" style='position:relative; top:-12px' /></a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="{% url 'home' %}">Home</a></li>
-                    <li class=""><a href="/events">Events</a></li>
-                    <li class="dropdown"><!--Projects-->
-                        <a href="/projects" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Projects <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="/project-pentest">Pen Test Network</a></li>
-                            <li><a href="/project-pisec">Raspberry Pi security system</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/project-suggest">Start a project</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown"><!--Competitions-->
-                        <a href="/competitions" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Competitions <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="/competition-wrccdc">WRCCDC</a></li>
-                            <li><a href="/competition-ncl">NCL</a></li>
-                            <li><a href="/competition-itc">ITC</a></li>
-                            <li><a href="/competition-netwars">NetWars</a></li>
-                            <li><a href="/competition-cyberpatriot">Cyber Patriot</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="/wiki">Wiki</a></li>
-                    <li><a href="/blog">Blog</a></li>
-                    <li><a href="{% url 'contact' %}">Contact Us</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-{% if request.user.is_authenticated %}
-                        <li class="dropdown">
-                            <a href="/members" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ user.first_name }} {{ user.last_name }} <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="/members">Members Area</a></li>
-                                <li><a href="/admin">Site Administration</a></li>
-                                <li class="divider"></li>
-                                <li><a href="{% url 'auth_logout' %}">Logout</a></li>
-                            </ul>
-                        </li>
-{% else %}
-                        <li><a href="{% url 'auth_login' %}">Login</a></li>
-                        <li><a href="{% url 'registration_register' %}">Register</a></li>
-{% endif %}
-                </ul>
-            </div><!--/.nav-collapse -->
-        </div>
-    </nav>
+<nav class="navbar navbar-default navbar-static-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{% url 'home' %}"><img alt="Brand" src="/static/img/clublogo.png" width="195" height="46" style='position:relative; top:-12px' /></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="{% url 'home' %}">Home</a></li>
+        <li class=""><a href="/events">Events</a></li>
+        <li class="dropdown"><!--Projects-->
+          <a href="/projects" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Projects <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/project-pentest">Pen Test Network</a></li>
+            <li><a href="/project-pisec">Raspberry Pi security system</a></li>
+            <li class="divider"></li>
+            <li><a href="/project-suggest">Start a project</a></li>
+          </ul>
+        </li>
+        <li class="dropdown"><!--Competitions-->
+          <a href="/competitions" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Competitions <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/competition-wrccdc">WRCCDC</a></li>
+            <li><a href="/competition-ncl">NCL</a></li>
+            <li><a href="/competition-itc">ITC</a></li>
+            <li><a href="/competition-netwars">NetWars</a></li>
+            <li><a href="/competition-cyberpatriot">Cyber Patriot</a></li>
+          </ul>
+        </li>
+        <li><a href="/wiki">Wiki</a></li>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        {% if request.user.is_authenticated %}
+        <li class="dropdown">
+          <a href="/members" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ user.first_name }} {{ user.last_name }} <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/members">Members Area</a></li>
+            <li><a href="/admin">Site Administration</a></li>
+            <li class="divider"></li>
+            <li><a href="{% url 'auth_logout' %}">Logout</a></li>
+          </ul>
+        </li>
+        {% else %}
+        <li><a href="{% url 'auth_login' %}">Login</a></li>
+        <li><a href="{% url 'registration_register' %}">Register</a></li>
+        {% endif %}
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
