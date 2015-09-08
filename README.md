@@ -2,7 +2,7 @@
 starting up django...
 - boot nitrous container
 
-For now, the django superuser is 'root' with a password of 'password123'.
+For development purposes only, the django superuser is 'root' with a password of 'password123'.
 
 Using the Linux 'tmux' tool, so all collaborators can use the same terminal:
 - Check if there is a screen running:
