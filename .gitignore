@@ -1,3 +1,4 @@
+###################
 # Originally from https://github.com/github/gitignore/blob/master/Python.gitignore
 
 # Byte-compiled / optimized / DLL files
@@ -61,7 +62,8 @@ target/
 
 
 
-
+###################
+# Stuff we've added for this project
 
 # PIP VirtualEnv
 .env/
@@ -72,3 +74,6 @@ pip-selfcheck.json
 
 # Mac files
 .DS_STORE
+
+# Django migrations
+migrations/
