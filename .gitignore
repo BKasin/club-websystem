@@ -77,3 +77,6 @@ pip-selfcheck.json
 
 # Django migrations
 migrations/
+
+# No need to store static_in_env, if collaborators can just run 'python manage.py collectstatic' to rebuild it
+/static_in_env/
