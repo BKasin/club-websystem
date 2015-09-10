@@ -5,10 +5,12 @@ from django.contrib import admin
 
 
 urlpatterns = [
-    # Examples:
+    # Our site
     url(r'^$', 'mainsite.views.home', name='home'),
     url(r'^about/$', 'mainsite.views.about', name='about'),
+    url(r'^pagemd/(?P<page>\w+)/$', 'contentblocks.views.pagemd', name='pagemd'),
 
+    # Built-in pages
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('registration.backends.default.urls')),
 ]

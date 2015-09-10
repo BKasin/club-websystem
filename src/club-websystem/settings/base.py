@@ -54,6 +54,7 @@ INSTALLED_APPS = (
   'versatileimagefield',
   #my apps
   'clubmembers',
+  'contentblocks',
 )
 
 MIDDLEWARE_CLASSES = (
