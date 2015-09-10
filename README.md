@@ -4,12 +4,14 @@ The aim of the project is to develop a central codebase that multiple CSUSB stud
 
 This specific repository is attempt #2 at getting this project off the ground. Previous repositories located at <https://github.com/CSE-Club/Website-Project> and <https://github.com/InfoSec-CSUSB/Website-Project> are no longer maintained.
 
+A little at a time, we are building this loosely according to the original database diagram located on Google Drive here (you must have the free [Draw.IO](https://www.draw.io) plugin installed first): [New Multi-club Website - Data Model](https://drive.google.com/file/d/0B2eX_I6RM9VBVVdONXYyRGpzSWs/view?usp=sharing). If you would like write-access to this diagram, contact Kenneth Johnson.
+
 (Fill in details on the codebase later)
 
 # Developers
 
-* Kenneth Johnson, *securedirective*
-* Patrick Gillespie, *alofoxx*
+* Kenneth Johnson, [*securedirective*](https://github.com/securedirective)
+* Patrick Gillespie, [*alofoxx*](https://github.com/Alofoxx)
 
 # Getting involved
 
