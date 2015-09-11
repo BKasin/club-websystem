@@ -37,7 +37,7 @@ Before you do anything else, create a virtual environment and activate it:
     virtualenv --python=python2 ./
     source bin/activate
 
-Install all required python dependencies:
+Install all required python dependencies (make sure your virtual environment is activated first!):
 
     pip install -r requirements.txt
 

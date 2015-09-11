@@ -1,6 +1,6 @@
+CommonMark==0.5.4
 Django==1.8.4
 django-crispy-forms==1.5.1
--e git+https://github.com/rodrigoamaral/django-fullcalendar.git@f35195be4650d86f4cc0d768bbf457c1139fcffd#egg=django_fullcalendar-master
 django-registration-redux==1.2
 django-versatileimagefield==1.0.4
 Pillow==2.9.0
