@@ -1,6 +1,6 @@
 {% load staticfiles %}
 <nav class="navbar navbar-default navbar-static-top">
-  <div class="container-fluid">
+  <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
         <span class="sr-only">Toggle navigation</span>
@@ -13,7 +13,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li class="active"><a href="{% url 'home' %}">Home</a></li>
-        <li class=""><a href="#">Events</a></li>
+        <li class=""><a href="{% url 'calendar' %}">Calendar</a></li>
         <li class="dropdown"><!--Projects-->
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Projects <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
@@ -26,11 +26,11 @@
         <li class="dropdown"><!--Competitions-->
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Competitions <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="{% url 'pagemd' 'competition_ccdc' %}">WRCCDC</a></li>
+            <li><a href="{% url 'pagemd' 'competition_ccdc' %}">CCDC</a></li>
             <li><a href="{% url 'pagemd' 'competition_ncl' %}">NCL</a></li>
             <li><a href="{% url 'pagemd' 'competition_itc' %}">ITC</a></li>
-            <li><a href="{% url 'pagemd' 'competition_netwars' %}">NetWars</a></li>
-            <li><a href="{% url 'pagemd' 'competition_cyberpatriot' %}">Cyber Patriot</a></li>
+            <li><a href="{% url 'pagemd' 'competition_nw' %}">NetWars</a></li>
+            <li><a href="{% url 'pagemd' 'competition_cp' %}">Cyber Patriot</a></li>
           </ul>
         </li>
         <li><a href="#">Wiki</a></li>
@@ -42,7 +42,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><img src="{{ user.member.photo.thumbnail.20x20 }}" /> {{ user.get_short_name }} <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li style="text-align:center; font-weight:bold;"><img src="{{ user.member.photo.thumbnail.100x100 }}" /><br>{{ user.get_full_name }}</li>
+            <li style="text-align:center; font-weight:bold;"><a href="#"><img src="{{ user.member.photo.thumbnail.100x100 }}" /><br>{{ user.get_full_name }}</a></li>
             <li class="divider"></li>
             {% if request.user.is_staff %}
             <li><a href="{% url 'admin:index' %}" style="color:orange">Site Administration</a></li>

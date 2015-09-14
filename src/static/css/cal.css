@@ -1,0 +1,43 @@
+.gcinfosec {
+  color:white;
+  background-color:red;
+}
+
+.gckenneth {
+  color:white;
+  background-color:green;
+}
+
+.calitem_blue {
+  color:white;
+  background:linear-gradient(#5050ff,#8080ff,#5050ff);
+  border-color:#1010ff;
+  font-size: 0.9em;
+}
+.calitem_blue div {
+  padding:3px;
+}
+
+.calitem_green {
+  color:white;
+  background:linear-gradient(#20a020,#40c040,#20a020);
+  border-color:#008000;
+  font-size: 0.9em;
+}
+.calitem_green div {
+  padding:3px;
+}
+
+.calitem_red {
+  color:white;
+  background:linear-gradient(#ff5050,#ff8080,#ff5050);
+  border-color:#ff1010;
+  font-size: 0.9em;
+}
+.calitem_red div {
+  padding:3px;
+}
+
+.fc-unthemed .fc-today {
+  background-color:#FFFA41;
+}

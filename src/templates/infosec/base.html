@@ -21,8 +21,13 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 
+  <!-- Bootstrap usually has this in the footer, but we need it sooner for FullCalendar -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
   <!-- Custom styles -->
-  <link href="/static/css/infosec.css" rel="stylesheet" />
+  <link rel='stylesheet' href="/static/css/infosec.css" />
+  {% block extrahead %}
+  {% endblock %}
 </head>
 
 <body>
@@ -43,7 +48,7 @@
   </div> <!-- container -->
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="/static/bootstrap-custom/js/bootstrap.min.js"></script>
 </body>
