@@ -66,20 +66,17 @@ target/
 # Stuff we've added for this project
 
 # PIP VirtualEnv
-/.env/
-/bin/
-/include/
-/lib/
+.env/
+bin/
+include/
+lib/
 pip-selfcheck.json
 
 # Mac files
 .DS_STORE
 
-# Django migrations
-migrations/
-
 # No need to store static_in_env, if collaborators can just run 'python manage.py collectstatic' to rebuild it
-/static_in_env/
+static_in_env/
 
 # Don't put production passwords in the repo
 *production*

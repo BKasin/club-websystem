@@ -1,5 +1,5 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Content
-admin.site.register(Content)
+from .models import Block
+admin.site.register(Block)
