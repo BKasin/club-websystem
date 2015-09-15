@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Event
-from .util import events_to_json
 from django.utils.timezone import get_current_timezone
 import json
 from datetime import datetime, timedelta
