@@ -4,7 +4,7 @@ from clubmembers.models import Club, Member
 
 # Create your models here.
 
-class Content(models.Model):
+class Block(models.Model):
   MARKDOWN = 'md'
   HTML = 'htm'
   TEXT = 'txt'

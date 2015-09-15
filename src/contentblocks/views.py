@@ -4,13 +4,13 @@ from django.http import HttpResponse, Http404
 from CommonMark.CommonMark import DocParser, HTMLRenderer
 
 # Create your views here.
-from .models import Content
+from .models import Block
 
 # Create your views here.
 def pagemd(request, page):
   try:
-    contentblock = Content.objects.get(uniquetitle=page)
-  except Content.DoesNotExist:
+    contentblock = Block.objects.get(uniquetitle=page)
+  except Block.DoesNotExist:
     raise Http404("Content block named %s could not be found."%(page))
 
   parser = DocParser()

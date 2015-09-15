@@ -16,9 +16,72 @@
 <!--<script type='text/javascript' src='/static/fullcalendar-2.4.0/gcal.js'></script>-->
 
 <script>
+function dir(obj) {
+  var r = '';
+  for (var propertyName in obj) {
+    r += propertyName + ": " + obj[propertyName] + '\n';
+  }
+  return r;
+}
+
+function conv(t) {
+  if (t == null) {
+    return 0;
+  }else{
+    return new Date(t).toISOString();
+  }
+}
+
+function clog(t) {
+  document.getElementById('clog').innerHTML += '<pre>' + t + '</pre>';
+}
+
 $(document).ready(function() {
+  handle_eventDrop = function(event, delta, revertFunc, jsEvent, ui, view) {
+    if (event.end == null) {
+      e = 'null';
+    }else{
+      e = event.end/1000;
+    }
+    $.ajax({
+      url: '/eventmodify/',
+      data: {
+        id: event.id,
+        newstart: event.start/1000,
+        newend: e,
+        allday: event.allDay
+      },
+      error: function(xhr, status, error) {
+        revertFunc();
+      }
+    });
+  }
   // page is now ready, initialize the calendar...
   $('#calendar').fullCalendar({
+    header: {
+      left: 'prev,next title',
+      center: '',
+      right: 'month,agendaWeek,agendaDay today',
+    },
+    defaultView: 'agendaWeek',
+    aspectRatio: 2,
+    fixedWeekCount: true, // Always show months with 6 weeks, even if month has fewer
+    timezone: false,
+    defaultTimedEventDuration: '02:00:00',
+    defaultAllDayEventDuration: {days: 1},
+    businessHours: {
+      start: '10:00',
+      end: '18:00',
+      dow: [1,2,3,4]
+    },
+    minTime: '08:00:00',
+    maxTime: '23:00:00',
+    allDaySlot: true,     // Show all-day events in their own section above the rest (if false, they aren't shown at all)
+    editable: true,
+
+    eventDrop: handle_eventDrop,
+    eventResize: handle_eventDrop,
+
     {{ calendar_config_options|safe }}
   })
 });
@@ -31,6 +94,7 @@ $(document).ready(function() {
 <h1>Event Calendar</h1>
 <p>Currently this is only showing <b><u>sample data</u></b>:</p>
 <div id='calendar'></div>
+<div id='clog'></div>
 <hr />
 <ul>
 <li>Items in <span style="background-color:blue; color:white">&nbsp;blue&nbsp;</span> are being generated internally from the Event model.</li>

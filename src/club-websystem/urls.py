@@ -9,8 +9,9 @@ urlpatterns = [
     url(r'^$', 'mainsite.views.home', name='home'),
     url(r'^about/$', 'mainsite.views.about', name='about'),
     url(r'^pagemd/(?P<page>\w+)/$', 'contentblocks.views.pagemd', name='pagemd'),
-    url(r'^eventjson/', 'events.views.eventjson', name='eventjson'),
     url(r'^calendar/', 'events.views.calendar', name='calendar'),
+    url(r'^eventjson/', 'events.views.eventjson', name='eventjson'),
+    url(r'^eventmodify/', 'events.views.eventmodify', name='eventmodify'),
 
     # Built-in pages
     url(r'^admin/', include(admin.site.urls)),

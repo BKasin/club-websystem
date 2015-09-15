@@ -54,6 +54,7 @@ INSTALLED_APPS = (
   'clubmembers',
   'contentblocks',
   'events',
+  'mainsite',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -104,13 +105,14 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'America/Los_Angeles'
+#TIME_ZONE = 'America/Los_Angeles'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+#USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
