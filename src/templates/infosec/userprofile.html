@@ -1,0 +1,12 @@
+{% extends "infosec/base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block title %}Profile | {{ block.super }}{% endblock %}
+
+{% block contentarea %}
+<h1>User Profile</h1>
+
+{% crispy form form.helper %}
+
+{% endblock %}
