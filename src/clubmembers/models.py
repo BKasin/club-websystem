@@ -1,11 +1,12 @@
+import os
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from versatileimagefield.fields import VersatileImageField, PPOIField
+from versatileimagefield.placeholder import OnDiscPlaceholderImage
 
 # Create your models here.
-
 class Club(models.Model):
   id                    = models.AutoField(primary_key=True)
   name_short            = models.CharField(max_length=20)
@@ -29,10 +30,14 @@ class Member(models.Model):
   texting_ok            = models.BooleanField()
 
   # Photo of user
-  photo                 = VersatileImageField(upload_to="memberphotos", width_field="photowidth", height_field="photoheight", ppoi_field="photoppoi", blank=True, default="")
+  photo                = VersatileImageField(blank=True, default="",
+                            upload_to="memberphotos",
+                            width_field="photowidth", height_field="photoheight", #ppoi_field="photoppoi",
+                            placeholder_image=OnDiscPlaceholderImage(os.path.join(settings.BASE_DIR, 'clubmembers/placeholder.png'))
+                          )
   photowidth            = models.PositiveIntegerField(null=True, blank=True, editable=False)
   photoheight           = models.PositiveIntegerField(null=True, blank=True, editable=False)
-  photoppoi             = PPOIField(blank=True, editable=False)
+  #photoppoi             = PPOIField(blank=True, editable=False)
 
   # PIN number, used for signing in and out for meetings without requiring the user's full password
   pin_hash              = models.CharField(max_length=120, blank=True)

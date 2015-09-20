@@ -1,22 +1,32 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 from .models import Member
 from .forms import MemberForm
 
 # Create your views here.
+@login_required
 def userprofile(request):
-  m = Member.objects.get(pk=1)
+  user = request.user
+  member = user.member
+  context = {}
+  initialdata = {'username': user.username, 'password': user.password}
   if request.method == 'POST':
-    form = MemberForm(request.POST, instance=m)
+    form = MemberForm(request.POST, request.FILES, instance=member, initial=initialdata)
+    context['form'] = form
     if form.is_valid():
-      print("Saving...")
+      newusername = form.cleaned_data['username']
+      user = form.instance.user
+      if (user.username != newusername):
+        user.username = newusername
+        user.save()
       form.instance.save()
-      return HttpResponseRedirect('/userprofile/')
-  else:
-    form = MemberForm(instance=m)
+      context['success'] = True
+    else:
+      context['fail'] = True
 
-  context = {
-    'form': form
-  }
+  else:
+    form = MemberForm(instance=member, initial=initialdata)
+    context['form'] = form
+
   return render(request, "infosec/userprofile.html", context)
