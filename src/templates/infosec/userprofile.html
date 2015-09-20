@@ -4,9 +4,9 @@
 
 {% block title %}Profile | {{ block.super }}{% endblock %}
 
-{% block contentarea %}
+{% block content %}
 <h1>User Profile</h1>
-
-{% crispy form form.helper %}
-
+{% if success %}<div class="alert alert-success" role="alert">Changes made successfully.</div>{% endif %}
+{% if fail %}<div class="alert alert-danger" role="alert">Changes not applied. Please correct the errors hilighted below.</div>{% endif %}
+{% crispy form %}
 {% endblock %}
