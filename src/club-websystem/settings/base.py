@@ -103,16 +103,13 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+USE_I18N = False
+#LANGUAGE_CODE = 'en-us'
 
-#TIME_ZONE = 'America/Los_Angeles'
+USE_L10N = False
 
-USE_I18N = True
-
-USE_L10N = True
-
-#USE_TZ = True
 USE_TZ = False
+#TIME_ZONE = 'America/Los_Angeles'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -151,12 +148,4 @@ VERSATILEIMAGEFIELD_SETTINGS = {
   'filtered_directory_name': '__filtered__',
   'placeholder_directory_name': '__placeholder__',
   'create_images_on_demand': True
-}
-
-VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
-  'memberphotos2': [
-    ('sm', 'crop__50x50'),
-    ('md', 'crop__100x100'),
-    ('lg', 'crop__200x200')
-  ]
 }
