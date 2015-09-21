@@ -2,7 +2,7 @@
 
 The aim of the project is to develop a central codebase that multiple CSUSB student clubs (currently the ACM, IEEE, and InfoSec clubs) can use for years to build and maintain their individual websites. It will provide a central database for storing information on club events, club membership, attendance, etc. To ensure future club members can easily maintain this project, the popular [__Python__](https://docs.python.org/3/) programming language was chosen.
 
-This specific repository is attempt #2 at getting this project off the ground. Previous repositories located at <https://github.com/CSE-Club/Website-Project> and <https://github.com/InfoSec-CSUSB/Website-Project> are no longer maintained.
+This specific repository is attempt #3 at getting this project off the ground. Previous repositories located at <https://github.com/CSE-Club/Website-Project> and <https://github.com/InfoSec-CSUSB/Website-Project> are no longer maintained.
 
 A little at a time, we are building this loosely according to the original database diagram located on Google Drive here (you must have the free [Draw.IO](https://www.draw.io) plugin installed first): [New Multi-club Website - Data Model](https://drive.google.com/file/d/0B2eX_I6RM9VBVVdONXYyRGpzSWs/view?usp=sharing). If you would like write-access to this diagram, contact Kenneth Johnson.
 
@@ -11,7 +11,9 @@ A little at a time, we are building this loosely according to the original datab
 # Developers
 
 * Kenneth Johnson, [*securedirective*](https://github.com/securedirective)
-* Patrick Gillespie, [*alofoxx*](https://github.com/Alofoxx)
+* Patrick Gillespie, [*Alofoxx*](https://github.com/Alofoxx)
+* Juan Nevares, [*JuanNevares*](https://github.com/JuanNevares)
+* Brendan Higgins, [*BrendanHiggins*](https://github.com/BrendanHiggins)
 
 # Getting involved
 
@@ -57,7 +59,9 @@ Run the server
 
 ## Ongoing work
 
-Since we exclude the migrations from the repo, each time you run `git pull`, you should also run these commands to verify you have the latest database model and latest static files:
+Since the database model can change from time to time, we include the migrations file in the repo. Each time you run `git pull`, you should use the migrations to update your copy of the database, instead of simply overwriting your database with the copy in the repo.
+
+Run these commands after each `git pull`:
 
     python manage.py makemigrations
     python manage.py migrate
