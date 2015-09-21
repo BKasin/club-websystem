@@ -59,12 +59,19 @@ Run the server
 
 ## Ongoing work
 
-Since the database model can change from time to time, we include the migrations file in the repo. Each time you run `git pull`, you should use the migrations to update your copy of the database, instead of simply overwriting your database with the copy in the repo.
+Since the database model can change from time to time, we include the migrations file in the repo. If you would rather keep your copy of the database, and simply use migrations to update it, do this as your `git pull`
 
-Run these commands after each `git pull`:
-
-    python manage.py makemigrations
+    mv db.sqlite3 ~/tmp/
+    git pull
+    mv ~/tmp/db.sqlite3 ./
+    python manage.py showmigrations
     python manage.py migrate
+    python manage.py collectstatic
+
+But if you want to replace your database with the version from the repo, do this instead:
+
+    rm db.sqlite3
+    git pull
     python manage.py collectstatic
 
 # Temporary development passwords
