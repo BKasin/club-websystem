@@ -1,6 +1,6 @@
-{% extends "infosec/base.html" %}
-{% load i18n %}
+{% extends "infosec/simplecenter.html" %}
 
-{% block content %}
-<p class='text-align-center lead'>You have successfully logged out.</p><p class='text-align-center lead'><a href="{% url 'auth_login' %}">Login</a></p></p>
+{% block content2 %}
+<p class='lead'>You have successfully logged out.</p>
+<p>Want to <a href="{% url 'auth_login' %}">login</a> again?</p>
 {% endblock %}

@@ -42,7 +42,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><img src="{{ user.member.photo.thumbnail.20x20 }}" /> {{ user.member.get_short_name }} <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li style="text-align:center; font-weight:bold;"><a href="#"><img src="{{ user.member.photo.thumbnail.100x100 }}" /><br>{{ user.member.get_full_name }}</a></li>
+            <li style="text-align:center; font-weight:bold;"><a href="{% url 'userprofile' %}"><img src="{{ user.member.photo.thumbnail.100x100 }}" /><br>{{ user.member.get_full_name }}</a></li>
             <li class="divider"></li>
             {% if request.user.is_staff %}
             <li><a href="{% url 'admin:index' %}" style="color:orange">Site Administration</a></li>

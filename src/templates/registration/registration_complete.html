@@ -1,6 +1,6 @@
-{% extends "infosec/base.html" %}
-{% load i18n %}
+{% extends "infosec/simplecenter.html" %}
 
-{% block content %}
-<p>{% trans "You are now registered. Activation email sent." %}</p>
+{% block content2 %}
+<h1>Join the Club</h1>
+<p>You are now registered and automatically logged in. Next, visit your <a href="{% url 'userprofile' %}">profile page</a> to complete the process.</p>
 {% endblock %}

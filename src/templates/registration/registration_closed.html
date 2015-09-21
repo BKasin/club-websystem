@@ -1,6 +1,6 @@
-{% extends "infosec/base.html" %}
-{% load i18n %}
+{% extends "infosec/simplecenter.html" %}
 
-{% block content %}
-	<p>{% trans "Registration is currently closed." %}</p>
+{% block content2 %}
+<h1>Join the Club</h1>
+<p>We're sorry. Registration is temporarily closed. Please check back later or <a href="{% url 'about' %}">contact an officer</a> for assistance.</p>
 {% endblock %}
