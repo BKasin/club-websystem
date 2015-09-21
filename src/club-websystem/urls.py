@@ -17,7 +17,7 @@ urlpatterns = [
 
   # Built-in pages
   url(r'^admin/', include(admin.site.urls)),
-  url(r'^accounts/', include('registration.backends.default.urls')),
+  url(r'^accounts/', include('regbackend.urls')),
 ]
 
 if settings.DEBUG:

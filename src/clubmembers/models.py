@@ -27,7 +27,7 @@ class Member(models.Model):
   # Contact info
   email                 = models.EmailField(blank=True)
   phone                 = models.CharField(max_length=10, blank=True)
-  texting_ok            = models.BooleanField()
+  texting_ok            = models.BooleanField(default=False)
 
   # Photo of user
   photo                = VersatileImageField(blank=True, default="",

@@ -134,9 +134,12 @@ CRISPY_FAIL_SILENTLY = not DEBUG
 
 
 #DJANGO REGISTRATION REDUX SETTINGS
-ACCOUNT_ACTIVATION_DAYS = 7
-REGISTRATION_AUTO_LOGIN = True
+REGISTRATION_OPEN = True
+
+# Django sites framework settings
 SITE_ID = 1
+
+# Django auth settings
 LOGIN_REDIRECT_URL = '/'
 
 # Settings for django-versatileimagefield

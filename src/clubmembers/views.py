@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from .models import Member
@@ -9,11 +9,9 @@ from .forms import MemberForm
 def userprofile(request):
   user = request.user
   member = user.member
-  context = {}
   initialdata = {'username': user.username, 'password': user.password}
   if request.method == 'POST':
     form = MemberForm(request.POST, request.FILES, instance=member, initial=initialdata)
-    context['form'] = form
     if form.is_valid():
       newusername = form.cleaned_data['username']
       user = form.instance.user
@@ -21,12 +19,16 @@ def userprofile(request):
         user.username = newusername
         user.save()
       form.instance.save()
-      context['success'] = True
+      return redirect('userprofile')
     else:
-      context['fail'] = True
-
+      context = {
+        'form': form,
+        'fail': True,
+      }
   else:
     form = MemberForm(instance=member, initial=initialdata)
-    context['form'] = form
+    context = {
+      'form': form,
+    }
 
   return render(request, "infosec/userprofile.html", context)

@@ -1,11 +1,11 @@
 from django import forms
+from django.contrib.auth.forms import ReadOnlyPasswordHashField
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, HTML, Field, Div, Submit
 from crispy_forms.bootstrap import FormActions
+
 from .models import Member
-
-
-from django.contrib.auth.forms import ReadOnlyPasswordHashField, ReadOnlyPasswordHashWidget
 
 class MemberForm(forms.ModelForm):
   username = forms.CharField(max_length=254)
@@ -22,11 +22,6 @@ class MemberForm(forms.ModelForm):
       'acad_major', 'acad_minor', 'acad_concentration', 'acad_grad_qtr',
       'shirt_size',
     ]
-    error_messages = {
-      'username': {
-        'unique': 'Test error message',
-      },
-    }
 
   def __init__(self, *args, **kwargs):
     self.helper = FormHelper()
@@ -61,9 +56,3 @@ class MemberForm(forms.ModelForm):
       )
     )
     super(MemberForm, self).__init__(*args, **kwargs)
-
-  def clean_username(self):
-    username = self.cleaned_data['username']
-    if (username == 'user'):
-      raise forms.ValidationError("The specified username '%(username)s' is already in use.", params={'username': username}, code='username_not_unique')
-    return username
