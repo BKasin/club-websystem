@@ -10,23 +10,21 @@ A little at a time, we are building this loosely according to the original datab
 
 # Developers
 
-* Kenneth Johnson, [*securedirective*](https://github.com/securedirective)
+* Kenneth Johnson, [*securedirective*](https://github.com/securedirective) - *lead developer*
 * Patrick Gillespie, [*Alofoxx*](https://github.com/Alofoxx)
 * Juan Nevares, [*JuanNevares*](https://github.com/JuanNevares)
 * Brendan Higgins, [*BrendanHiggins*](https://github.com/BrendanHiggins)
 
 # Getting involved
 
-## Requirements
+## Setting up your environment
 
-* python2 (2.7.x)... we will port everything later to python 3.4.x
+Install the following Linux packages. __Note:__ Package names and methods of installing them may be different for different distributions of Linux.
+
+* python2 (2.7.x)... we will port everything to python 3.4.x later
 * python2-virtualenv
 * python2-pip
 * git
-
-__Note:__ Package names may be different for different distributions of Linux...
-
-## Setting things up
 
 Make a directory and clone the repository into it:
 
@@ -43,40 +41,52 @@ Install all required python dependencies (make sure your virtual environment is 
 
     pip install -r requirements.txt
 
-Rebuild the files that we exclude from the repo:
+## Ongoing collaboration
 
-    cd src
-    python manage.py makemigrations
+Each development day should start by activating your virtual environment and pulling any recent commits from the team.
+
+    cd ~/club-websystem/src
+    source ../bin/activate
+
+When you pull the recent commits, you have two choices...
+
+1. Pulling the latest database from the repo will overwrite any changes you may have made. If you would rather keep the data in your database and simply use migrations to upgrade the models, do this as your `git pull`:
+
+        mkdir -p ~/tmp
+        mv {./,~/tmp/}db.sqlite3
+        git pull
+        mv {~/tmp/,./}db.sqlite3
+
+2. The database in the repo usually has the latest migrations. If you want to dump your copy of the database in favor of the one in the repo, just perform `git pull`. But this will give an error if your copy has changed, so just move it out of the way first:
+
+        mv -i db.sqlite3{,.bak}
+        git pull
+
+After pulling recent changes, you should apply the latest migrations:
+
+    python manage.py showmigrations
     python manage.py migrate
 
-Collect the various static files into the /static_in_env folder:
+Then, collect the various static files into the `static_in_env` folder:
 
     python manage.py collectstatic
 
-Run the server
+For development use only, Django provides a simple webserver that you can start with the following command. In production, we'll use `apache` or `nginx` instead.
 
     python manage.py runserver 0.0.0.0:8000
 
-## Ongoing work
+If you want to test email features within your development environment, you can start Python's debug SMTP server and see the emails in the terminal without actually needing a working email server:
 
-Since the database model can change from time to time, we include the migrations file in the repo. If you would rather keep your copy of the database, and simply use migrations to update it, do this as your `git pull`
+    python -m smtpd -n -c DebuggingServer localhost:1025
 
-    mv db.sqlite3 ~/tmp/
-    git pull
-    mv ~/tmp/db.sqlite3 ./
-    python manage.py showmigrations
-    python manage.py migrate
-    python manage.py collectstatic
+Then configure your club-websystem/settings/local.py accordingly:
 
-But if you want to replace your database with the version from the repo, do this instead:
+    EMAIL_HOST = 'localhost'
+    EMAIL_PORT = 1025
 
-    rm db.sqlite3
-    git pull
-    python manage.py collectstatic
+# Passwords
 
-# Temporary development passwords
-
-For development purposes only, the django superuser is `root` with a password of `password123`. You can log into the /admin side of the site or the main portion using these credentials.
+For development purposes only, the django superuser is `root` with a password of `password123`. You can log into the main site or the /admin site using these credentials. To be consistent, use the same `password123` for any other accounts used for development.
 
 # Working within the Nitrous development server
 
