@@ -40,12 +40,9 @@ def about(request):
 				html_message=some_html_message,
 				fail_silently=True)
 
-	spuser = Member.objects.get(phone='9099218097')
-
 	context = {
 		"form": form,
 		"title": title,
 		"title_align_center": title_align_center,
-		"spuser": spuser,
 	}
 	return render(request, "infosec/about.html", context)
