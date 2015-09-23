@@ -1,5 +1,10 @@
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+
+ALLOWED_HOSTS = [
+    '.alofoxx.com',  # Allow domain and subdomains
+    '.alofoxx.com.',  # Also allow FQDN and subdomains
+]
 
 # Send to the local debug smpt server.
 # Start it by running this in a terminal:

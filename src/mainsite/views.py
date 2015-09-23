@@ -5,11 +5,15 @@ from django.core.mail import send_mail
 from .forms import ContactForm
 
 from clubmembers.models import Member
+from nav import infosec
 
 # Create your views here.
 def home(request):
-  context = {}
-  return render(request, "infosec/home.html", context)
+    nav = infosec.nav("home")
+    context = {
+        "nav": nav,
+    }
+    return render(request, "infosec/home.html", context)
 
 def about(request):
 	title = 'Contact Us'

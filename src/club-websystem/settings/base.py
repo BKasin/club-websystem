@@ -54,6 +54,7 @@ INSTALLED_APPS = (
   'contentblocks',
   'events',
   'mainsite',
+  'nav',
 )
 
 MIDDLEWARE_CLASSES = (

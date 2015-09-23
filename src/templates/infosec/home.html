@@ -4,6 +4,13 @@
 
 {% block title %}Welcome | {{ block.super }}{% endblock %}
 
+{% block nav %}
+{% autoescape off %}
+{{ nav }}
+{% include "infosec/navbar_user.html" %}
+{% endautoescape %}
+{% endblock %}
+
 {% block content %}
 <div class="row">
 <div class="col-md-12">
