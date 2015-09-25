@@ -13,7 +13,7 @@ def home(request):
     context = {
         "nav": nav,
     }
-    return render(request, "infosec/home.html", context)
+    return render(request, "home.html", context)
 
 def about(request):
 	title = 'Contact Us'
@@ -49,4 +49,4 @@ def about(request):
 		"title": title,
 		"title_align_center": title_align_center,
 	}
-	return render(request, "infosec/about.html", context)
+	return render(request, "about.html", context)

@@ -19,4 +19,4 @@ def pagemd(request, page):
   context = {
     "renderedmd": renderer.render(ast)
   }
-  return render(request, "infosec/pagemd.html", context)
+  return render(request, "pagemd.html", context)

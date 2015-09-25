@@ -31,4 +31,4 @@ def userprofile(request):
       'form': form,
     }
 
-  return render(request, "infosec/userprofile.html", context)
+  return render(request, "userprofile.html", context)

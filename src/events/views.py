@@ -29,7 +29,7 @@ def calendar(request):
   context = {
     'calendar_config_options': CALSOURCES
   }
-  return render(request, 'infosec/calendar.html', context)
+  return render(request, "calendar.html", context)
 
 def eventjson(request):
   # Determine what date range to query
