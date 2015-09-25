@@ -29,16 +29,19 @@ def generatemenu(nd, curpage):
   for pgref in nd:
     pagename = pgref[0]
     if pagename=="-":
+      # Just show a divider; nothing else
       output += "<li class='divider'></li>"
     else:
       url = pgref[1]
       if type(url)==type(()):
+        # Call ourselves recursively to build a sub-menu
         output += "<li class='%s dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>%s <span class='caret'></span></a><ul class='dropdown-menu' role='menu'>%s</ul></li>" % (
           'active' if fnmatch.fnmatch(curpage, pgref[2]) else '',
           pagename,
           generatemenu(url, curpage)
         )
       else:
+        # Create a standard menu item
         output += "<li class='%s'><a href='%s'>%s</a></li>" % (
           'active' if url==curpage else '',
           url,
