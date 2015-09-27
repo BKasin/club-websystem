@@ -37,7 +37,9 @@ https://accounts.google.com/displayunlockcaptcha
 
 # Application definition
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
+  #bootstrap the admin (must be before django.contrib.admin)
+  'django_admin_bootstrapped',
   #django app
   'django.contrib.admin',
   'django.contrib.auth',
@@ -56,7 +58,7 @@ INSTALLED_APPS = (
   'events',
   'mainsite',
   'nav',
-)
+]
 
 MIDDLEWARE_CLASSES = (
   'django.contrib.sessions.middleware.SessionMiddleware',

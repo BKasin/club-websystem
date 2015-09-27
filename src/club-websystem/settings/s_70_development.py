@@ -1,3 +1,6 @@
+import os
+from django.conf import settings
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -13,6 +16,6 @@ CURRENT_CLUB = 'infosec'
 
 # Insert the club's template directory at the beginning, so it will
 # take precedence over the root template director
-import os
-from .base import TEMPLATES, BASE_DIR
-TEMPLATES[0]['DIRS'] = [os.path.join(BASE_DIR, "templates", CURRENT_CLUB)] + TEMPLATES[0]['DIRS']
+settings.TEMPLATES[0]['DIRS'] = [
+  os.path.join(settings.BASE_DIR, "templates", CURRENT_CLUB),
+] + settings.TEMPLATES[0]['DIRS']
