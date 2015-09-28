@@ -15,7 +15,7 @@ CURRENT_CLUB_ID = 1   # primary key of the club in the database
 CURRENT_CLUB = 'infosec'
 
 # Insert the club's template directory at the beginning, so it will
-# take precedence over the root template director
+# take precedence over the root template directory
 settings.TEMPLATES[0]['DIRS'] = [
   os.path.join(settings.BASE_DIR, "templates", CURRENT_CLUB),
 ] + settings.TEMPLATES[0]['DIRS']
