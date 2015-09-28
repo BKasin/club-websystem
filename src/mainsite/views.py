@@ -5,7 +5,6 @@ from django.core.mail import send_mail
 from .forms import ContactForm
 
 from clubmembers.models import Member
-from nav import infosec
 
 # Create your views here.
 def home(request):

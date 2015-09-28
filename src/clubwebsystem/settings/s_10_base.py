@@ -45,7 +45,6 @@ INSTALLED_APPS = [
   'contentblocks',
   'events',
   'mainsite',
-  'nav',
   'regbackend',
 ]
 

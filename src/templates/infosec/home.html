@@ -6,84 +6,82 @@
 
 {% block content %}
 <div class="row">
-<div class="col-md-12">
-  <h1>Information Security Club</h1>
-  <p>The InfoSec Club at <a href="http://www.csusb.edu">California State University San Bernardino</a> is devoted to the art and science of information security. We are a diverse, welcoming group of students passionate about breaking, hacking, and fixing things. We are open to everyone, and we encourage you to join the club! You can do so by visiting the <a href="{% url 'registration_register' %}">Sign Up Page</a>.</p>
-</div>
+  <div class="col-md-8">
+    <h1>Information Security Club</h1>
+    <p>The InfoSec Club at <a href="http://www.csusb.edu">California State University San Bernardino</a> is devoted to the art and science of information security. We are a diverse, welcoming group of students passionate about breaking, hacking, and fixing things. We are open to everyone, and we encourage you to join the club! You can do so by visiting the <a href="{% url 'registration_register' %}">Sign Up Page</a>.</p>
+  </div>
+  <div class="col-md-4">
+    <div class="alert alert-danger" role="alert"><b>Heads up!</b> This entire website is a work in progress. Information may not be current, and features may not work correctly. Please visit the club's <a href="http://www.csusbinfosecclub.com">official site</a> until this one is completed.</div>
+  </div>
 </div>
 
 <div class="row">
-<div class="col-md-6">
-  <h2>Meetings</h2>
-  <p>We generally have a formal meeting every other Wednesday during the Fall, Winter, and Spring quarters. These consist of guest speakers from the cybersecurity industry, hands-on workshops from students, or relevant presentations about cyber topics. Fridays (and sometimes Saturdays) are used for ongoing projects. Check our <a href="#">Events Page</a> for an up-to-date list.</p>
-  <p>We are always open to suggestions, so if you have an idea for a workshop or guest speaker, please <a href="{% url 'about' %}">let us know</a>.</p>
+  <div class="col-md-6">
+    <h2>Meetings</h2>
+    <p>We generally have a formal meeting every other Wednesday during the Fall, Winter, and Spring quarters. These consist of guest speakers from the cybersecurity industry, hands-on workshops from students, or relevant presentations about cyber topics. Fridays (and sometimes Saturdays) are used for ongoing projects. Check our <a href="{% url 'calendar' %}">Events Page</a> for an up-to-date list.</p>
+    <p>We are always open to suggestions, so if you have an idea for a workshop or guest speaker, please <a href="{% url 'about' %}">let us know</a>.</p>
 
-  <h2>Projects</h2>
-  <p>Our university department emphasizes learning <em>outside the classroom</em>. There are many subjects in cybersecurity which simply cannot be learned in a lecture-style classroom, so our lab provides space to build, break, secure, and experiment with technology. These experiences add invaluable skills to your repertoire, and gives you tangible stories to tell in job interviews that demonstrate your problem-solving skills.</p>
-  <p>As a member of the InfoSec Club, you may jump into any project at any time. For more information on each projects, including those that are just in the idea phase, see our <a href="#">Projects Page</a>. Feel free to <a href="{% url 'about' %}">tell us your ideas</a> as well.</p>
+    <h2>Projects</h2>
+    <p>Our university department emphasizes learning <em>outside the classroom</em>. There are many subjects in cybersecurity which simply cannot be learned in a lecture-style classroom, so our lab provides space to build, break, secure, and experiment with technology. These experiences add invaluable skills to your repertoire, and gives you tangible stories to tell in job interviews that demonstrate your problem-solving skills.</p>
+    <p>As a member of the InfoSec Club, you may jump into any project at any time. For more information on each projects, including those that are just in the idea phase, see our <a href="#">Projects Page</a>. Feel free to <a href="{% url 'about' %}">tell us your ideas</a> as well.</p>
 
-  <h2>Our Lab</h2>
-  <p>We operate primarily out of Jack Brown room 122 (affectionately known as "the lab"). We do our best to keep it open on a consistent schedule. If you'd like the lab open outside of these hours, <a href="{% url 'about' %}">contact one of the club officers</a>.</p>
-  <p>For the <em>Spring 2015 quarter</em>:</p>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Day</th>
-        <th>Time</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Mon</td>
-        <td>11am - 8pm</td>
-      </tr>
-      <tr>
-        <td>Tue</td>
-        <td>11am - 8pm</td>
-      </tr>
-      <tr>
-        <td>Wed</td>
-        <td>11am - 8pm</td>
-      </tr>
-      <tr>
-        <td>Thu</td>
-        <td>11am - 8pm</td>
-      </tr>
-      <tr>
-        <td>Fri</td>
-        <td>Flexible depending on project leaders</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="col-md-6">
-  <h2>News</h2>
-  <div height="200">
-  <p>Coming soon!</p>
-  </div>
-  <h2>Upcoming events</h2>
-  <p>This is a preview of events in the next 7 days only. Visit our <a href="#">Events Page</a> for the full list.</p>
-  <div class="panel panel-primary">
-    <!-- Table -->
-    <table class="table eventtable">
+    <h2>Our Lab</h2>
+    <p>We operate primarily out of Jack Brown room 122 (affectionately known as "the lab"). We do our best to keep it open on a consistent schedule. If you'd like the lab open outside of these hours, <a href="{% url 'about' %}">contact one of the club officers</a>.</p>
+    <p>For the <em>Fall 2015 quarter</em>:</p>
+    <table class="table">
       <thead>
         <tr>
-          <th width="120">Date</th>
-          <th>Description</th>
-          <th width="120">Location</th>
+          <th>Day</th>
+          <th>Time</th>
         </tr>
       </thead>
       <tbody>
-        <tr class='event_ours'>
-          <td>e.time_start<br />11am</td>
-          <td>e.title</td>
-          <td>e.location</td>
+        <tr>
+          <td>Mon</td>
+          <td>9am - 7pm</td>
+        </tr>
+        <tr>
+          <td>Tue</td>
+          <td>9am - 7pm</td>
+        </tr>
+        <tr>
+          <td>Wed</td>
+          <td>9am - 7pm</td>
+        </tr>
+        <tr>
+          <td>Thu</td>
+          <td>9am - 7pm</td>
+        </tr>
+        <tr>
+          <td>Fri</td>
+          <td>Flexible depending on project leaders</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <center><span class="eventlegend eventlegend_ours">green</span> = InfoSec Club Events&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="eventlegend eventlegend_acm">blue</span> = ACM Club Events</center>
+  <div class="col-md-6">
+    <h2>News</h2>
+    <p>(Work in progress)</p>
+    <h2>Upcoming events</h2>
+    <p>This is a preview of events in the next 7 days only. Visit our <a href="{% url 'calendar' %}">Events Page</a> for the full list.</p>
+    <div class="panel panel-primary">
+      <!-- Table -->
+      <table class="table eventtable">
+        <thead>
+          <tr>
+            <th width="120">Date</th>
+            <th>Description</th>
+            <th width="120">Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class='event_ours'>
+            <td colspan="3">(Work in progress. Visit the <a href="{% url 'calendar' %}">main calendar page</a> instead.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <center><span class="eventlegend eventlegend_ours">green</span> = InfoSec Club Events&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="eventlegend eventlegend_acm">blue</span> = ACM Club Events</center>
+  </div>
 </div>
-<div class="row">
 {% endblock %}
