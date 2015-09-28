@@ -4,16 +4,16 @@
 {% block title %}Event Calendar | {{ block.super }}{% endblock %}
 
 {% block extrahead %}
-<link rel='stylesheet' href='/static/fullcalendar-2.4.0/fullcalendar.css' />
+<link rel="stylesheet" href="{% static 'fullcalendar-2.4.0/fullcalendar.css' %}" />
 <!-- We already have jQuery v1.11.3 included with bootstrap -->
-<!-- <script src='/static/fullcalendar-2.4.0/lib/jquery.min.js'></script> -->
+<!-- <script src="{% static 'fullcalendar-2.4.0/lib/jquery.min.js' %}"></script> -->
 
 <!-- Two standard scripts for FullCalendar -->
-<script src='/static/fullcalendar-2.4.0/lib/moment.min.js'></script>
-<script src='/static/fullcalendar-2.4.0/fullcalendar.js'></script>
+<script src="{% static 'fullcalendar-2.4.0/lib/moment.min.js' %}"></script>
+<script src="{% static 'fullcalendar-2.4.0/fullcalendar.js' %}"></script>
 
 <!-- Extra script needed to import any Google Calendars -->
-<!--<script type='text/javascript' src='/static/fullcalendar-2.4.0/gcal.js'></script>-->
+<!--<script type="text/javascript" src="{% static 'fullcalendar-2.4.0/gcal.js' %}"></script>-->
 
 <script>
 function dir(obj) {
@@ -87,7 +87,7 @@ $(document).ready(function() {
 });
 </script>
 
-<link rel='stylesheet' href='/static/css/cal.css' />
+<link rel="stylesheet" href="{% static 'css/cal.css' %}" />
 {% endblock %}
 
 {% block content %}

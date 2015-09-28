@@ -15,32 +15,21 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'csqwlmc8s55o($rt6ozh7u+ui9zb-et00w$d90j8$^!nvj41_r'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+# Restrict connections to a list of hosts
 ALLOWED_HOSTS = []
 
-'''
-If using gmail, you will need to
-unlock Captcha to enable Django
-to  send for you:
-https://accounts.google.com/displayunlockcaptcha
-'''
-
-
+# Must set some secret key initially, to avoid errors when importing the settings module
+# into other settings sub-files (s_40_development.py, etc.)
+SECRET_KEY = '00000000000000000000000000000000000000000000000000'
 
 # Application definition
-
 INSTALLED_APPS = [
-  #bootstrap the admin (must be before django.contrib.admin)
+  # bootstrap the admin (must be before django.contrib.admin)
   'django_admin_bootstrapped',
-  #django app
+  # django
   'django.contrib.admin',
   'django.contrib.auth',
   'django.contrib.contenttypes',
@@ -48,19 +37,22 @@ INSTALLED_APPS = [
   'django.contrib.sites',
   'django.contrib.messages',
   'django.contrib.staticfiles',
-  #third party apps
+  # third party apps
   'crispy_forms',
   'registration',
   'versatileimagefield',
-  #my apps
+  # our own
   'clubmembers',
   'contentblocks',
   'events',
   'mainsite',
   'nav',
+  'regbackend',
 ]
 
+# Middleware
 MIDDLEWARE_CLASSES = (
+  # django
   'django.contrib.sessions.middleware.SessionMiddleware',
   'django.middleware.common.CommonMiddleware',
   'django.middleware.csrf.CsrfViewMiddleware',
@@ -69,10 +61,14 @@ MIDDLEWARE_CLASSES = (
   'django.contrib.messages.middleware.MessageMiddleware',
   'django.middleware.clickjacking.XFrameOptionsMiddleware',
   'django.middleware.security.SecurityMiddleware',
+  # third party middleware
+  # our own
 )
 
+# URL settings
 ROOT_URLCONF = 'clubwebsystem.urls'
 
+# Templates
 TEMPLATES = [
   {
     'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -89,52 +85,33 @@ TEMPLATES = [
   },
 ]
 
+# Which python module will the WSGI server load
 WSGI_APPLICATION = 'clubwebsystem.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
-DATABASES = {
-  'default': {
-    'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-  }
-}
-
+# Email settings
+# <to be completed later>
 
 # Internationalization
-# https://docs.djangoproject.com/en/1.8/topics/i18n/
-
 USE_I18N = False
-#LANGUAGE_CODE = 'en-us'
-
 USE_L10N = False
-
 USE_TZ = False
-#TIME_ZONE = 'America/Los_Angeles'
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.8/howto/static-files/
-
-STATIC_URL = '/static/'
-
+# Static files (CSS, JavaScript, Images). Because we're using try_files
+# in nginx, we serve static content from the same URI root that the pages
+# are in. For development, we can override this with '/static/'.
+STATIC_URL = '/'
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_in_env", "static_root")
-
 STATICFILES_DIRS = (
   os.path.join(BASE_DIR, "static"),
 )
 
+# Media files (untrusted files uploaded by users)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_in_env", "media_root")
-
-
 
 #Crispy FORM TAGs SETTINGS
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 CRISPY_FAIL_SILENTLY = not DEBUG
-
 
 #DJANGO REGISTRATION REDUX SETTINGS
 REGISTRATION_OPEN = True

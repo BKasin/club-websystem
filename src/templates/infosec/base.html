@@ -10,10 +10,10 @@
   <title>{% block title %}InfoSec Club{% endblock %}</title>
 
   <!-- Bootstrap core CSS-->
-  <link href="/static/bootstrap-custom/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{% static 'bootstrap-custom/css/bootstrap.min.css' %}" rel="stylesheet">
 
   <!-- Default Bootstrap theme -->
-  <link href="/static/bootstrap-custom/css/bootstrap-theme.min.css" rel="stylesheet">
+  <link href="{% static 'bootstrap-custom/css/bootstrap-theme.min.css' %}" rel="stylesheet">
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -23,10 +23,10 @@
   <![endif]-->
 
   <!-- Bootstrap usually has this in the footer, but we need it sooner for FullCalendar -->
-  <script src="/static/jquery-1.11.3/jquery.min.js"></script>
+  <script src="{% static 'jquery-1.11.3/jquery.min.js' %}"></script>
 
   <!-- Custom styles -->
-  <link rel='stylesheet' href="/static/css/infosec.css" />
+  <link rel='stylesheet' href="{% static 'css/infosec.css' %}" />
   {% block extrahead %}
   {% endblock %}
 </head>
@@ -51,6 +51,6 @@
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
   <!-- Include all compiled plugins (below), or include individual files as needed -->
-  <script src="/static/bootstrap-custom/js/bootstrap.min.js"></script>
+  <script src="{% static 'bootstrap-custom/js/bootstrap.min.js' %}"></script>
 </body>
 </html>
