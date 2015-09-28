@@ -34,7 +34,6 @@ INSTALLED_APPS = [
   'django.contrib.auth',
   'django.contrib.contenttypes',
   'django.contrib.sessions',
-  'django.contrib.sites',
   'django.contrib.messages',
   'django.contrib.staticfiles',
   # third party apps
@@ -115,9 +114,6 @@ CRISPY_FAIL_SILENTLY = not DEBUG
 
 #DJANGO REGISTRATION REDUX SETTINGS
 REGISTRATION_OPEN = True
-
-# Django sites framework settings
-SITE_ID = 1
 
 # Django auth settings
 LOGIN_REDIRECT_URL = '/'
