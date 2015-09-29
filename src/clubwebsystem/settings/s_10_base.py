@@ -86,9 +86,6 @@ TEMPLATES = [
 # Which python module will the WSGI server load
 WSGI_APPLICATION = 'clubwebsystem.wsgi.application'
 
-# Email settings
-# <to be completed later>
-
 # Internationalization
 USE_I18N = False
 USE_L10N = False

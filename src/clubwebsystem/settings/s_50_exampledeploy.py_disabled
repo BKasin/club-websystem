@@ -40,6 +40,10 @@ SESSION_COOKIE_SECURE = True
 # ]
 # del settings.TEMPLATES[0]['APP_DIRS']
 
+# Email settings
+EMAIL_HOST = '127.0.0.1'
+EMAIL_PORT = 25
+
 # Restrict connections to a list of hosts
 ALLOWED_HOSTS = [
   'www.test-club.org'
