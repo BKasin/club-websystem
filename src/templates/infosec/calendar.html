@@ -64,7 +64,7 @@ $(document).ready(function() {
       right: 'month,agendaWeek,agendaDay today',
     },
     defaultView: 'agendaWeek',
-    aspectRatio: 2,
+    //aspectRatio: 2,
     fixedWeekCount: true, // Always show months with 6 weeks, even if month has fewer
     timezone: false,
     defaultTimedEventDuration: '02:00:00',
@@ -74,8 +74,11 @@ $(document).ready(function() {
       end: '18:00',
       dow: [1,2,3,4]
     },
-    minTime: '08:00:00',
-    maxTime: '23:00:00',
+    minTime: '09:00:00',
+    maxTime: '19:00:00',
+    slotDuration: '00:30:00',
+    snapDuration: '00:15:00',
+    contentHeight: 520,
     allDaySlot: true,     // Show all-day events in their own section above the rest (if false, they aren't shown at all)
     editable: true,
 
@@ -92,13 +95,7 @@ $(document).ready(function() {
 
 {% block content %}
 <h1>Event Calendar</h1>
-<p>Currently this is only showing <b><u>sample data</u></b>:</p>
+<p>Items in <span class="calitem_red" style="font-size:16px">&nbsp;red&nbsp;</span> are being pulled in from the <a href="https://www.google.com/calendar/embed?src=csusb.infosec.club%40gmail.com&ctz=America/Los_Angeles">InfoSec Club's google calendar</a>. Items in <span class="calitem_blue" style="font-size:16px">&nbsp;blue&nbsp;</span> are from the website's internal database.</p>
+
 <div id='calendar'></div>
-<div id='clog'></div>
-<hr />
-<ul>
-<li>Items in <span style="background-color:blue; color:white">&nbsp;blue&nbsp;</span> are being generated internally from the Event model.</li>
-<li>Items in <span style="background-color:green; color:white">&nbsp;green&nbsp;</span> are from a javascript array in this HTML file.</li>
-</ul>
-</p>
 {% endblock %}

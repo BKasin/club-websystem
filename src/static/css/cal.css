@@ -1,13 +1,3 @@
-.gcinfosec {
-  color:white;
-  background-color:red;
-}
-
-.gckenneth {
-  color:white;
-  background-color:green;
-}
-
 .calitem_blue {
   color:white;
   background:linear-gradient(#5050ff,#8080ff,#5050ff);
@@ -39,5 +29,5 @@
 }
 
 .fc-unthemed .fc-today {
-  background-color:#FFFA41;
+  background-color:#FFFEB0;
 }

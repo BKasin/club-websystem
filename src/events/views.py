@@ -14,7 +14,7 @@ CALSOURCES = """
       },
       {
         googleCalendarId: 'csusb.infosec.club@gmail.com',
-        className: 'gcinfosec'
+        className: 'calitem_red'
       }
     ]
 """
