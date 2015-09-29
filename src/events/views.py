@@ -4,8 +4,9 @@ from .models import Event
 import json
 from datetime import datetime, timedelta
 
-'''CALSOURCES = """
-    googleCalendarApiKey: '<API Key>',
+# Method #1: multiple event sources
+CALSOURCES = """
+    googleCalendarApiKey: 'AIzaSyDKSBh7lXk8DS8TASIywg6E2JD8ZvGA9Lo',
     eventSources: [
       {
         url: "/eventjson/",
@@ -16,14 +17,15 @@ from datetime import datetime, timedelta
         className: 'gcinfosec'
       }
     ]
-"""'''
+"""
 
-CALSOURCES = """
+# Method #2: single event source
+'''CALSOURCES = """
     events: {
         url: "/eventjson/",
         className: 'calitem_blue'
     }
-"""
+"""'''
 
 def calendar(request):
   context = {
