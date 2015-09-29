@@ -27,8 +27,8 @@ def about(request):
     msg = EmailMultiAlternatives(
       subject='Email from website contact form',
       body=template_txt.render(context),
-      from_email='csusb.infosec.club@gmail.com',
-      to=['testing2@infosec-csusb.org']
+      from_email='support@infosec-csusb.org',
+      to=['csusb.infosec.club@gmail.com']
     )
     msg.attach_alternative(template_html.render(context), 'text/html')
     msg.send()
