@@ -11,7 +11,7 @@ class MemberForm(forms.ModelForm):
   username = forms.CharField(max_length=254)
   password = ReadOnlyPasswordHashField(
     label="Password*",
-    help_text="For your security, we do not store your raw passwords, so we also cannot display it here. To change your password, use <a href='/accounts/password/change/'>this form</a>."
+    help_text="For your security, we store a hash of your password in the database, instead of the password itself. To update your password, visit the <a href='/accounts/password/change/'><b>Change My Password</b></a> page."
   )
   class Meta:
     model = Member
@@ -27,16 +27,16 @@ class MemberForm(forms.ModelForm):
     self.helper = FormHelper()
     self.helper.form_method = 'post'
     self.helper.layout = Layout(
-      HTML('<div class="row"><div class="col-sm-8">'),
+      HTML('<div class="row"><div class="col-sm-6">'),
       Fieldset(
         'Identity',
-        'username', 'password', 'name_first', 'name_last',
+        'username', Field('password', css_class='nofieldborder'), 'name_first', 'name_last',
       ),
       Fieldset(
         'Contact',
         'email', 'phone', 'texting_ok',
       ),
-      HTML('</div><div class="col-sm-4">'),
+      HTML('</div><div class="col-sm-6">'),
       Fieldset(
         'Photo',
         HTML('<img style="float:right" src="{{ user.member.photo.thumbnail.100x100 }}" />'),
