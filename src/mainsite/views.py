@@ -33,7 +33,8 @@ def about(request):
     msg.attach_alternative(template_html.render(context), 'text/html')
     msg.send()
 
-    return redirect('about')
+    #return redirect('about')
+    return render(request, "about_emailsent.html") #Temporary, until we use message properly
 
   context = {
     "form": form,

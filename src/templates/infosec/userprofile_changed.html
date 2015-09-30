@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block title %}Profile | {{ block.super }}{% endblock %}
+
+{% block content %}
+<script type="text/javascript">
+$(document).ready(function () {
+    window.setTimeout(function () {
+        location.href = "{% url 'userprofile' %}";
+    }, 5000);
+});
+</script>
+<h1>User Profile</h1>
+<div class="alert alert-success" role="alert">Changes made successfully. You will be redirected to <a href="{% url 'userprofile' %}">your profile</a> shortly.</div>
+{% endblock %}

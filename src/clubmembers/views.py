@@ -19,7 +19,8 @@ def userprofile(request):
         user.username = newusername
         user.save()
       form.instance.save()
-      return redirect('userprofile')
+      #return redirect('userprofile')
+      return render(request, "userprofile_changed.html") #Temporary, until we use message properly
     else:
       context = {
         'form': form,
