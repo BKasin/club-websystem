@@ -14,7 +14,11 @@ class CustomRegistrationForm(UserCreationForm):
   """
   name_first = forms.CharField(max_length=30)
   name_last = forms.CharField(max_length=30)
-  email = forms.EmailField(label="E-mail", required=False)
+  email = forms.EmailField(label="E-mail")
+
+  class Meta:
+      model = get_user_model()
+      fields = ('username', 'email')
 
   def __init__(self, *args, **kwargs):
     self.helper = FormHelper()

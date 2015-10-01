@@ -60,12 +60,18 @@ class RegistrationView(BaseRegistrationView):
 
 
 class ActivationView(BaseActivationView):
+  @transaction.atomic   # A database transaction is used for this entire function
   def activate(self, request, activation_key):
     # Attempt to activate the user
     activated_user = RegistrationProfile.objects.activate_user(activation_key)
 
     if activated_user:
-      # If successful, send the signal that user has been activated
+      # If successful, remove the email from the User instance, since we already saved it
+      # to the Member instance, and django-registration-redux no longer needs it
+      activated_user.email = ''
+      activated_user.save()
+
+      # Send the signal that user has been activated
       signals.user_activated.send(sender=self.__class__,
                     user=activated_user,
                     request=request)
