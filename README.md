@@ -8,6 +8,16 @@ A little at a time, we are building this loosely according to the original datab
 
 (Fill in details on the codebase later)
 
+# Requirements
+
+The production server must at least contain these requirements:
+
+* nginx
+* python v2.7.x
+* virtualenv for python2
+* libjpeg-dev
+* a virtual environment setup with the packages listed in `requirements.txt`
+
 # Developers
 
 * Kenneth Johnson, [*securedirective*](https://github.com/securedirective) - *lead developer*
