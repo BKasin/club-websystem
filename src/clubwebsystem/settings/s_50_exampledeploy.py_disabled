@@ -43,6 +43,7 @@ SESSION_COOKIE_SECURE = True
 # Email settings
 EMAIL_HOST = '127.0.0.1'
 EMAIL_PORT = 25
+DEFAULT_FROM_EMAIL = 'support@infosec-csusb.org'
 
 # Restrict connections to a list of hosts
 ALLOWED_HOSTS = [
@@ -51,5 +52,6 @@ ALLOWED_HOSTS = [
 
 # Keep track of which club we're in
 CURRENT_CLUB_ID = 1   # primary key of the club in the database
-CURRENT_CLUB = 'infosec'
-settings.TEMPLATES[0]['DIRS'].insert(0, os.path.join(settings.BASE_DIR, "templates", CURRENT_CLUB))
+CURRENT_CLUB_NAME = 'infosec'
+CURRENT_CLUB_DOMAIN = 'https://www.infosec-csusb.org'
+settings.TEMPLATES[0]['DIRS'].insert(0, os.path.join(settings.BASE_DIR, "templates", CURRENT_CLUB_NAME))

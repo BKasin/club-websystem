@@ -16,18 +16,21 @@ def about(request):
   form = ContactForm(request.POST or None)
 
   if form.is_valid():
+    sendername = form.cleaned_data.get("full_name")
+    senderemail = form.cleaned_data.get("email")
     context = Context({
-      'sendername': form.cleaned_data.get("full_name"),
-      'senderemail': form.cleaned_data.get("email"),
+      'sendername': sendername,
+      'senderemail': senderemail,
       'message': form.cleaned_data.get("message"),
     })
     template_txt = get_template('contact_email.txt')
     template_html = get_template('contact_email.html')
 
     msg = EmailMultiAlternatives(
-      subject='Email from website contact form',
+      subject='%s has sent a message through the website contact form' % sendername,
       body=template_txt.render(context),
-      from_email='support@infosec-csusb.org',
+      reply_to=[senderemail],
+      from_email=settings.DEFAULT_FROM_EMAIL,
       to=['csusb.infosec.club@gmail.com']
     )
     msg.attach_alternative(template_html.render(context), 'text/html')

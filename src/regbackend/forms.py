@@ -1,3 +1,5 @@
+# Derived from the 'default' backend in django-registration-redux
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
@@ -6,7 +8,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, HTML, Field, Div, Submit
 from crispy_forms.bootstrap import FormActions
 
-class RegistrationFormWithoutEmail(UserCreationForm):
+class CustomRegistrationForm(UserCreationForm):
   """
   Custom registration form
   """
@@ -23,4 +25,4 @@ class RegistrationFormWithoutEmail(UserCreationForm):
         Submit('save', 'Submit Request'),
       )
     )
-    super(RegistrationFormWithoutEmail, self).__init__(*args, **kwargs)
+    super(CustomRegistrationForm, self).__init__(*args, **kwargs)
