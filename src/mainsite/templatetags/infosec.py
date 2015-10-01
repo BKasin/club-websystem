@@ -21,6 +21,7 @@ navdata = (
   ), "/pagemd/competition_*"),
   ("Wiki", "#"),
   ("Blog", "#"),
+  ("Teamspeak", "/pagemd/teamspeak"),
   ("About", "/about/"),
 )
 
