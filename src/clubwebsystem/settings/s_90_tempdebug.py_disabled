@@ -1,0 +1,2 @@
+# Temporarily turn on debug mode to troubleshoot errors that only happen in production
+DEBUG = True
