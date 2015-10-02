@@ -7,6 +7,7 @@ navdata = (
   ("Home", "/"),
   ("Calendar", "/calendar/"),
   ("Projects", (
+    ("Cyber Patriot", "/pagemd/project_cp/"),
     ("Pen Test Network", "#"),
     ("Raspberry Pi security system", "#"),
     ("-"),
@@ -17,7 +18,6 @@ navdata = (
     ("NCL", "/pagemd/competition_ncl/"),
     ("ITC", "/pagemd/competition_itc/"),
     ("Netwars", "/pagemd/competition_nw/"),
-    ("Cyber Patriot", "/pagemd/competition_cp/"),
   ), "/pagemd/competition_*"),
   ("Wiki", "#"),
   ("Blog", "#"),
