@@ -70,6 +70,7 @@ target/
 bin/
 include/
 lib/
+local/
 pip-selfcheck.json
 
 # Mac files
@@ -83,3 +84,6 @@ static_in_env/
 
 # Ignore fullcalendar's demos
 demos
+
+# Ignore uwsgi settings
+uwsgi.ini
