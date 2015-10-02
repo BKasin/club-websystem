@@ -1,0 +1,9 @@
+{% extends "admin/change_form.html" %}
+
+{% block form_top %}
+  <p>Enter the following fields to initialize the member account. You'll be able to edit more fields later.</p>
+{% endblock %}
+
+{% block after_field_sets %}
+<script type="text/javascript">document.getElementById("id_username").focus();</script>
+{% endblock %}
