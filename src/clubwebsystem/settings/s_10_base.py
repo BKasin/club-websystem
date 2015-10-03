@@ -41,6 +41,7 @@ INSTALLED_APPS = [
   'registration',
   'versatileimagefield',
   # our own
+  'clubdata',
   'clubmembers',
   'contentblocks',
   'events',
@@ -82,6 +83,10 @@ TEMPLATES = [
     },
   },
 ]
+
+# Custom user model
+AUTH_USER_MODEL = 'clubmembers.Member'
+AUTHENTICATION_BACKENDS = ('clubmembers.models.MemberAuthenticationBackend',)
 
 # Which python module will the WSGI server load
 WSGI_APPLICATION = 'clubwebsystem.wsgi.application'

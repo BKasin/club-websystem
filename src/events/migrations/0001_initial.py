@@ -14,10 +14,10 @@ class Migration(migrations.Migration):
             name='Event',
             fields=[
                 ('id', models.AutoField(serialize=False, primary_key=True)),
-                ('title', models.CharField(max_length=200, verbose_name=b'Title', blank=True)),
-                ('start', models.DateTimeField(verbose_name=b'Start')),
-                ('end', models.DateTimeField(verbose_name=b'End')),
-                ('allDay', models.BooleanField(default=False, verbose_name=b'All day')),
+                ('title', models.CharField(help_text=b'This will show directly on the calendar.', max_length=200, verbose_name=b'Title', blank=True)),
+                ('start', models.DateTimeField(verbose_name=b'Start date/time')),
+                ('end', models.DateTimeField(verbose_name=b'End date/time')),
+                ('allDay', models.BooleanField(default=False, verbose_name=b'All day event?')),
             ],
             options={
                 'verbose_name': 'Event',

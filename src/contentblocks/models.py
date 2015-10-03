@@ -1,9 +1,10 @@
 from django.db import models
 from django.utils import timezone
-from clubmembers.models import Club, Member
+
+from clubdata.models import Club
+from clubmembers.models import Member
 
 # Create your models here.
-
 class Block(models.Model):
   MARKDOWN = 'md'
   HTML = 'htm'
