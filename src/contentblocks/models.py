@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.core import validators
 
 from clubdata.models import Club
 from clubmembers.models import Member
@@ -18,9 +19,10 @@ class Block(models.Model):
                             blank=True, # Field is optional
                             on_delete=models.CASCADE)  # Deleting a club will delete all delete all associated content
   uniquetitle           = models.CharField('Unique title',
-                            help_text='This is used internally to lookup this piece of content, so use something short and logical, and use a prefix that can be filtered on later (competition_ccdc, project_securitysystem, etc.)',
+                            help_text='Use only letters, numbers, underscores or hyphens. This is used internally to lookup this piece of content, so use something short and logical, and use a prefix that can be filtered on later (competition_ccdc, project_securitysystem, etc.)',
                             max_length=20,
-                            unique=True)
+                            unique=True,
+                            validators=[validators.validate_slug])
   description           = models.CharField('Description',
                             help_text='Longer description, if any.',
                             max_length=100,

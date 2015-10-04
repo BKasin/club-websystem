@@ -11,6 +11,8 @@ from versatileimagefield.placeholder import OnDiscPlaceholderImage
 from clubdata.models import Club
 
 
+validate_username = validators.RegexValidator(r'^[\w.@+-]+$')  # Letters, digits or @.+-_
+validate_coyoteid = validators.RegexValidator(r'^[\d]+$')  # Numbers only
 
 class MemberAuthenticationBackend(ModelBackend):
   # Extends Django's default authentication backend, for use with our custom
@@ -101,13 +103,14 @@ class Member(AbstractBaseUser, PermissionsMixin):
                             help_text='Letters, digits or the following symbols only: <span style="font-size:1.2em">@.+-_</span>',
                             max_length=50,
                             unique=True, # Two members cannot use the same username
-                            validators=[validators.RegexValidator(r'^[\w.@+-]+$', 'Enter a valid username.', 'invalid')],
+                            validators=[validate_username],
                             error_messages={'unique': "Another InfoSec Club member with that username already exists.",})
   coyote_id             = models.CharField('Coyote ID #',
                             help_text='Provide the 9-digit CSUSB student identification number. Leave blank if member is not yet or no longer a student.',
                             max_length=9,
                             #unique=True, # Since the field is optional, we cannot require it to be unique
-                            blank=True) # Field is optional, but blank is stored as '' instead of Null
+                            blank=True, # Field is optional, but blank is stored as '' instead of Null
+                            validators=[validate_coyoteid])
   name_first            = models.CharField('First name',
                             max_length=30)
   name_last             = models.CharField('Last name',
@@ -116,10 +119,12 @@ class Member(AbstractBaseUser, PermissionsMixin):
   # Contact info
   email                 = models.EmailField('Email address',
                             unique=True) # Two members cannot use the same email
-  email_pending         = models.EmailField('New email address (pending verification)',
+  email_pending         = models.EmailField('Pending email address',
+                            help_text='This field is only to be used for an email that has not yet been verified by the user. Once verified, the <i>email</i> field is updated and this one is cleared.',
                             blank=True) # Field is optional, but blank is stored as '' instead of Null
   phone                 = models.CharField('Phone number',
-                            max_length=20,
+                            help_text='Please enter your phone number in the following format: 000-000-0000',
+                            max_length=100, # Extra long to allow notes after the number
                             blank=True) # Field is optional, but blank is stored as '' instead of Null
   texting_ok            = models.BooleanField('SMS Okay?',
                             help_text='May the club send SMS messages to this number? Your usual SMS charges will still apply.',
@@ -147,7 +152,7 @@ class Member(AbstractBaseUser, PermissionsMixin):
   # PIN number, used for signing in and out for meetings without requiring the user's full password
   pin_hash              = models.CharField('PIN',
                             help_text='This is optional, but will be used for less critical sign-in purposes, such as checking into a project meeting or confirming your lab hours.',
-                            max_length=120,
+                            max_length=128,
                             blank=True) # Field is optional, but blank is stored as '' instead of Null
 
   # Other information we may be interested in

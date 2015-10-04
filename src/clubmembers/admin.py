@@ -18,10 +18,10 @@ class MemberAdmin(UserAdmin):
 
   # Fields to show when editing a user
   fieldsets = (
-    ('Authentication', {'fields': ('username', 'password')}),
+    ('Authentication', {'fields': ('username', 'password', 'pin_hash', 'last_login',)}),
     ('Personal', {'fields': ('name_first', 'name_last', 'coyote_id',)}),
-    ('Contact', {'fields': ('email', 'phone', 'texting_ok',)}),
-    #('Photo', {'fields': ('photo',)}),
+    ('Contact', {'fields': ('email', 'email_pending', 'phone', 'texting_ok',)}),
+    ('Photo', {'fields': ('photo',)}),
     ('Academic', {'fields': ('acad_major', 'acad_minor', 'acad_concentration', 'acad_grad_qtr',)}),
     ('Other', {'fields': ('shirt_size',)}),
     ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions',)}),
@@ -37,7 +37,7 @@ class MemberAdmin(UserAdmin):
   )
 
   # Fields that show on the admin page as columns
-  list_display = ('name_first', 'name_last', 'coyote_id', 'email', 'is_staff', 'is_superuser')
+  list_display = ('username', 'name_first', 'name_last', 'coyote_id', 'email', 'phone', 'is_active', 'is_staff')
 
   # Filters available along the right side
   list_filter = (
@@ -47,7 +47,7 @@ class MemberAdmin(UserAdmin):
   )
 
   # Fields to search through when admin performs a text search on the member list
-  search_fields = ('username', 'name_first', 'name_last', 'coyote_id', 'email')
+  search_fields = ('username', 'name_first', 'name_last', 'coyote_id', 'email', 'phone')
 
   # Default sort order of the list
   ordering = ('name_last', 'name_first',)
