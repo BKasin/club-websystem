@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Page | {{ block.super }}{% endblock %}
+
+{% block extrahead %}
+<link rel='stylesheet' href="{% static 'commonmarkjs/dingus.css' %}" />
+<script src="{% static 'commonmarkjs/lodash.min.js' %}"></script>
+<script src="{% static 'commonmarkjs/commonmark.js' %}"></script>
+<script src="{% static 'commonmarkjs/dingus.js' %}"></script>
+{% endblock %}
+
+{% block bodyarea %}
+  <div class="Xrow">
+    <div class="Xcol-md-6 splitviewleft">
+      <h1>CommonMark</h1>
+      <textarea id="text" class="mdsplit mdtextarea" wrap="hard">{{ origmd|safe }}</textarea>
+    </div>
+    <div class="Xcol-md-6 splitviewright">
+      <h1>HTML Preview</h1>
+      <div id="preview" class="mdsplit mdpreview"></div>
+    </div>
+  </div>
+{% endblock %}
