@@ -92,6 +92,9 @@ AUTHENTICATION_BACKENDS = ('clubmembers.models.MemberAuthenticationBackend',)
 # Which python module will the WSGI server load
 WSGI_APPLICATION = 'clubwebsystem.wsgi.application'
 
+# Settings for django.sites
+SITE_ID = 1
+
 # Internationalization
 USE_I18N = False
 USE_L10N = False

@@ -87,3 +87,6 @@ demos
 
 # Ignore uwsgi settings
 uwsgi.ini
+
+# Ignore the development database, since each developer may have custom data
+db.sqlite3
