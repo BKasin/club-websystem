@@ -52,6 +52,22 @@ div.versatileimagefield {
 .nofieldborder {
   border: none;
   box-shadow: none;
-  margin-bottom: 15px;
   color: silver;
+  height: initial;
+}
+
+.clublogosm {
+  padding-left:1em;
+  padding-top:1em;
+  padding-right:1em;
+}
+.membershipexpired {
+  color:silver;
+}
+.membershipexpired img {
+  opacity:0.2;
+}
+.membershipactive {
+  font-weight:bold;
+  color:green;
 }

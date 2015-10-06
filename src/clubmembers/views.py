@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from datetime import datetime, timedelta
 
-from .models import Member
+from .models import Member, Membership
 from .forms import MemberForm
 
 # Create your views here.
@@ -31,5 +32,9 @@ def userprofile(request):
         'form': form,
         'fail': True,
       }
+
+  # Lookup all memberships, except if they expired more than 30 days ago
+  context['membershiplist'] = Membership.objects.filter(member = member.id,
+                              paid_until_date__gte = (datetime.today() - timedelta(days=30)))
 
   return render(request, "userprofile.html", context)
