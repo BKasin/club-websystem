@@ -100,6 +100,7 @@ SITE_ID = 1
 USE_I18N = False
 USE_L10N = False
 USE_TZ = False
+DATE_FORMAT = 'N j, Y' # Default date format when displaying dates in templates
 
 # Static files (CSS, JavaScript, Images). Because we're using try_files
 # in nginx, we serve static content from the same URI root that the pages
