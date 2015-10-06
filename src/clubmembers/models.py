@@ -217,12 +217,8 @@ class Membership(models.Model):
                             on_delete=models.CASCADE)  # Deleting a club will delete all memberships that reference it (won't delete the members themselves)
 
   # Membership dues
-  paid_date             = models.DateField('Paid on',
-                            null=True,  # Blank is stored as Null
-                            blank=True) # Field is optional
-  paid_until_date       = models.DateField('Payment is valid until',
-                            null=True,  # Blank is stored as Null
-                            blank=True) # Field is optional
+  paid_date             = models.DateField('Paid on')
+  paid_until_date       = models.DateField('Payment is valid until')
   paid_amount           = models.DecimalField('Paid amount',
                             max_digits=6,
                             decimal_places=2,
@@ -247,3 +243,7 @@ class Membership(models.Model):
 
   def __unicode__(self): #Python 3.3 is __str__
     return "%s --> %s"%(self.member.get_full_name(), self.club.name_short)
+
+  @property
+  def is_active(self):
+    return (self.paid_date <= timezone.now().date() <= self.paid_until_date)

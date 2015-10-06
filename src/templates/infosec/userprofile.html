@@ -6,6 +6,26 @@
 
 {% block content %}
 <h1>User Profile</h1>
+<legend>Memberships</legend>
+<div class="panel panel-default">
+<table class="form-group">
+  {% for membership in membershiplist %}
+  <tr>
+    <td{% if not membership.is_active %} class="membershipexpired"{% endif %}>{% if membership.club.logo %}<img class="clublogosm" src="{% static membership.club.logo %}" /> {% endif %}</td>
+    {% if membership.is_active %}
+    <td>{% if membership.paid_amount %}You paid <b>{{ membership.paid_amount }}</b>{% else %}You joined{% endif %} on {{ membership.paid_date }}, and your membership is <span class="membershipactive">active until {{ membership.paid_until_date }}</span>.</td>
+    {% else %}
+    <td class="membershipexpired">You membership to this club expired on {{ membership.paid_until_date }}. To get more information about joining, visit the <a href="{% url 'pagemd' 'membership' %}">membership information page</a>.</td>
+    {% endif %}
+  </tr>
+  {% empty %}
+  <tr>
+    <td>You are not a member of any club.</td>
+  </tr>
+  {% endfor %}
+</table>
+</div>
+
 {% if success %}<div class="alert alert-success" role="alert">Changes made successfully.</div>{% endif %}
 {% if fail %}<div class="alert alert-danger" role="alert">Changes not applied. Please correct the errors hilighted below.</div>{% endif %}
 {% crispy form %}

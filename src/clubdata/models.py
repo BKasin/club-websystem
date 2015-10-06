@@ -8,6 +8,9 @@ class Club(models.Model):
                             max_length=20)
   name_long             = models.CharField('Name (long version)',
                             max_length=120)
+  logo                  = models.CharField('Logo of the club',
+                            max_length=100,
+                            default='')
 
   def __unicode__(self): #Python 3.3 is __str__
     return self.name_short
