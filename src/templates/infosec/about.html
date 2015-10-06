@@ -6,6 +6,13 @@
 
 {% block content %}
 <h1>Contact Us</h1>
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert {{ message.tags }}" role="alert">{{ message }}</div>
+{% endfor %}
+{% endif %}
+
 <div class="row">
   <div class="col-sm-7">
     <p>Please use the form below to send any suggestions, questions, or complaints to the club's primary email:</p>

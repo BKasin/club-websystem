@@ -56,18 +56,19 @@ div.versatileimagefield {
   height: initial;
 }
 
-.clublogosm {
-  padding-left:1em;
-  padding-top:1em;
-  padding-right:1em;
-}
 .membershipexpired {
   color:silver;
 }
 .membershipexpired img {
   opacity:0.2;
 }
-.membershipactive {
+.membershiplogo {
+  padding:0.5em 1em 0.5em 0.5em;
+  font-weight:bold;
+  font-size:1.5em;
+  color:blue;
+}
+.membershiphilight {
   font-weight:bold;
   color:green;
 }

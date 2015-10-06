@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
@@ -36,8 +37,8 @@ def about(request):
     msg.attach_alternative(template_html.render(context), 'text/html')
     msg.send()
 
-    #return redirect('about')
-    return render(request, "about_emailsent.html") #Temporary, until we use message properly
+    messages.success(request, "Your email has been sent successfully.")
+    return redirect(about)
 
   context = {
     "form": form,

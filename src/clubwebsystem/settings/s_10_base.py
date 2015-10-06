@@ -10,9 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from django.contrib import messages
 
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -112,6 +113,14 @@ STATICFILES_DIRS = (
 # Media files (untrusted files uploaded by users)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_in_env", "media_root")
+
+# CSS styles for various messages (django.contrib.messages framework)
+MESSAGE_TAGS = {
+  messages.INFO: 'alert-info',
+  messages.SUCCESS: 'alert-success',
+  messages.WARNING: 'alert-warning',
+  messages.ERROR: 'alert-danger'
+}
 
 #Crispy FORM TAGs SETTINGS
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
