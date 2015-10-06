@@ -8,9 +8,10 @@ class Club(models.Model):
                             max_length=20)
   name_long             = models.CharField('Name (long version)',
                             max_length=120)
-  logo                  = models.CharField('Logo of the club',
+  logo_small            = models.CharField('Logo of the club',
+                            help_text='Relative path to the small logo, to used on the users profile. Should not begin with a slash. Ex: img/clublogo-club1-sm.png',
                             max_length=100,
-                            default='')
+                            blank=True) # Field is optional, but blank is stored as '' instead of Null
 
   def __unicode__(self): #Python 3.3 is __str__
     return self.name_short

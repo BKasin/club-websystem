@@ -18,7 +18,7 @@
 <table>
   {% for membership in membershiplist %}
   <tr class="{% if membership.is_active %}membershipactive{% else %}membershipexpired{% endif %}">
-    <td class="membershiplogo">{% if membership.club.logo %}<img src="{% static membership.club.logo %}" />{% else %}{{ membership.club.name_short }}{% endif %}</td>
+    <td class="membershiplogo">{% if membership.club.logo_small %}<img src="{% static membership.club.logo_small %}" />{% else %}{{ membership.club.name_short }}{% endif %}</td>
     {% if membership.is_active %}
     <td>{% if membership.paid_amount %}You paid <b>{{ membership.paid_amount }}</b>{% else %}You joined{% endif %} on {{ membership.paid_date }}, and your membership is <span class="membershiphilight">active until {{ membership.paid_until_date }}</span>.</td>
     {% else %}
