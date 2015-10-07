@@ -72,3 +72,8 @@ div.versatileimagefield {
   font-weight:bold;
   color:green;
 }
+
+.showresizehandle {
+  resize:horizontal;
+  overflow:auto;
+}
