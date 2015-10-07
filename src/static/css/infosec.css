@@ -49,7 +49,7 @@ div.versatileimagefield {
   display:inline-block !important;
 }
 
-.nofieldborder {
+.readonlypasswordhashwidget {
   border: none;
   box-shadow: none;
   color: silver;

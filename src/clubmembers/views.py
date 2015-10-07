@@ -19,6 +19,11 @@ def userprofile(request):
     form = MemberForm(request.POST, request.FILES, instance=member)
 
     if form.is_valid():
+      if 'email' in form.changed_data:
+        # Don't let the user change the email yet. The new one must be confirmed.
+        form.instance.email = form.initial['email']
+        form.instance.email_pending = form.cleaned_data['email']
+
       # Save the Member instance
       form.instance.save()
 

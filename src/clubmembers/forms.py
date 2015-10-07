@@ -8,7 +8,9 @@ from crispy_forms.bootstrap import FormActions
 from .models import Member
 
 class MemberForm(forms.ModelForm):
-  username = forms.CharField(max_length=254)
+  # Override the password field just to add a help_text
+  # We manually add the *, because the field is technically required in the database, but we're
+  # not expecting the user to enter data since it's a read-only field
   password = ReadOnlyPasswordHashField(
     label="Password*",
     help_text="For your security, we store a hash of your password in the database, instead of the password itself. To update your password, visit the <a href='/accounts/password/change/'><b>Change My Password</b></a> page."
@@ -24,13 +26,14 @@ class MemberForm(forms.ModelForm):
     ]
 
   def __init__(self, *args, **kwargs):
+    # Initialize the form's layout here instead of writing HTML
     self.helper = FormHelper()
     self.helper.form_method = 'post'
     self.helper.layout = Layout(
       HTML('<div class="row"><div class="col-sm-6">'),
       Fieldset(
         'Identity',
-        'username', Field('password', css_class='nofieldborder'), 'name_first', 'name_last',
+        'username', 'password', 'name_first', 'name_last',
       ),
       Fieldset(
         'Contact',
