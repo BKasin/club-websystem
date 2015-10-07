@@ -6,6 +6,7 @@ from crispy_forms.layout import Layout, Fieldset, HTML, Field, Div, Submit
 from crispy_forms.bootstrap import FormActions
 
 from .models import Member
+from .widgets import PendingEmailField
 
 class MemberForm(forms.ModelForm):
   # Override the password field just to add a help_text
@@ -15,11 +16,13 @@ class MemberForm(forms.ModelForm):
     label="Password*",
     help_text="For your security, we store a hash of your password in the database, instead of the password itself. To update your password, visit the <a href='/accounts/password/change/'><b>Change My Password</b></a> page."
   )
+  email_pending = PendingEmailField(label='')
+
   class Meta:
     model = Member
     fields = [
       'username', 'password', 'name_first', 'name_last',
-      'email', 'phone', 'texting_ok',
+      'email', 'email_pending', 'phone', 'texting_ok',
       'photo',
       'acad_major', 'acad_minor', 'acad_concentration', 'acad_grad_qtr',
       'shirt_size',
@@ -37,7 +40,7 @@ class MemberForm(forms.ModelForm):
       ),
       Fieldset(
         'Contact',
-        'email', 'phone', 'texting_ok',
+        'email', 'email_pending', 'phone', 'texting_ok',
       ),
       HTML('</div><div class="col-sm-6">'),
       Fieldset(
@@ -59,3 +62,9 @@ class MemberForm(forms.ModelForm):
       )
     )
     super(MemberForm, self).__init__(*args, **kwargs)
+
+  def clean_email_pending(self):
+    # Regardless of what the user provides, return the initial value.
+    # This is done here, rather than on the field, because the
+    # field does not have access to the initial value
+    return self.initial["email_pending"]
