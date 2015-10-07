@@ -16,7 +16,7 @@
 
 <legend>Memberships</legend>
 <div class="panel panel-default">
-<table>
+<table class="membership">
   {% for membership in membershiplist %}
   <tr class="{% if membership.is_active %}membershipactive{% else %}membershipexpired{% endif %}">
     <td class="membershiplogo">{% if membership.club.logo_small %}<img src="{% static membership.club.logo_small %}" />{% else %}{{ membership.club.name_short }}{% endif %}</td>
