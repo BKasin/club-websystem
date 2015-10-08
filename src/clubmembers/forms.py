@@ -56,6 +56,7 @@ class MemberForm(forms.ModelForm):
       HTML('</div></div>'),
       FormActions(
         Submit('save', 'Save Changes'),
+        css_class='form-actions'
       )
     )
     super(MemberForm, self).__init__(*args, **kwargs)
