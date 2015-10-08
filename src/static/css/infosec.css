@@ -56,6 +56,9 @@ div.versatileimagefield {
   height: initial;
 }
 
+.membership td {
+  padding:0.5em;
+}
 .membershipexpired {
   color:silver;
 }
@@ -63,7 +66,6 @@ div.versatileimagefield {
   opacity:0.2;
 }
 .membershiplogo {
-  padding:0.5em 1em 0.5em 0.5em;
   font-weight:bold;
   font-size:1.5em;
   color:blue;
@@ -71,6 +73,12 @@ div.versatileimagefield {
 .membershiphilight {
   font-weight:bold;
   color:green;
+}
+
+.form-actions {
+  position:fixed;
+  bottom:10px;
+  right:10px;
 }
 
 .showresizehandle {
