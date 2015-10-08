@@ -23,8 +23,8 @@ Some other dependencies that are included in this source code but should be moni
 * Bootstrap <http://getbootstrap.com/>
 * jQuery v1.x <http://jquery.com/download/>
 * lodash, modern build <https://lodash.com/>
-* autosize <http://www.jacklmoore.com/autosize/>
-* fullcalendar <http://fullcalendar.io/download/>
+* Autosize <http://www.jacklmoore.com/autosize/>
+* FullCalendar <http://fullcalendar.io/download/>
 
 # Developers
 
