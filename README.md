@@ -18,6 +18,14 @@ The production server must at least contain these requirements:
 * libjpeg-dev
 * a virtual environment setup with the packages listed in `requirements.txt`
 
+Some other dependencies that are included in this source code but should be monitored for updates include the following:
+
+* Bootstrap <http://getbootstrap.com/>
+* jQuery v1.x <http://jquery.com/download/>
+* lodash, modern build <https://lodash.com/>
+* autosize <http://www.jacklmoore.com/autosize/>
+* fullcalendar <http://fullcalendar.io/download/>
+
 # Developers
 
 * Kenneth Johnson, [*securedirective*](https://github.com/securedirective) - *lead developer*

@@ -4,21 +4,29 @@
 {% block title %}Page | {{ block.super }}{% endblock %}
 
 {% block extrahead %}
-<link rel='stylesheet' href="{% static 'commonmarkjs/dingus.css' %}" />
-<script src="{% static 'commonmarkjs/lodash.min.js' %}"></script>
-<script src="{% static 'commonmarkjs/commonmark.js' %}"></script>
-<script src="{% static 'commonmarkjs/dingus.js' %}"></script>
+<link rel='stylesheet' href="{% static 'css/markdown.css' %}" />
+<link rel='stylesheet' href="{% static 'css/splitvieweditor.css' %}" />
+<script type="text/javascript" src="{% static 'js/lodash.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/commonmark.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/autosize.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/splitvieweditor.js' %}"></script>
 {% endblock %}
 
-{% block bodyarea %}
-  <div class="Xrow">
-    <div class="Xcol-md-6 splitviewleft">
-      <h1>CommonMark</h1>
-      <textarea id="text" class="mdsplit mdtextarea" wrap="hard">{{ origmd|safe }}</textarea>
-    </div>
-    <div class="Xcol-md-6 splitviewright">
-      <h1>HTML Preview</h1>
-      <div id="preview" class="mdsplit mdpreview"></div>
-    </div>
+{% block content %}
+<div class="row">
+  <div class="col-xs-6 showresizehandle">
+    <h1 class="sv-heading">CommonMark</h1>
+    <textarea id="sv-textarea" class="sv-textarea">{{ origmd|safe }}</textarea>
   </div>
+  <div class="col-xs-6">
+    <h1 class="sv-heading">HTML Preview</h1>
+    <div id="sv-preview" class="sv-preview markdown-body"></div>
+  </div>
+</div>
+
+<div class="form-actions">
+  <button class="btn btn-primary" id="sv-submitbutton" style="display:none">Save Changes</button>
+  <button class="btn btn-default">Cancel</button>
+  <button class="btn btn-default">Adjust Height</button>
+</div>
 {% endblock %}
