@@ -31,10 +31,11 @@ class MemberAdmin(UserAdmin):
   filter_horizontal = ('groups', 'user_permissions',)
 
   # Fields to ask for when creating a new user
-  add_form_template = 'admin_add_member_form.html'
-  add_fieldsets = (
-    (None, {'classes': ('wide',), 'fields': ('username', 'password1', 'password2', 'coyote_id', 'name_first', 'name_last', 'email',)}),
-  )
+  add_form_template = 'admin/add_member_form.html'
+  add_fieldsets = ((None, {
+    'classes': ('wide',),
+    'fields': ('username', 'password1', 'password2', 'name_first', 'name_last', 'coyote_id', 'email', 'is_active')
+  }),)
 
   # Fields that show on the admin page as columns
   list_display = ('username', 'name_first', 'name_last', 'coyote_id', 'email', 'phone', 'is_active', 'is_staff')

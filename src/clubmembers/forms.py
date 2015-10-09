@@ -24,7 +24,7 @@ class MemberForm(forms.ModelForm):
       'username', 'password', 'name_first', 'name_last',
       'email', 'email_pending', 'phone', 'texting_ok',
       'photo',
-      'acad_major', 'acad_minor', 'acad_concentration', 'acad_grad_qtr',
+      'coyote_id', 'acad_major', 'acad_minor', 'acad_concentration', 'acad_grad_qtr',
       'shirt_size',
     ]
 
@@ -50,7 +50,7 @@ class MemberForm(forms.ModelForm):
       ),
       Fieldset(
         'Academic',
-        'acad_major', 'acad_minor', 'acad_concentration', 'acad_grad_qtr',
+        'coyote_id', 'acad_major', 'acad_minor', 'acad_concentration', 'acad_grad_qtr',
       ),
       Fieldset(
         'Other',
@@ -59,6 +59,7 @@ class MemberForm(forms.ModelForm):
       HTML('</div></div>'),
       FormActions(
         Submit('save', 'Save Changes'),
+        css_class='form-actions'
       )
     )
     super(MemberForm, self).__init__(*args, **kwargs)
