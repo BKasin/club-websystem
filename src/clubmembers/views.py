@@ -23,12 +23,16 @@ def userprofile(request):
         # Don't let the user change the email yet. The new one must be confirmed.
         form.instance.email = form.initial['email']
         form.instance.email_pending = form.cleaned_data['email']
+        addpendingemailwarning = True
+      else:
+        addpendingemailwarning = False
 
       # Save the Member instance
       form.instance.save()
 
       # Everything looks good, so redirect the user to their updated profile page
       messages.success(request, "Changes made successfully.")
+      if addpendingemailwarning: messages.warning(request, "Email change is pending activation (see below).")
       return redirect(userprofile)
 
     else:

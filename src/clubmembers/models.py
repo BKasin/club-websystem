@@ -72,13 +72,13 @@ class MemberManager(BaseUserManager):
 
 class Member(AbstractBaseUser, PermissionsMixin):
   # AbstractBaseUser will add the following fields:
-  # password            = models.CharField(...)
-  # last_login          = models.DateTimeField(...)
+  # password            = models.CharField(_('password'), max_length=128)
+  # last_login          = models.DateTimeField(_('last login'), blank=True, null=True)
 
   # PermissionsMixin will add the following fields:
-  # is_superuser        = models.BooleanField(...)
-  # groups              = models.ManyToManyField(Group, ...)
-  # user_permissions    = models.ManyToManyField(Permission, ...)
+  # is_superuser        = models.BooleanField(_('superuser status'), default=False, help_text=_('Designates that this user has all permissions without explicitly assigning them.'))
+  # groups              = models.ManyToManyField(Group, verbose_name=_('groups'), blank=True, help_text=_('The groups this user belongs to. A user will get all permissions granted to each of their groups.'), related_name="user_set", related_query_name="user")
+  # user_permissions    = models.ManyToManyField(Permission, verbose_name=_('user permissions'), blank=True, help_text=_('Specific permissions for this user.'), related_name="user_set", related_query_name="user")
 
   is_active             = models.BooleanField('Account activated?',
                             default=False)
@@ -93,7 +93,7 @@ class Member(AbstractBaseUser, PermissionsMixin):
                             max_length=50,
                             unique=True, # Two members cannot use the same username
                             validators=[validate_username],
-                            error_messages={'unique': "Another InfoSec Club member with that username already exists.",})
+                            error_messages={'unique': "Another member with that username already exists.",})
   coyote_id             = models.CharField('Coyote ID #',
                             help_text='Provide the 9-digit CSUSB student identification number. Leave blank if member is not yet or no longer a student.',
                             max_length=9,
