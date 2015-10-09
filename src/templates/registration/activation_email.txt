@@ -1,4 +1,4 @@
-Hello {{ user }},
+Hello {{ user.get_short_name }},
 
 You have asked to register an account at https://www.infosec-csusb.org/. If this
 wasn't you, please ignore this email and your address will be removed from our

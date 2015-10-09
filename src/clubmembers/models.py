@@ -1,10 +1,17 @@
 import os
+import hashlib
+import random
+import re
+import datetime
+
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.contrib.auth.backends import ModelBackend
 from django.core import validators
+from django.utils import six
+
 from versatileimagefield.fields import VersatileImageField, PPOIField
 from versatileimagefield.placeholder import OnDiscPlaceholderImage
 
@@ -236,3 +243,63 @@ class Membership(models.Model):
   @property
   def is_active(self):
     return (self.paid_date <= timezone.now().date() <= self.paid_until_date)
+
+
+
+
+
+
+
+
+
+
+
+
+SHA1_RE = re.compile('^[a-f0-9]{40}$')
+
+class PendingEmailChangeManager(models.Manager):
+  def confirm_pendingemail(self, confirmation_key):
+    # Make sure the key we're trying conforms to the pattern of a
+    # SHA1 hash; if it doesn't, no point trying to look it up in
+    # the database.
+    if SHA1_RE.search(confirmation_key):
+      try:
+        changerequest = self.get(confirmation_key=confirmation_key)
+      except self.model.DoesNotExist:
+        return False
+      if not changerequest.confirmation_key_expired():
+        member = changerequest.member
+        member.email = member.email_pending
+        member.email_pending = ''
+        member.save()
+        changerequest.delete()
+        return member
+    return False
+
+  def create_pendingemail(self, member):
+    salt = hashlib.sha1(six.text_type(random.random()).encode('ascii')).hexdigest()[:5]
+    salt = salt.encode('ascii')
+    member_pk = str(member.pk)
+    if isinstance(member_pk, six.text_type):
+      member_pk = member_pk.encode('utf-8')
+    confirmation_key = hashlib.sha1(salt+member_pk).hexdigest()
+    return self.create(member=member,
+                       confirmation_key=confirmation_key)
+
+class PendingEmailChange(models.Model):
+  member                = models.ForeignKey(Member, verbose_name='Member',
+                            on_delete=models.CASCADE)  # Deleting a member will delete all record of pending emails for that member
+  confirmation_key      = models.CharField('Confirmation key',
+                            max_length=40)
+  date_initiated        = models.DateTimeField('Date of email change request',
+                            default=timezone.now)
+
+  objects = PendingEmailChangeManager()
+
+  def __str__(self):
+    return "%s's pending email change from %s to %s" % (self.member.get_full_name(), self.member.email, self.member.email_pending)
+
+  def confirmation_key_expired(self):
+    expiration_date = datetime.timedelta(days=settings.PENDINGEMAIL_CONFIRMATION_DAYS)
+    return (self.date_initiated + expiration_date <= timezone.now())
+  confirmation_key_expired.boolean = True

@@ -31,4 +31,4 @@ settings.TEMPLATES[0]['DIRS'].insert(0, os.path.join(settings.BASE_DIR, "templat
 # Start it by running this in a terminal: python -m smtpd -n -c DebuggingServer localhost:1025
 EMAIL_HOST = '127.0.0.1'
 EMAIL_PORT = 1025
-DEFAULT_FROM_EMAIL = 'support@infosec-csusb.org'
+DEFAULT_FROM_EMAIL = '"Test Club" <support@test-club.org>'

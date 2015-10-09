@@ -131,6 +131,9 @@ CRISPY_FAIL_SILENTLY = not DEBUG
 REGISTRATION_OPEN = True
 ACCOUNT_ACTIVATION_DAYS = 2
 
+# Settings for our pending email function in the clubmembers app
+PENDINGEMAIL_CONFIRMATION_DAYS = 2
+
 # Django auth settings
 LOGIN_REDIRECT_URL = '/'
 

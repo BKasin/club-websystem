@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.admin.forms import AdminAuthenticationForm
 
-from .models import Member, Membership
+from .models import Member, Membership, PendingEmailChange
 
 class CustomAdminLoginForm(AdminAuthenticationForm):
   # Extend Django's default admin login form, simply to change the label
@@ -58,3 +58,4 @@ class MemberAdmin(UserAdmin):
 admin.site.login_form = CustomAdminLoginForm
 admin.site.register(Member, MemberAdmin)
 admin.site.register(Membership)
+admin.site.register(PendingEmailChange)
