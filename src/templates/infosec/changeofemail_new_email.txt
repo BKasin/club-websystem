@@ -1,0 +1,9 @@
+Hello {{ user.get_short_name }},
+
+You have requested a change of your email address on file. To confirm your new
+email, you must follow this link within the next {{ expiration_days }} days:
+
+https://www.infosec-csusb.org{% url 'confirmemail' confirmation_key %}
+
+Sincerely,
+InfoSec Club Officers

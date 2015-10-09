@@ -11,7 +11,6 @@ from registration import signals
 from registration.models import RegistrationProfile
 from registration.views import ActivationView as BaseActivationView
 from registration.views import RegistrationView as BaseRegistrationView
-from registration.users import UserModel
 
 from clubmembers.models import Member
 
@@ -27,27 +26,22 @@ class RegistrationView(BaseRegistrationView):
     else:
       site = RequestSite(request)
 
-    # Create a new User instance
+    # Create a new Member instance
     if hasattr(form, 'save'):
+      # This skips our custom MemberManager
       new_user_instance = form.save()
     else:
-      new_user_instance = UserModel().objects.create_user(**form.cleaned_data)
+      # This will pass the data to the create_user function in our custom MemberManager
+      new_user_instance = Member.objects.create_user(**form.cleaned_data)
 
-    # Mark the User we just created as inactive; then create a RegistrationProfile instance for that user
+    # In case it's not already, mark the Member we just created as inactive.
+    # Then create a RegistrationProfile instance for that user with a one-time activation key
     new_user = RegistrationProfile.objects.create_inactive_user(
       new_user=new_user_instance,
       site=site,
       send_email=self.SEND_ACTIVATION_EMAIL,
       request=request,
     )
-
-    # Create the new associated member
-    new_member = Member(
-      user=new_user,
-      name_first=form.cleaned_data['name_first'],
-      name_last=form.cleaned_data['name_last'],
-      email=form.cleaned_data['email'],
-    ).save()
 
     # Send the signal that a user has been registered
     signals.user_registered.send(sender=self.__class__,
@@ -66,10 +60,8 @@ class ActivationView(BaseActivationView):
     activated_user = RegistrationProfile.objects.activate_user(activation_key)
 
     if activated_user:
-      # If successful, remove the email from the User instance, since we already saved it
-      # to the Member instance, and django-registration-redux no longer needs it
-      activated_user.email = ''
-      activated_user.save()
+      # Automatically log the user in
+      signals.login_user(self, activated_user, request)
 
       # Send the signal that user has been activated
       signals.user_activated.send(sender=self.__class__,

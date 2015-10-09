@@ -66,9 +66,8 @@ div.versatileimagefield {
   opacity:0.2;
 }
 .membershiplogo {
-  font-weight:bold;
-  font-size:1.5em;
-  color:blue;
+  width:220px;
+  text-align:center;
 }
 .membershiphilight {
   font-weight:bold;

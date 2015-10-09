@@ -43,7 +43,7 @@ SESSION_COOKIE_SECURE = True
 # Email settings
 EMAIL_HOST = '127.0.0.1'
 EMAIL_PORT = 25
-DEFAULT_FROM_EMAIL = 'support@infosec-csusb.org'
+DEFAULT_FROM_EMAIL = '"Information Security Club" <support@infosec-csusb.org>'
 
 # Restrict connections to a list of hosts
 ALLOWED_HOSTS = [

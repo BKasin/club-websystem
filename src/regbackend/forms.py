@@ -12,19 +12,15 @@ class CustomRegistrationForm(UserCreationForm):
   """
   Custom registration form
   """
-  name_first = forms.CharField(max_length=30)
-  name_last = forms.CharField(max_length=30)
-  email = forms.EmailField(label="E-mail")
-
   class Meta:
       model = get_user_model()
-      fields = ('username', 'email')
+      fields = ('username', 'name_first', 'name_last', 'coyote_id', 'email')
 
   def __init__(self, *args, **kwargs):
     self.helper = FormHelper()
     self.helper.form_method = 'post'
     self.helper.layout = Layout(
-      'name_first', 'name_last', 'email', 'username', 'password1', 'password2',
+      'username', 'password1', 'password2', 'name_first', 'name_last', 'coyote_id', 'email',
       FormActions(
         Submit('save', 'Submit Request'),
       )

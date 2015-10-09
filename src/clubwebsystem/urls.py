@@ -14,7 +14,8 @@ urlpatterns = [
   url(r'^calendar/', 'events.views.calendar', name='calendar'),
   url(r'^eventjson/', 'events.views.eventjson', name='eventjson'),
   url(r'^eventmodify/', 'events.views.eventmodify', name='eventmodify'),
-  url(r'^userprofile/', 'clubmembers.views.userprofile', name='userprofile'),
+  url(r'^userprofile/$', 'clubmembers.views.userprofile', name='userprofile'),
+  url(r'^userprofile/confirmemail/(?P<confirmation_key>\w+)/', 'clubmembers.views.confirmemail', name='confirmemail'),
 
   # Built-in pages
   url(r'^admin/', include(admin.site.urls)),

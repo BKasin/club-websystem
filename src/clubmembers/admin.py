@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.admin.forms import AdminAuthenticationForm
 
-from .models import Member, Membership
+from .models import Member, Membership, PendingEmailChange
 
 class CustomAdminLoginForm(AdminAuthenticationForm):
   # Extend Django's default admin login form, simply to change the label
@@ -31,10 +31,11 @@ class MemberAdmin(UserAdmin):
   filter_horizontal = ('groups', 'user_permissions',)
 
   # Fields to ask for when creating a new user
-  add_form_template = 'admin/admin_add_member_form.html'
-  add_fieldsets = (
-    (None, {'classes': ('wide',), 'fields': ('username', 'password1', 'password2', 'coyote_id', 'name_first', 'name_last', 'email',)}),
-  )
+  add_form_template = 'admin/add_member_form.html'
+  add_fieldsets = ((None, {
+    'classes': ('wide',),
+    'fields': ('username', 'password1', 'password2', 'name_first', 'name_last', 'coyote_id', 'email', 'is_active')
+  }),)
 
   # Fields that show on the admin page as columns
   list_display = ('username', 'name_first', 'name_last', 'coyote_id', 'email', 'phone', 'is_active', 'is_staff')
@@ -57,3 +58,4 @@ class MemberAdmin(UserAdmin):
 admin.site.login_form = CustomAdminLoginForm
 admin.site.register(Member, MemberAdmin)
 admin.site.register(Membership)
+admin.site.register(PendingEmailChange)

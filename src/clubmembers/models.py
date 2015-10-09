@@ -1,10 +1,17 @@
 import os
+import hashlib
+import random
+import re
+import datetime
+
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.contrib.auth.backends import ModelBackend
 from django.core import validators
+from django.utils import six
+
 from versatileimagefield.fields import VersatileImageField, PPOIField
 from versatileimagefield.placeholder import OnDiscPlaceholderImage
 
@@ -45,58 +52,47 @@ class MemberAuthenticationBackend(ModelBackend):
 class MemberManager(BaseUserManager):
   # Custom manager object for the Member model below
 
-  def create_user(self, username, email, password=None):
+  def _create_user(self, username, email, password, name_first, name_last,
+                   **extra_fields):
     """
-    Creates and saves a Member with the given email, date of
-    birth and password.
-    This method should have the same parameters as create_superuser below,
-    but allows the password to be left out.
+    Creates and saves a new Member
     """
     if not username:
-      raise ValueError('Members must have a username')
-
-    user = self.model(
-      username=username,
-      email=self.normalize_email(email)
-    )
+        raise ValueError('The given username must be set')
+    user = self.model(username=username, email=self.normalize_email(email),
+                      name_first=name_first, name_last=name_last,
+                      **extra_fields)
     user.set_password(password)
     user.save(using=self._db)
     return user
 
-  def create_superuser(self, username, email, password):
-    """
-    Called by 'python manage.py createsuperuser to creates a user that
-    gets all privileges without being specifically set.
-    This method will receive username, followed by any fields specified below
-    in REQUIRED_FIELDS, then followed by the password.
-    It should use the create_user method above to create the Member, and then
-    modify that user to make it a superuser.
-    """
-    user = self.create_user(
-      username=username,
-      email=email,
-      password=password
-    )
-    user.is_superuser = True
-    user.is_staff = True
-    user.save(using=self._db)
-    return user
+  # Parameters should be any field that is required (blank=False) and missing any default value
+  def create_user(self, username, email, password, name_first, name_last, **extra_fields):
+    print(extra_fields)
+    return self._create_user(username, email, password, name_first, name_last, False, False,
+                             **extra_fields)
+
+  # Parameters should be username, then the fields specifed by Member.REQUIRED_FIELDS, then password
+  def create_superuser(self, username, password):
+    return self._create_user(username, '', password, '', '',
+                             is_staff=True, is_superuser=True, is_active=True)
 
 class Member(AbstractBaseUser, PermissionsMixin):
   # AbstractBaseUser will add the following fields:
-  # password            = models.CharField(...)
-  # last_login          = models.DateTimeField(...)
+  # password            = models.CharField(_('password'), max_length=128)
+  # last_login          = models.DateTimeField(_('last login'), blank=True, null=True)
 
   # PermissionsMixin will add the following fields:
-  # is_superuser        = models.BooleanField(...)
-  # groups              = models.ManyToManyField(Group, ...)
-  # user_permissions    = models.ManyToManyField(Permission, ...)
+  # is_superuser        = models.BooleanField(_('superuser status'), default=False, help_text=_('Designates that this user has all permissions without explicitly assigning them.'))
+  # groups              = models.ManyToManyField(Group, verbose_name=_('groups'), blank=True, help_text=_('The groups this user belongs to. A user will get all permissions granted to each of their groups.'), related_name="user_set", related_query_name="user")
+  # user_permissions    = models.ManyToManyField(Permission, verbose_name=_('user permissions'), blank=True, help_text=_('Specific permissions for this user.'), related_name="user_set", related_query_name="user")
 
   is_active             = models.BooleanField('Account activated?',
-                            default=True)
+                            default=False)
   is_staff              = models.BooleanField('May login to /admin?',
                             default=False)
-  date_created          = models.DateTimeField('Date created',
+  # Note: django-registration-redux requires the date_joined field to exist
+  date_joined           = models.DateTimeField('Date created',
                             default=timezone.now,
                             editable=False)
   username              = models.CharField('User name',
@@ -104,7 +100,7 @@ class Member(AbstractBaseUser, PermissionsMixin):
                             max_length=50,
                             unique=True, # Two members cannot use the same username
                             validators=[validate_username],
-                            error_messages={'unique': "Another InfoSec Club member with that username already exists.",})
+                            error_messages={'unique': "Another member with that username already exists.",})
   coyote_id             = models.CharField('Coyote ID #',
                             help_text='Provide the 9-digit CSUSB student identification number. Leave blank if member is not yet or no longer a student.',
                             max_length=9,
@@ -185,7 +181,7 @@ class Member(AbstractBaseUser, PermissionsMixin):
 
   # Fields required when using 'python manage.py createsuperuser'. Doesn't affect
   # any other part of Django. See the create_superuser method in MemberManager above
-  REQUIRED_FIELDS = ['email']
+  REQUIRED_FIELDS = []
 
   def get_short_name(self):
     return self.name_first
@@ -247,3 +243,63 @@ class Membership(models.Model):
   @property
   def is_active(self):
     return (self.paid_date <= timezone.now().date() <= self.paid_until_date)
+
+
+
+
+
+
+
+
+
+
+
+
+SHA1_RE = re.compile('^[a-f0-9]{40}$')
+
+class PendingEmailChangeManager(models.Manager):
+  def confirm_pendingemail(self, confirmation_key):
+    # Make sure the key we're trying conforms to the pattern of a
+    # SHA1 hash; if it doesn't, no point trying to look it up in
+    # the database.
+    if SHA1_RE.search(confirmation_key):
+      try:
+        changerequest = self.get(confirmation_key=confirmation_key)
+      except self.model.DoesNotExist:
+        return False
+      if not changerequest.confirmation_key_expired():
+        member = changerequest.member
+        member.email = member.email_pending
+        member.email_pending = ''
+        member.save()
+        changerequest.delete()
+        return member
+    return False
+
+  def create_pendingemail(self, member):
+    salt = hashlib.sha1(six.text_type(random.random()).encode('ascii')).hexdigest()[:5]
+    salt = salt.encode('ascii')
+    member_pk = str(member.pk)
+    if isinstance(member_pk, six.text_type):
+      member_pk = member_pk.encode('utf-8')
+    confirmation_key = hashlib.sha1(salt+member_pk).hexdigest()
+    return self.create(member=member,
+                       confirmation_key=confirmation_key)
+
+class PendingEmailChange(models.Model):
+  member                = models.ForeignKey(Member, verbose_name='Member',
+                            on_delete=models.CASCADE)  # Deleting a member will delete all record of pending emails for that member
+  confirmation_key      = models.CharField('Confirmation key',
+                            max_length=40)
+  date_initiated        = models.DateTimeField('Date of email change request',
+                            default=timezone.now)
+
+  objects = PendingEmailChangeManager()
+
+  def __str__(self):
+    return "%s's pending email change from %s to %s" % (self.member.get_full_name(), self.member.email, self.member.email_pending)
+
+  def confirmation_key_expired(self):
+    expiration_date = datetime.timedelta(days=settings.PENDINGEMAIL_CONFIRMATION_DAYS)
+    return (self.date_initiated + expiration_date <= timezone.now())
+  confirmation_key_expired.boolean = True
