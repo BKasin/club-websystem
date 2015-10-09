@@ -45,42 +45,30 @@ class MemberAuthenticationBackend(ModelBackend):
 class MemberManager(BaseUserManager):
   # Custom manager object for the Member model below
 
-  def create_user(self, username, email, password=None):
+  def _create_user(self, username, email, password, name_first, name_last,
+                   **extra_fields):
     """
-    Creates and saves a Member with the given email, date of
-    birth and password.
-    This method should have the same parameters as create_superuser below,
-    but allows the password to be left out.
+    Creates and saves a new Member
     """
     if not username:
-      raise ValueError('Members must have a username')
-
-    user = self.model(
-      username=username,
-      email=self.normalize_email(email)
-    )
+        raise ValueError('The given username must be set')
+    user = self.model(username=username, email=self.normalize_email(email),
+                      name_first=name_first, name_last=name_last,
+                      **extra_fields)
     user.set_password(password)
     user.save(using=self._db)
     return user
 
-  def create_superuser(self, username, email, password):
-    """
-    Called by 'python manage.py createsuperuser to creates a user that
-    gets all privileges without being specifically set.
-    This method will receive username, followed by any fields specified below
-    in REQUIRED_FIELDS, then followed by the password.
-    It should use the create_user method above to create the Member, and then
-    modify that user to make it a superuser.
-    """
-    user = self.create_user(
-      username=username,
-      email=email,
-      password=password
-    )
-    user.is_superuser = True
-    user.is_staff = True
-    user.save(using=self._db)
-    return user
+  # Parameters should be any field that is required (blank=False) and missing any default value
+  def create_user(self, username, email, password, name_first, name_last, **extra_fields):
+    print(extra_fields)
+    return self._create_user(username, email, password, name_first, name_last, False, False,
+                             **extra_fields)
+
+  # Parameters should be username, then the fields specifed by Member.REQUIRED_FIELDS, then password
+  def create_superuser(self, username, password):
+    return self._create_user(username, '', password, '', '',
+                             is_staff=True, is_superuser=True, is_active=True)
 
 class Member(AbstractBaseUser, PermissionsMixin):
   # AbstractBaseUser will add the following fields:
@@ -93,10 +81,11 @@ class Member(AbstractBaseUser, PermissionsMixin):
   # user_permissions    = models.ManyToManyField(Permission, ...)
 
   is_active             = models.BooleanField('Account activated?',
-                            default=True)
+                            default=False)
   is_staff              = models.BooleanField('May login to /admin?',
                             default=False)
-  date_created          = models.DateTimeField('Date created',
+  # Note: django-registration-redux requires the date_joined field to exist
+  date_joined           = models.DateTimeField('Date created',
                             default=timezone.now,
                             editable=False)
   username              = models.CharField('User name',
@@ -185,7 +174,7 @@ class Member(AbstractBaseUser, PermissionsMixin):
 
   # Fields required when using 'python manage.py createsuperuser'. Doesn't affect
   # any other part of Django. See the create_superuser method in MemberManager above
-  REQUIRED_FIELDS = ['email']
+  REQUIRED_FIELDS = []
 
   def get_short_name(self):
     return self.name_first

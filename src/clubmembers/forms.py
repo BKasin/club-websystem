@@ -21,7 +21,7 @@ class MemberForm(forms.ModelForm):
       'username', 'password', 'name_first', 'name_last',
       'email', 'phone', 'texting_ok',
       'photo',
-      'acad_major', 'acad_minor', 'acad_concentration', 'acad_grad_qtr',
+      'coyote_id', 'acad_major', 'acad_minor', 'acad_concentration', 'acad_grad_qtr',
       'shirt_size',
     ]
 
@@ -47,7 +47,7 @@ class MemberForm(forms.ModelForm):
       ),
       Fieldset(
         'Academic',
-        'acad_major', 'acad_minor', 'acad_concentration', 'acad_grad_qtr',
+        'coyote_id', 'acad_major', 'acad_minor', 'acad_concentration', 'acad_grad_qtr',
       ),
       Fieldset(
         'Other',
