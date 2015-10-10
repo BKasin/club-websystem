@@ -80,8 +80,8 @@ $(document).ready(function() {
     snapDuration: '00:15:00',
     contentHeight: 520,
     allDaySlot: true,     // Show all-day events in their own section above the rest (if false, they aren't shown at all)
-{% if request.user.is_authenticated %}
-    {% if request.user.is_staff %}
+{% if user.is_authenticated %}
+    {% if user.is_staff %}
       editable: true,
     {% endif %}
 {% else %}
