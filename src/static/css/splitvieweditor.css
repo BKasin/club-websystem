@@ -1,0 +1,20 @@
+.sv-textarea {
+  width: 100%;
+  padding:1em;
+  font-family: monospace;
+  resize: none;
+}
+.sv-heading {
+  text-align:center;
+  color:#e8e8e8;
+  font-size:18pt;
+  font-style:italic;
+}
+
+/* Paragraph in the HTML preview that corresponds to the selected paragram in the markdown editor */
+.selected {
+  background-color: #FFFFE0;
+  border: 1px solid #ECE4BB;
+  border-radius: 5px;
+  padding: 0px 2px 0px 2px;
+}

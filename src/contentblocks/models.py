@@ -10,6 +10,7 @@ class Block(models.Model):
   MARKDOWN = 'md'
   HTML = 'htm'
   TEXT = 'txt'
+  datatypechoices = ((MARKDOWN, 'CommonMark'), (HTML, 'HTML'), (TEXT, 'Raw Text'))
 
   id                    = models.AutoField(
                             primary_key=True)
@@ -30,7 +31,7 @@ class Block(models.Model):
   datatype              = models.CharField('Type of content',
                             help_text='This tells the website how to process and render the content for the user.',
                             max_length=3,
-                            choices=((MARKDOWN, 'CommonMark'), (HTML, 'HTML'), (TEXT, 'Raw Text')))
+                            choices=datatypechoices)
   blob                  = models.TextField('Content block',
                             help_text='This is the actual block of content. Specify the format above.')
   published             = models.BooleanField('Published?',

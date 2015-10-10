@@ -79,3 +79,8 @@ div.versatileimagefield {
   bottom:10px;
   right:10px;
 }
+
+.showresizehandle {
+  resize:horizontal;
+  overflow:auto;
+}

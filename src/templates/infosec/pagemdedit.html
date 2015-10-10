@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Page | {{ block.super }}{% endblock %}
+
+{% block extrahead %}
+<link rel='stylesheet' href="{% static 'css/markdown.css' %}" />
+<link rel='stylesheet' href="{% static 'css/splitvieweditor.css' %}" />
+<script type="text/javascript" src="{% static 'js/lodash.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/commonmark.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/autosize.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/splitvieweditor.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert {{ message.tags }}" role="alert">{{ message }}</div>
+  {% endfor %}
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="row">
+      <div class="col-xs-6 showresizehandle">
+        <h1 class="sv-heading">{{ form.datatype }}</h1>
+        <textarea name="blob" id="sv-textarea" class="sv-textarea">{{ blob|safe }}</textarea>
+      </div>
+      <div class="col-xs-6">
+        <h1 class="sv-heading">HTML Preview</h1>
+        <div id="sv-preview" class="sv-preview markdown-body"></div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <input type="submit" name="save" value="Save Changes" class="btn btn-primary" id="sv-submitbutton">
+      <a class="btn btn-default" href="{% url 'pagemd' uniquetitle %}">Cancel</a>
+    </div>
+  </form>
+{% endblock %}
