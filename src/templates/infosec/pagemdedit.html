@@ -13,20 +13,29 @@
 {% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-xs-6 showresizehandle">
-    <h1 class="sv-heading">CommonMark</h1>
-    <textarea id="sv-textarea" class="sv-textarea">{{ origmd|safe }}</textarea>
-  </div>
-  <div class="col-xs-6">
-    <h1 class="sv-heading">HTML Preview</h1>
-    <div id="sv-preview" class="sv-preview markdown-body"></div>
-  </div>
-</div>
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert {{ message.tags }}" role="alert">{{ message }}</div>
+  {% endfor %}
+  {% endif %}
 
-<div class="form-actions">
-  <button class="btn btn-primary" id="sv-submitbutton" style="display:none">Save Changes</button>
-  <button class="btn btn-default">Cancel</button>
-  <button class="btn btn-default">Adjust Height</button>
-</div>
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="row">
+      <div class="col-xs-6 showresizehandle">
+        <h1 class="sv-heading">{{ form.datatype }}</h1>
+        <textarea name="blob" id="sv-textarea" class="sv-textarea">{{ blob|safe }}</textarea>
+      </div>
+      <div class="col-xs-6">
+        <h1 class="sv-heading">HTML Preview</h1>
+        <div id="sv-preview" class="sv-preview markdown-body"></div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <input type="submit" name="save" value="Save Changes" class="btn btn-primary" id="sv-submitbutton">
+      <a class="btn btn-default" href="{% url 'pagemd' uniquetitle %}">Cancel</a>
+    </div>
+  </form>
 {% endblock %}

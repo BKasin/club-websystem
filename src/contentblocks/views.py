@@ -1,39 +1,57 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db import models
-from django.http import HttpResponse, Http404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import Http404
 from CommonMark.CommonMark import DocParser, HTMLRenderer
 
 # Create your views here.
 from .models import Block
+from .forms import BlockForm
 
 # Create your views here.
-def pagemd(request, page, editmode=False):
-  try:
-    contentblock = Block.objects.get(uniquetitle=page)
-  except Block.DoesNotExist:
-    raise Http404("Content block named %s could not be found."%(page))
-
-  blob = contentblock.blob
+def pagemd(request, page):
+  contentblock = get_object_or_404(Block, uniquetitle=page)
 
   editable = request.user.has_perm('contentblocks.in_page_editor')
+  blob = contentblock.blob
 
-  if editmode:
-    context = {
-      'editmode': editmode,
-      'uniquetitle': page,
-      'origmd': blob,
-    }
-    return render(request, "pagemdedit.html", context)
+  parser = DocParser()
+  ast = parser.parse(blob)
+  renderer = HTMLRenderer()
+
+  context = {
+    'editable': editable,
+    'uniquetitle': page,
+    'renderedmd': renderer.render(ast),
+  }
+  return render(request, "pagemd.html", context)
+
+@login_required
+def pagemdedit(request, page):
+  contentblock = get_object_or_404(Block, uniquetitle=page)
+  editable = request.user.has_perm('contentblocks.in_page_editor')
+  if not editable:
+    raise Http404("You do not have privileges to edit content block %s."%(page))
+
+  if not request.method == 'POST':
+    # Initial load of the form
+    form = BlockForm(instance=contentblock)
 
   else:
-    parser = DocParser()
-    ast = parser.parse(blob)
-    renderer = HTMLRenderer()
-    context = {
-      'editmode': editmode,
-      'editable': editable,
-      'uniquetitle': page,
-      'origmd': blob,
-      'renderedmd': renderer.render(ast),
-    }
-    return render(request, "pagemd.html", context)
+    # User posted changes
+    form = BlockForm(request.POST, instance=contentblock)
+
+    if form.is_valid():
+      form.instance.save()
+      messages.success(request, "Changes made successfully.")
+      return redirect(pagemd, page)
+    else:
+      messages.error(request, "Form data is not valid.")
+
+  context = {
+    'form': form,
+    'uniquetitle': page,
+    'blob': contentblock.blob,
+  }
+  return render(request, "pagemdedit.html", context)
