@@ -14,10 +14,9 @@ def pagemd(request, page):
   contentblock = get_object_or_404(Block, uniquetitle=page)
 
   editable = request.user.has_perm('contentblocks.change_block')
-  blob = contentblock.blob
 
   parser = DocParser()
-  ast = parser.parse(blob)
+  ast = parser.parse(contentblock.blob)
   renderer = HTMLRenderer()
 
   context = {
