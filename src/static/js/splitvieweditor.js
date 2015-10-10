@@ -17,12 +17,15 @@ function sv_render_initial() {
     var parsed = reader.parse(sv_textarea.val());
     if (parsed === undefined) return;
     sv_preview.html(writer.render(parsed));
-    break;
-  case 'txt':
-    sv_preview.html('<pre>' + sv_textarea.val() + '</pre>');
+    sv_preview.css('white-space', '');
     break;
   case 'htm':
     sv_preview.html(sv_textarea.val());
+    sv_preview.css('white-space', '');
+    break;
+  case 'txt':
+    sv_preview.text(sv_textarea.val());
+    sv_preview.css('white-space', 'pre-wrap');
     break;
   default:
     sv_preview.html('');

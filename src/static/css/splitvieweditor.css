@@ -13,5 +13,8 @@
 
 /* Paragraph in the HTML preview that corresponds to the selected paragram in the markdown editor */
 .selected {
-  background-color: #aaffee;
+  background-color: #FFFFE0;
+  border: 1px solid #ECE4BB;
+  border-radius: 5px;
+  padding: 0px 2px 0px 2px;
 }

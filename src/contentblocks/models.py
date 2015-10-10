@@ -57,10 +57,5 @@ class Block(models.Model):
                             related_name="content_edited",
                             on_delete=models.SET_NULL)  # If a member is deleted, do NOT delete content edited by that user!
 
-  class Meta:
-    permissions = (
-      ("in_page_editor", "Can edit this page using the in-page editor"),
-    )
-
   def __unicode__(self): #Python 3.3 is __str__
     return "%s (%s)"%(self.uniquetitle, self.description)

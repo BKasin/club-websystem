@@ -13,7 +13,7 @@ from .forms import BlockForm
 def pagemd(request, page):
   contentblock = get_object_or_404(Block, uniquetitle=page)
 
-  editable = request.user.has_perm('contentblocks.in_page_editor')
+  editable = request.user.has_perm('contentblocks.change_block')
   blob = contentblock.blob
 
   parser = DocParser()
