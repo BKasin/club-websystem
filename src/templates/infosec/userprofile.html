@@ -23,7 +23,7 @@
       {% if membership.is_active %}
       <td>{% if membership.paid_amount %}You paid <b>{{ membership.paid_amount|currency }}</b>{% else %}You joined{% endif %} on {{ membership.paid_date }}, and your membership is <span class="membershiphilight">active until {{ membership.paid_until_date }}</span>.</td>
       {% else %}
-      <td>You membership to this club expired on {{ membership.paid_until_date }}. To get more information about joining, visit the <a href="{% url 'pagemd' 'membership' %}">membership information page</a>.</td>
+      <td>You membership to this club expired on {{ membership.paid_until_date }}. To get more information about joining, visit the <a href="{% url 'contentblock_view' 'membership' %}">membership information page</a>.</td>
       {% endif %}
     </tr>
   </table>
@@ -31,7 +31,7 @@
 {% empty %}
 <div class="alert alert-warning">
   <p class='lead'>No memberships found</p>
-  <p>You have a user account on the website, which stores information common accross all clubs. But you are not yet a paid member of any particular club. Once you have joined, you will see your memberships listed here instead. To get more information about joining, visit the <a class="alert-link" href="{% url 'pagemd' 'membership' %}">membership information page</a></p>
+  <p>You have a user account on the website, which stores information common accross all clubs. But you are not yet a paid member of any particular club. Once you have joined, you will see your memberships listed here instead. To get more information about joining, visit the <a class="alert-link" href="{% url 'contentblock_view' 'membership' %}">membership information page</a></p>
 </div>
 {% endfor %}
 

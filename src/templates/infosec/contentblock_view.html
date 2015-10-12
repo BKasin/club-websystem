@@ -14,8 +14,8 @@
   {% endfor %}
   {% endif %}
 
-  {% if editable %}
-    <a style="display:block; float:right; border:1px solid gray; border-radius:5px; margin:2px; padding:10px;" href="{% url 'pagemdedit' uniquetitle %}">Edit this page</a>
+  {% if user.may_edit_blocks %}
+    <a style="display:block; float:right; border:1px solid gray; border-radius:5px; margin:2px; padding:10px;" href="{% url 'contentblock_edit' uniquetitle %}">Edit this page</a>
   {% endif %}
 
   {{ renderedmd|safe }}

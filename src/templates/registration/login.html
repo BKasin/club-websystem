@@ -1,6 +1,14 @@
 {% extends "simplecenter.html" %}
 {% load crispy_forms_tags %}
 
+{% block extrahead %}
+<script type="text/javascript">
+$(function() {
+  $('#id_username').focus();
+})
+</script>
+{% endblock %}
+
 {% block content2 %}
 <h1>Login</h1>
 

@@ -5,4 +5,4 @@ from .models import Block
 class BlockForm(forms.ModelForm):
   class Meta:
     model = Block
-    fields = ['datatype', 'blob']
+    fields = ['datatype', 'published', 'blob']

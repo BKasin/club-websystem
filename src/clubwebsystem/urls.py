@@ -9,8 +9,8 @@ urlpatterns = [
   # Our site
   url(r'^$', 'mainsite.views.home', name='home'),
   url(r'^about/$', 'mainsite.views.about', name='about'),
-  url(r'^pagemd/(?P<page>\w+)/$', 'contentblocks.views.pagemd', name='pagemd'),
-  url(r'^pagemdedit/(?P<page>\w+)/$', 'contentblocks.views.pagemdedit', name='pagemdedit'),
+  url(r'^page/(?P<page>\w+)/$', 'contentblocks.views.contentblock_view', name='contentblock_view'),
+  url(r'^page/edit/(?P<page>\w+)/$', 'contentblocks.views.contentblock_edit', name='contentblock_edit'),
   url(r'^calendar/', 'events.views.calendar', name='calendar'),
   url(r'^eventjson/', 'events.views.eventjson', name='eventjson'),
   url(r'^eventmodify/', 'events.views.eventmodify', name='eventmodify'),

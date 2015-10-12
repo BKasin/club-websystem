@@ -189,6 +189,9 @@ class Member(AbstractBaseUser, PermissionsMixin):
   def get_full_name(self):
     return " ".join((self.name_first, self.name_last))
 
+  def may_edit_blocks(self):
+    return self.has_perm('contentblocks.change_block')
+
   def __unicode__(self): #Python 3.3 is __str__
     return "%s %s <%s>"%(self.name_first, self.name_last, self.username)
 

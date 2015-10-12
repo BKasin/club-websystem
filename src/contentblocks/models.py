@@ -10,7 +10,13 @@ class Block(models.Model):
   MARKDOWN = 'md'
   HTML = 'htm'
   TEXT = 'txt'
-  datatypechoices = ((MARKDOWN, 'CommonMark'), (HTML, 'HTML'), (TEXT, 'Raw Text'))
+  JSON = 'jsn'
+  datatypechoices = (
+    (MARKDOWN, 'CommonMark'),
+    (HTML, 'HTML'),
+    (TEXT, 'Raw Text'),
+    (JSON, 'JSON'),
+  )
 
   id                    = models.AutoField(
                             primary_key=True)
@@ -31,11 +37,13 @@ class Block(models.Model):
   datatype              = models.CharField('Type of content',
                             help_text='This tells the website how to process and render the content for the user.',
                             max_length=3,
-                            choices=datatypechoices)
+                            choices=datatypechoices,
+                            default=MARKDOWN)
   blob                  = models.TextField('Content block',
                             help_text='This is the actual block of content. Specify the format above.')
   published             = models.BooleanField('Published?',
-                            help_text='If true, this content will be visible to regular users of the site. False will hide the content without needing to delete it.')
+                            help_text='If true, this content will be visible to regular users of the site. False will hide the content without needing to delete it.',
+                            default=False)
   created_date          = models.DateTimeField('Created on',
                             null=True,  # Blank is stored as Null
                             blank=True, # Field is optional
