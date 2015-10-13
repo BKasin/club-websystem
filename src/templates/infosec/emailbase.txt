@@ -1,0 +1,5 @@
+Hello {{ user.get_short_name }},
+{% block content %}
+{% endblock %}
+Sincerely,
+InfoSec Club Officers

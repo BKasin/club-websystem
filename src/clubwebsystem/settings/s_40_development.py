@@ -32,3 +32,4 @@ settings.TEMPLATES[0]['DIRS'].insert(0, os.path.join(settings.BASE_DIR, "templat
 EMAIL_HOST = '127.0.0.1'
 EMAIL_PORT = 1025
 DEFAULT_FROM_EMAIL = '"Test Club" <support@test-club.org>'
+GENERIC_CONTACT_EMAIL = ['test-club@gmail.com']

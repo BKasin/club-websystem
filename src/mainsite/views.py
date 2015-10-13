@@ -1,9 +1,7 @@
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import get_template
-from django.template import Context
+from transactionalemail import mailer
 
 from .forms import ContactForm
 
@@ -17,25 +15,17 @@ def about(request):
   form = ContactForm(request.POST or None)
 
   if form.is_valid():
-    sendername = form.cleaned_data.get("full_name")
-    senderemail = form.cleaned_data.get("email")
-    context = Context({
-      'sendername': sendername,
-      'senderemail': senderemail,
-      'message': form.cleaned_data.get("message"),
-    })
-    template_txt = get_template('contact_email.txt')
-    template_html = get_template('contact_email.html')
-
-    msg = EmailMultiAlternatives(
-      subject='%s has sent a message through the website contact form' % sendername,
-      body=template_txt.render(context),
+    senderemail = form.cleaned_data['email']
+    mailer.send_template_email(request,
+      template_prefix='contact_email',
+      to=settings.GENERIC_CONTACT_EMAIL,
       reply_to=[senderemail],
-      from_email=settings.DEFAULT_FROM_EMAIL,
-      to=['csusb.infosec.club@gmail.com']
+      extra_context={
+        'sendername': form.cleaned_data['full_name'],
+        'senderemail': senderemail,
+        'message': form.cleaned_data['message'],
+      }
     )
-    msg.attach_alternative(template_html.render(context), 'text/html')
-    msg.send()
 
     messages.success(request, "Your email has been sent successfully.")
     return redirect(about)

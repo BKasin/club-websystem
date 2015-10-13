@@ -3,5 +3,6 @@
 {% block content2 %}
 <h1>Join the Club</h1>
 <p class='lead'>You're almost there</p>
-<p>To activate your account, look for an email from the club. It will come from <b>support@infosec-csusb.org</b>, and will have the subject line <b>Account activation at www.infosec-csusb.org</b>.</p>
+<p>To activate your account, look for an email from the club and follow the link it contains.</p>
+<p>It will come from <b>{{ defaultfromemail }}</b> and will have the subject line <b>Account activation for {{ request.get_host }}</b>.</p>
 {% endblock %}

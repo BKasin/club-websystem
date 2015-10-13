@@ -1,12 +1,7 @@
-<!doctype html>
-<html lang="en">
-<body>
-<p>Hello {{ user.get_short_name }},</p>
+{% extends "emailbase.html" %}
 
+{% block content %}
 <p>You have requested a change of your email address on file. To confirm your new email, you must follow this link within the next {{ expiration_days }} days:</p>
 
-<p><a href="https://www.infosec-csusb.org{% url 'confirmemail' confirmation_key %}">https://www.infosec-csusb.org{% url 'confirmemail' confirmation_key %}</a></p>
-
-<p>Sincerely,<br />InfoSec Club Officers</p>
-</body>
-</html>
+<p><a href="{{ protocol }}://{{ domain }}{% url 'confirmemail' confirmation_key %}">{{ protocol }}://{{ domain }}{% url 'confirmemail' confirmation_key %}</a></p>
+{% endblock %}

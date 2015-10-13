@@ -6,6 +6,7 @@ from django.contrib.sites.models import Site
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.db import transaction
+from transactionalemail import mailer
 
 from registration import signals
 from registration.models import RegistrationProfile
@@ -14,40 +15,40 @@ from registration.views import RegistrationView as BaseRegistrationView
 
 from clubmembers.models import Member
 
-
 class RegistrationView(BaseRegistrationView):
-  SEND_ACTIVATION_EMAIL = getattr(settings, 'SEND_ACTIVATION_EMAIL', True)
+  send_email = getattr(settings, 'SEND_ACTIVATION_EMAIL', True)
   success_url = 'registration_complete'
 
   @transaction.atomic   # A database transaction is used for this entire function
   def register(self, request, form):
-    if Site._meta.installed:
-      site = Site.objects.get_current()
-    else:
-      site = RequestSite(request)
-
     # Create a new Member instance
     if hasattr(form, 'save'):
-      # This skips our custom MemberManager
+      # FYI: This skips our custom MemberManager
       new_user_instance = form.save()
     else:
       # This will pass the data to the create_user function in our custom MemberManager
       new_user_instance = Member.objects.create_user(**form.cleaned_data)
 
-    # In case it's not already, mark the Member we just created as inactive.
-    # Then create a RegistrationProfile instance for that user with a one-time activation key
-    new_user = RegistrationProfile.objects.create_inactive_user(
-      new_user=new_user_instance,
-      site=site,
-      send_email=self.SEND_ACTIVATION_EMAIL,
-      request=request,
-    )
+    # Create a RegistrationProfile instance for that user with a one-time activation key
+    registration_profile = RegistrationProfile.objects.create_profile(new_user_instance)
+
+    # Send the mail ourselves, so we have control over the templates used
+    if self.send_email:
+      mailer.send_template_email(request,
+        template_prefix='registration/activation_email',
+        to=[new_user_instance.email],
+        extra_context={
+          'user': new_user_instance,
+          'activation_key': registration_profile.activation_key,
+          'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
+        }
+      )
 
     # Send the signal that a user has been registered
     signals.user_registered.send(sender=self.__class__,
-                   user=new_user,
+                   user=new_user_instance,
                    request=request)
-    return new_user
+    return new_user_instance
 
   def registration_allowed(self, request):
     return getattr(settings, 'REGISTRATION_OPEN', True)

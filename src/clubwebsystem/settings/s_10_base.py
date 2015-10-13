@@ -49,6 +49,7 @@ INSTALLED_APPS = [
   'events',
   'mainsite',
   'regbackend',
+  'transactionalemail',
 ]
 
 # Middleware

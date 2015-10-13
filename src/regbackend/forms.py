@@ -2,18 +2,19 @@
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import get_user_model
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, HTML, Field, Div, Submit
 from crispy_forms.bootstrap import FormActions
+
+from clubmembers.models import Member
 
 class CustomRegistrationForm(UserCreationForm):
   """
   Custom registration form
   """
   class Meta:
-      model = get_user_model()
+      model = Member
       fields = ('username', 'name_first', 'name_last', 'coyote_id', 'email')
 
   def __init__(self, *args, **kwargs):

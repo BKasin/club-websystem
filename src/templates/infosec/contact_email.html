@@ -1,10 +1,12 @@
-<html>
+<!doctype html>
+<html lang="en">
 <body>
-<h1>Message submitted</h1>
-<p>A message has been submitted through the contact form at <a href="https://www.infosec-csusb.org/about/">https://www.infosec-csusb.org/about/</a></p>
-<p></p>
-<p>From: <b>{{ sendername }}</b> ({{ senderemail }})</p>
-<p></p>
+
+<p>A message has been submitted through the contact form at <a href="{{ protocol }}://{{ domain }}{% url 'about' %}">{{ protocol }}://{{ domain }}{% url 'about' %}</a>.</p>
+
+<p>From: <b>{{ sendername }}</b> &lt;{{ senderemail }}&gt;</p>
+
 <p>{{ message }}</p>
+
 </body>
 </html>

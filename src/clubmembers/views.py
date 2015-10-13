@@ -5,9 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import transaction
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import get_template
-from django.template import Context
+from transactionalemail import mailer
 
 from .models import Member, Membership, PendingEmailChange
 from .forms import MemberForm
@@ -41,36 +39,22 @@ def userprofile(request):
         form.instance.save()
 
         # Notify the old email address of the change
-        context = Context({
-          'user': member,
-        })
-        template_txt = get_template('changeofemail_old_email.txt')
-        template_html = get_template('changeofemail_old_email.html')
-        msg = EmailMultiAlternatives(
-          subject='Your email has been changed',
-          body=template_txt.render(context),
-          from_email=settings.DEFAULT_FROM_EMAIL,
-          to=[oldemail]
+        mailer.send_template_email(request,
+          template_prefix='changeofemail_old_email',
+          to=[oldemail],
+          extra_context={'user': member}
         )
-        msg.attach_alternative(template_html.render(context), 'text/html')
-        msg.send()
 
         # Send activation link to new email address
-        context = Context({
-          'user': member,
-          'expiration_days': settings.PENDINGEMAIL_CONFIRMATION_DAYS,
-          'confirmation_key': confirmation_key
-        })
-        template_txt = get_template('changeofemail_new_email.txt')
-        template_html = get_template('changeofemail_new_email.html')
-        msg = EmailMultiAlternatives(
-          subject='Activate your new email',
-          body=template_txt.render(context),
-          from_email=settings.DEFAULT_FROM_EMAIL,
-          to=[newemail]
+        mailer.send_template_email(request,
+          template_prefix='changeofemail_new_email',
+          to=[newemail],
+          extra_context={
+            'user': member,
+            'expiration_days': settings.PENDINGEMAIL_CONFIRMATION_DAYS,
+            'confirmation_key': confirmation_key,
+          }
         )
-        msg.attach_alternative(template_html.render(context), 'text/html')
-        msg.send()
 
         # Add a message to the user
         messages.success(request, "Changes made successfully.")

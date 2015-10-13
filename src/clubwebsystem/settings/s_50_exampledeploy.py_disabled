@@ -44,6 +44,7 @@ SESSION_COOKIE_SECURE = True
 EMAIL_HOST = '127.0.0.1'
 EMAIL_PORT = 25
 DEFAULT_FROM_EMAIL = '"Information Security Club" <support@infosec-csusb.org>'
+GENERIC_CONTACT_EMAIL = ['csusb.infosec.club@gmail.com']
 
 # Restrict connections to a list of hosts
 ALLOWED_HOSTS = [
