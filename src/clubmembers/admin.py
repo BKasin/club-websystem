@@ -1,17 +1,8 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.admin.forms import AdminAuthenticationForm
 
 from .models import Member, Membership, PendingEmailChange
-
-class CustomAdminLoginForm(AdminAuthenticationForm):
-  # Extend Django's default admin login form, simply to change the label
-  # on the username field
-  error_messages = {
-    'invalid_login': "Please enter the correct credentials of a user with admin privileges. Note that both fields are case-sensitive.",
-  }
-  username = forms.CharField(label='Username / email / coyote id', max_length=254)
 
 class MemberAdmin(UserAdmin):
   # Custom admin class for our Member model
@@ -55,7 +46,6 @@ class MemberAdmin(UserAdmin):
 
 
 
-admin.site.login_form = CustomAdminLoginForm
 admin.site.register(Member, MemberAdmin)
 admin.site.register(Membership)
 admin.site.register(PendingEmailChange)

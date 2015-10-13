@@ -76,7 +76,7 @@ def userprofile(request):
         messages.success(request, "Changes made successfully.")
         messages.warning(request, "Email change is pending activation (see below).")
 
-      else:
+      else:  # NOT if 'email' in form.changed_data
         # Save the Member instance
         form.instance.save()
 

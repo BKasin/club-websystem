@@ -19,7 +19,7 @@ from clubdata.models import Club
 
 
 validate_username = validators.RegexValidator(r'^[\w.@+-]+$')  # Letters, digits or @.+-_
-validate_coyoteid = validators.RegexValidator(r'^[\d]+$')  # Numbers only
+validate_coyoteid = validators.RegexValidator(r'^[\d]{9}$')    # Exactly 9 digits
 
 class MemberAuthenticationBackend(ModelBackend):
   # Extends Django's default authentication backend, for use with our custom
@@ -27,6 +27,13 @@ class MemberAuthenticationBackend(ModelBackend):
   # other than just username
 
   def authenticate(self, username=None, password=None):
+    # Form validation elsewhere should prevent authentication of a blank username,
+    # but just in case...
+    if not username:
+      return
+    if len(username) == 0:
+      return
+
     try:
       user = Member._default_manager.get(**{'username': username})
       if user.check_password(password):
@@ -37,17 +44,12 @@ class MemberAuthenticationBackend(ModelBackend):
         if user.check_password(password):
           return user
       except Member.DoesNotExist:
-        try:
-          user = Member._default_manager.get(**{'coyote_id': username})
-          if user.check_password(password):
-            return user
-        except Member.DoesNotExist:
-          # We've been unable to find the user, but before we return None,
-          # run the default password hasher once to add the same timing delay
-          # there would have been had we found the user and checked the password
-          # See the security vulnerability info at
-          # https://code.djangoproject.com/ticket/20760
-          Member().set_password(password)
+        # We've been unable to find the user, but before we return None,
+        # run the default password hasher once to add the same timing delay
+        # there would have been had we found the user and checked the password
+        # See the security vulnerability info at
+        # https://code.djangoproject.com/ticket/20760
+        Member().set_password(password)
 
 class MemberManager(BaseUserManager):
   # Custom manager object for the Member model below
@@ -102,9 +104,8 @@ class Member(AbstractBaseUser, PermissionsMixin):
                             validators=[validate_username],
                             error_messages={'unique': "Another member with that username already exists.",})
   coyote_id             = models.CharField('Coyote ID #',
-                            help_text='Provide the 9-digit CSUSB student identification number. Leave blank if member is not yet or no longer a student.',
+                            help_text='Provide the 9-digit CSUSB student identification number. Leave blank if you do not yet have (or no longer have) a student ID number.',
                             max_length=9,
-                            #unique=True, # Since the field is optional, we cannot require it to be unique
                             blank=True, # Field is optional, but blank is stored as '' instead of Null
                             validators=[validate_coyoteid])
   name_first            = models.CharField('First name',
