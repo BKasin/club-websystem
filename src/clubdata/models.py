@@ -1,8 +1,10 @@
 from django.db import models
+from django.contrib.sites.models import Site
 
 class Club(models.Model):
   id                    = models.AutoField(
                             primary_key=True)
+  site                  = models.OneToOneField(Site)
 
   name_short            = models.CharField('Name (short version)',
                             max_length=20)

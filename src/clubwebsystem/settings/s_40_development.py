@@ -21,11 +21,12 @@ DATABASES = {
 # django's development server
 STATIC_URL = '/static/'
 
-# Keep track of which club we're in
-CURRENT_CLUB_ID = 1   # primary key of the club in the database
-CURRENT_CLUB_NAME = 'infosec'
-CURRENT_CLUB_DOMAIN = 'http://www.test-club.org'
-settings.TEMPLATES[0]['DIRS'].insert(0, os.path.join(settings.BASE_DIR, "templates", CURRENT_CLUB_NAME))
+# Settings for django.sites
+SITE_ID = 8001
+
+# Look in the club-specific template folder first
+settings.TEMPLATES[0]['DIRS'].insert(0,
+  os.path.join(settings.BASE_DIR, "templates", 'infosec'))
 
 # Send to the local debug smpt server.
 # Start it by running this in a terminal: python -m smtpd -n -c DebuggingServer localhost:1025
