@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db import models
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.sites.models import Site
 from django.http import Http404
+
 from CommonMark.CommonMark import DocParser, HTMLRenderer
 
 from mainsite.templatetags import infosec
@@ -15,6 +17,8 @@ def contentblock_view(request, page):
   may_edit = request.user.may_edit_blocks
 
   try:
+    # Because Block has a custom manager, the results will already be filtered to the current site
+    #   plus global items (not linked to any site)
     contentblock = Block.objects.get(uniquetitle=page)
   except Block.DoesNotExist:
     if may_edit:
@@ -49,7 +53,7 @@ def contentblock_edit(request, page):
       contentblock = Block.objects.get(uniquetitle=page)
     except Block.DoesNotExist:
       messages.warning(request, "This block does not yet exist, but you may create it below.")
-      contentblock = Block(uniquetitle=page)
+      contentblock = Block(uniquetitle=page, site=Site.objects.get_current())
 
     form = BlockForm(instance=contentblock)
 
@@ -58,7 +62,7 @@ def contentblock_edit(request, page):
     try:
       contentblock = Block.objects.get(uniquetitle=page)
     except Block.DoesNotExist:
-      contentblock = Block(uniquetitle=page)
+      contentblock = Block(uniquetitle=page, site=Site.objects.get_current())
     form = BlockForm(request.POST, instance=contentblock)
 
     if form.is_valid():
