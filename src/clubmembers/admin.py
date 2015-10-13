@@ -61,7 +61,6 @@ class MemberAdmin(UserAdmin):
 
 class MembershipAdmin(admin.ModelAdmin):
   list_display = ('member', 'club')
-  list_filter = ('club',)
   raw_id_fields = ['member']
 
 
