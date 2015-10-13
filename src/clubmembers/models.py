@@ -7,6 +7,7 @@ import datetime
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.contrib.sites.models import Site
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.contrib.auth.backends import ModelBackend
 from django.core import validators
@@ -195,7 +196,7 @@ class Member(AbstractBaseUser, PermissionsMixin):
     return self.has_perm('contentblocks.change_block')
 
   def __unicode__(self): #Python 3.3 is __str__
-    return "%s %s <%s>"%(self.name_first, self.name_last, self.username)
+    return "%s %s (%s)"%(self.name_first, self.name_last, self.username)
 
 
 
@@ -206,7 +207,20 @@ class Member(AbstractBaseUser, PermissionsMixin):
 
 
 
+class CustomMembershipManager(models.Manager):
+  # Custom manager to show only the items that belong to the current Club
+  use_in_migrations = True
 
+  current_club_id = None
+
+  def _get_current_club_id(self):
+    if not self.current_club_id:
+      current_site = Site.objects.get_current()
+      self.current_club_id = current_site.club.id
+    return self.current_club_id
+
+  def get_queryset(self):
+    return super(CustomMembershipManager, self).get_queryset().filter(club=self._get_current_club_id())
 
 class Membership(models.Model):
   id                    = models.AutoField(primary_key=True)
@@ -241,6 +255,8 @@ class Membership(models.Model):
   shirt_received_date   = models.DateField('Shirt received on',
                             null=True,  # Blank is stored as Null
                             blank=True) # Field is optional
+
+  objects = CustomMembershipManager()
 
   def __unicode__(self): #Python 3.3 is __str__
     return "%s --> %s"%(self.member.get_full_name(), self.club.name_short)

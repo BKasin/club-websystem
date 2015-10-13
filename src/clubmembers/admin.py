@@ -4,6 +4,10 @@ from django.contrib.auth.admin import UserAdmin
 
 from .models import Member, Membership, PendingEmailChange
 
+
+
+
+
 class MemberAdmin(UserAdmin):
   # Custom admin class for our Member model
 
@@ -46,6 +50,50 @@ class MemberAdmin(UserAdmin):
 
 
 
+
+
+
+
+
+
+
+
+
+class MembershipAdmin(admin.ModelAdmin):
+  list_display = ('member', 'club')
+  list_filter = ('club',)
+  raw_id_fields = ['member']
+
+
+
+
+
+
+
+
+
+
+
+
+class PendingEmailChangeAdmin(admin.ModelAdmin):
+  actions = ['confirm_emails']
+  list_display = ('member', 'pendingchange_tostr', 'confirmation_key_expired')
+  search_fields = ('member__username', 'member__email', 'member__emailpending')
+  raw_id_fields = ['member']
+
+  def pendingchange_tostr(self, obj):
+    return '%s --> %s' % (obj.member.email, obj.member.email_pending)
+  pendingchange_tostr.short_description = "Pending change"
+
+  def confirm_emails(self, request, queryset):
+    for c in queryset:
+      PendingEmailChange.objects.confirm_pendingemail(c.confirmation_key)
+  confirm_emails.short_description = "Confirm/apply email changes"
+
+
+
+
+
 admin.site.register(Member, MemberAdmin)
-admin.site.register(Membership)
-admin.site.register(PendingEmailChange)
+admin.site.register(Membership, MembershipAdmin)
+admin.site.register(PendingEmailChange, PendingEmailChangeAdmin)

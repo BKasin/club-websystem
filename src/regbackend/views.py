@@ -2,7 +2,6 @@
 
 from django.conf import settings
 from django.contrib.sites.requests import RequestSite
-from django.contrib.sites.models import Site
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.db import transaction

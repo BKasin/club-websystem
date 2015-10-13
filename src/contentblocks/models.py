@@ -5,12 +5,12 @@ from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
 from django.conf import settings
 
-from clubdata.models import Club
 from clubmembers.models import Member
 
 class CustomBlockManager(CurrentSiteManager):
-  # Since Block's 'site' field is optional, we must have a custom manager to hide the blocks that
-  #   don't belong to the current site, but still show blocks that belong to *no* site
+  # Custom manager to show only the items that either
+  #   (a) belong to the current Site, or
+  #   (b) belong to no Site
   def get_queryset(self):
     return super(CurrentSiteManager, self).get_queryset().filter(
       models.Q(site__id=settings.SITE_ID) | models.Q(site__id=None))
