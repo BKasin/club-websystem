@@ -12,7 +12,11 @@ def home(request):
   return render(request, "home.html")
 
 def about(request):
-  form = ContactForm(request.POST or None)
+  if request.user.is_anonymous():
+    initial=None
+  else:
+    initial = {'full_name':request.user.get_full_name(), 'email':request.user.email}
+  form = ContactForm(request.POST or None, initial=initial)
 
   if form.is_valid():
     senderemail = form.cleaned_data['email']
