@@ -63,7 +63,7 @@ $(document).ready(function() {
       center: '',
       right: 'month,agendaWeek,agendaDay today',
     },
-    defaultView: 'agendaWeek',
+    defaultView: 'month',
     //aspectRatio: 2,
     fixedWeekCount: true, // Always show months with 6 weeks, even if month has fewer
     timezone: false,
@@ -80,13 +80,7 @@ $(document).ready(function() {
     snapDuration: '00:15:00',
     contentHeight: 520,
     allDaySlot: true,     // Show all-day events in their own section above the rest (if false, they aren't shown at all)
-{% if user.is_authenticated %}
-    {% if user.is_staff %}
-      editable: true,
-    {% endif %}
-{% else %}
-      editable: false,
-{% endif %}
+    editable: {{ user.is_staff|yesno:"true,false" }},
     eventDrop: handle_eventDrop,
     eventResize: handle_eventDrop,
 

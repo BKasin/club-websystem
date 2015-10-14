@@ -4,12 +4,14 @@ body {
 }
 h1, .h1 {
   font-size:30px;
+  border-bottom-style:solid;
   border-image:linear-gradient(to right, rgba(82,159,202,255), rgba(82,159,202,255) 40%, rgba(0,0,0,0) 80%) 1;
   border-width:0px 0px 2px 0px;
   padding-bottom:2px;
 }
 h2, .h2 {
   font-size:22px;
+  border-bottom-style:solid;
   border-image:linear-gradient(to right, rgba(176,176,176,255), rgba(176,176,176,255) 40%, rgba(0,0,0,0) 50%) 1;
   border-width:0px 0px 1px 0px;
   padding-bottom:1px;
