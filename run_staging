@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Run the development server
+export DJANGO_SETTINGS_MODULE='system.settings.staging'
+echo uwsgi --ini $VIRTUAL_ENV/uwsgi.ini
+uwsgi --ini $VIRTUAL_ENV/uwsgi.ini

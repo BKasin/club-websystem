@@ -1,3 +1,11 @@
 #!/bin/sh
 
-python $VIRTUAL_ENV/src/manage.py runserver 0.0.0.0:8000
+# Run the development server
+export DJANGO_SETTINGS_MODULE='system.settings.dev'
+if [ $# -gt 0 ]; then
+  P="$*"
+else
+  P="runserver 0.0.0.0:8000"
+fi
+echo python $VIRTUAL_ENV/src/manage.py $P
+python $VIRTUAL_ENV/src/manage.py $P

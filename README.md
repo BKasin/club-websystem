@@ -97,7 +97,7 @@ If you want to test email features within your development environment, you can 
 
     python -m smtpd -n -c DebuggingServer localhost:1025
 
-Then configure your clubwebsystem/settings/local.py accordingly:
+Then configure your settings file accordingly:
 
     EMAIL_HOST = 'localhost'
     EMAIL_PORT = 1025
