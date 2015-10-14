@@ -47,7 +47,7 @@ INSTALLED_APPS = [
   'clubmembers',
   'contentblocks',
   'events',
-  'mainsite',
+  'mainsite_infosec',
   'regbackend',
   'transactionalemail',
 ]

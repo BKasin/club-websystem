@@ -1,24 +1,53 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.db import models
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.http import Http404
+from django.utils.html import format_html
+from django.core.urlresolvers import reverse
 
 from CommonMark.CommonMark import DocParser, HTMLRenderer
 
-from mainsite.templatetags import infosec
+#from mainsite_infosec.templatetags import trigger_navbar_refresh
 
 from .models import Block
 from .forms import BlockForm
 
-# Create your views here.
+def wrap_blob_with_editablediv(blob, uniquetitle):
+  return ("<div class='editableblock'><a class='editblockbutton' href='" +
+          reverse('contentblock_edit', args=(uniquetitle,)) +
+          "'>edit this block</a>" +
+          blob + "</div>")
+
+def render_blob(blob, datatype):
+  # This must return a string that is ready to insert directly into the page, without any further escaping
+  try:
+    if datatype == Block.MARKDOWN:
+      parser = DocParser()
+      ast = parser.parse(blob)
+      renderer = HTMLRenderer()
+      # No escaping, since markdown has already parsed everything
+      return '<div class="markdown-body">%s</div>' % renderer.render(ast)
+    elif datatype == Block.HTML:
+      # No escaping; we want the original
+      return blob
+    elif datatype == Block.TEXT:
+      # Escape the blob, so all characters will be preserved
+      return format_html('<div style="white-space:pre-wrap">{}</div>', blob)
+    elif datatype == Block.JSON:
+      return '{No rendering for JSON blobs}'
+    else:
+      return '{Unable to render block}'
+  except:
+    return '{Error rendering block}'
+
 def contentblock_view(request, page):
-  may_edit = request.user.may_edit_blocks
+  user = request.user
+  may_edit = request.user.is_authenticated() and request.user.may_edit_blocks
 
   try:
-    # Because Block has a custom manager, the results will already be filtered to the current site
-    #   plus global items (not linked to any site)
+    # Because Block has a custom manager, the results are filtered already even before adding this filter
     contentblock = Block.objects.get(uniquetitle=page)
   except Block.DoesNotExist:
     if may_edit:
@@ -32,19 +61,18 @@ def contentblock_view(request, page):
     else:
       raise Http404()
 
-  parser = DocParser()
-  ast = parser.parse(contentblock.blob)
-  renderer = HTMLRenderer()
+  blob = render_blob(contentblock.blob, contentblock.datatype)
+  if may_edit: blob = wrap_blob_with_editablediv(blob, page)
 
   context = {
     'uniquetitle': page,
-    'renderedmd': renderer.render(ast),
+    'renderedblob': blob,
   }
   return render(request, "contentblock_view.html", context)
 
 @login_required
 def contentblock_edit(request, page):
-  if not request.user.may_edit_blocks:
+  if not request.user.may_edit_blocks:  # No need to check is_authenticated, since login is already required
     raise Http404("You do not have privileges to edit content blocks.")
 
   if not request.method == 'POST':
@@ -69,8 +97,8 @@ def contentblock_edit(request, page):
       form.instance.save()
 
       # If we just changed the navbar, trigger a refresh of it
-      if contentblock.uniquetitle == infosec.NAVBAR_BLOCK_ID:
-        infosec.navdata = None
+      #if contentblock.uniquetitle == 'navbar':
+      #  trigger_navbar_refresh()
 
       messages.success(request, "Changes made successfully.")
       return redirect(contentblock_view, page)

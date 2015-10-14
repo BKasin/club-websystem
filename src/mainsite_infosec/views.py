@@ -11,7 +11,7 @@ from clubmembers.models import Member
 def home(request):
   return render(request, "home.html")
 
-def about(request):
+def about_contact(request):
   if request.user.is_anonymous():
     initial=None
   else:
@@ -32,9 +32,9 @@ def about(request):
     )
 
     messages.success(request, "Your email has been sent successfully.")
-    return redirect(about)
+    return redirect(about_contact)
 
   context = {
     "form": form,
   }
-  return render(request, "about.html", context)
+  return render(request, "about_contact.html", context)

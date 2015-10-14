@@ -9,7 +9,7 @@ CALSOURCES = """
     googleCalendarApiKey: 'AIzaSyDKSBh7lXk8DS8TASIywg6E2JD8ZvGA9Lo',
     eventSources: [
       {
-        url: "/eventjson/",
+        url: "/events/json/",
         className: 'calitem_blue'
       },
       {
@@ -22,16 +22,16 @@ CALSOURCES = """
 # Method #2: single event source
 '''CALSOURCES = """
     events: {
-        url: "/eventjson/",
+        url: "/events/json/",
         className: 'calitem_blue'
     }
 """'''
 
-def calendar(request):
+def events(request):
   context = {
     'calendar_config_options': CALSOURCES
   }
-  return render(request, "calendar.html", context)
+  return render(request, "events.html", context)
 
 def eventjson(request):
   # Determine what date range to query

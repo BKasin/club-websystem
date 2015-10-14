@@ -1,16 +1,33 @@
+body {
+  margin-top:60px;
+  line-height:1.5;
+}
 h1, .h1 {
-  font-size: 36px;
+  font-size:30px;
+  border-image:linear-gradient(to right, rgba(82,159,202,255), rgba(82,159,202,255) 40%, rgba(0,0,0,0) 80%) 1;
+  border-width:0px 0px 2px 0px;
+  padding-bottom:2px;
 }
 h2, .h2 {
-  font-size: 22px;
+  font-size:22px;
+  border-image:linear-gradient(to right, rgba(176,176,176,255), rgba(176,176,176,255) 40%, rgba(0,0,0,0) 50%) 1;
+  border-width:0px 0px 1px 0px;
+  padding-bottom:1px;
 }
 h3, .h3 {
-  font-size: 16px;
-  font-style: italic;
+  font-size:16px;
+  font-style:italic;
 }
 h4, .h4 {
-  font-size: 14px;
-  font-style: italic;
+  font-size:14px;
+  font-style:italic;
+}
+
+blockquote {
+  font-size:14px;
+  border-left:4px solid #DDD;
+  padding:0 15px;
+  color:#777
 }
 
 .dropdown-header {
@@ -44,16 +61,16 @@ tr.event_external td {
 
 /* Fix the incorrect styling from versatileimagefield, and make it like the other fields */
 div.versatileimagefield {
-  float: none !important;
-  clear: none !important;
+  float:none !important;
+  clear:none !important;
   display:inline-block !important;
 }
 
 .readonlypasswordhashwidget {
-  border: none;
-  box-shadow: none;
-  color: silver;
-  height: initial;
+  border:none;
+  box-shadow:none;
+  color:silver;
+  height:initial;
 }
 
 .membership td {
@@ -83,4 +100,27 @@ div.versatileimagefield {
 .showresizehandle {
   resize:horizontal;
   overflow:auto;
+}
+
+.editableblock {
+  border:1px dashed transparent;
+}
+.editableblock:hover {
+  border-color:#FFBE34;
+}
+.editblockbutton {
+  position:fixed;
+  display:none;
+  color:black;
+  background-color:#FFF6E3;
+  border-bottom:1px dashed #FFBE34;
+  border-right:1px dashed #FFBE34;
+  border-bottom-right-radius:5px;
+  padding:3px 5px 3px 5px;
+  font-size:8pt;
+  font-style:italic;
+  line-height:1;
+}
+.editableblock:hover .editblockbutton {
+  display:block;
 }

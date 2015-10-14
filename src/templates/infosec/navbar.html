@@ -1,6 +1,6 @@
-{% load infosec %}
+{% load contentblock_renderer %}
 {% load staticfiles %}
-<nav class="navbar navbar-default navbar-static-top">
+<nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -13,7 +13,7 @@
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        {% generatenav %}
+        {% generate_navbar %}
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if user.is_authenticated %}
@@ -26,7 +26,7 @@
             <li><a href="{% url 'admin:index' %}" style="color:orange">Site Administration</a></li>
             {% endif %}
             {% if user.may_edit_blocks %}
-            <li><a href="{% url 'contentblock_edit' 'navbar_infosec' %}" style="color:orange">Edit the Navbar</a></li>
+            <li><a href="{% url 'contentblock_edit' 'navbar' %}" style="color:orange">Edit the Navbar</a></li>
             {% endif %}
             <li><a href="{% url 'userprofile' %}">My Profile</a></li>
             <li class="divider"></li>

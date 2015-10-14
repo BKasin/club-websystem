@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load contentblock_renderer %}
+{% load staticfiles %}
+
+{% block title %}About | {{ block.super }}{% endblock %}
+
+{% block content %}
+<h1>Contact Us</h1>
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert {{ message.tags }}" role="alert">{{ message }}</div>
+{% endfor %}
+{% endif %}
+
+<div class="row">
+  <div class="col-sm-7">
+    <p>Please use the form below to send any suggestions, questions, or complaints to the club's primary email:</p>
+    <form method="POST" action="">{% csrf_token %}
+      {{ form|crispy }}
+      <input class="btn btn-default" type="submit" value="Submit" />
+    </form>
+  </div>
+  <div class="col-sm-5">
+    <p>If instead you would like to contact a club officer directly, see the list below:</p>
+    {% load_contentblock 'about_part1' %}
+  </div>
+</div>
+{% endblock %}

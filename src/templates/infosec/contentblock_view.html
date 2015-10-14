@@ -3,10 +3,6 @@
 
 {% block title %}Page | {{ block.super }}{% endblock %}
 
-{% block extrahead %}
-<link rel='stylesheet' href="{% static 'css/markdown.css' %}" />
-{% endblock %}
-
 {% block content %}
   {% if messages %}
   {% for message in messages %}
@@ -14,9 +10,5 @@
   {% endfor %}
   {% endif %}
 
-  {% if user.may_edit_blocks %}
-    <a style="display:block; float:right; border:1px solid gray; border-radius:5px; margin:2px; padding:10px;" href="{% url 'contentblock_edit' uniquetitle %}">Edit this page</a>
-  {% endif %}
-
-  {{ renderedmd|safe }}
+  {{ renderedblob|safe }}
 {% endblock %}

@@ -1,4 +1,4 @@
-A message has been submitted through the contact form at {{ protocol }}://{{ domain }}{% url 'about' %}.
+A message has been submitted through the contact form at {{ protocol }}://{{ domain }}{% url 'about_contact' %}.
 
 From: {{ sendername }} <{{ senderemail }}>
 
