@@ -3,13 +3,10 @@ import fnmatch
 
 from contentblocks.models import Block
 
-from ..views import wrap_blob_with_editablediv, render_blob
+from contentblocks.views import NAVBAR_BLOCK_ID, get_navdata, set_navdata, wrap_blob_with_editablediv, render_blob
 
 from django import template
 register = template.Library()
-
-NAVBAR_BLOCK_ID = 'navbar'
-navdata = None
 
 def _generate_navbar(nd, curpage):
   output = ""
@@ -38,7 +35,7 @@ def _generate_navbar(nd, curpage):
 
 @register.simple_tag(takes_context=True)
 def generate_navbar(context):
-  global navdata
+  navdata = get_navdata()
   if navdata is None:
     try:
       # Because Block has a custom manager, the results are filtered already even before adding this filter
@@ -51,7 +48,13 @@ def generate_navbar(context):
     except:
       navdata = [['{Error processing block "%s"}' % NAVBAR_BLOCK_ID, '/']]
 
+    set_navdata(navdata)
+
   return _generate_navbar(navdata, context.request.path_info)
+
+
+
+
 
 @register.simple_tag(takes_context=True)
 def load_contentblock(context, uniquetitle):

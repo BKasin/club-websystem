@@ -9,10 +9,20 @@ from django.core.urlresolvers import reverse
 
 from CommonMark.CommonMark import DocParser, HTMLRenderer
 
-#from mainsite_infosec.templatetags import trigger_navbar_refresh
-
 from .models import Block
 from .forms import BlockForm
+
+NAVBAR_BLOCK_ID = 'navbar'
+navdata = None
+
+def get_navdata():
+  return navdata
+
+def set_navdata(nd):
+  global navdata
+  navdata = nd
+
+
 
 def wrap_blob_with_editablediv(blob, uniquetitle):
   return ("<div class='editableblock'><a class='editblockbutton' href='" +
@@ -97,8 +107,10 @@ def contentblock_edit(request, page):
       form.instance.save()
 
       # If we just changed the navbar, trigger a refresh of it
-      #if contentblock.uniquetitle == 'navbar':
-      #  trigger_navbar_refresh()
+      # TODO: we need a more club-neutral way of doing this
+      if page == NAVBAR_BLOCK_ID:
+        global navdata
+        navdata = None
 
       messages.success(request, "Changes made successfully.")
       return redirect(contentblock_view, page)
