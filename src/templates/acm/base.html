@@ -1,0 +1,41 @@
+{% load staticfiles %}
+<!doctype html>
+<html class='no-js'>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>{% block title %}ACM Chapter at CSU, San Bernardino{% endblock %}</title>
+    <meta content='The official website of the ACM Chapter of California State University, San Bernardino.' name='description'>
+    <meta content='width=device-width' name='viewport'>
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Roboto+Condensed:300' rel='stylesheet' type='text/css'>
+
+    <link rel='stylesheet' href="{% static 'acm/main.css' %}">
+    {% block extrahead %}
+    {% endblock %}
+  </head>
+  <body>
+    <div class='container'>
+
+      <header>
+        <h1><img src="{% static 'acm/logo.svg' %}" style="width:175px; height:175px" /></h1>
+        ** Website is currently undergoing a rework. We'll keep the content as accurate as possible during the update, but can make no guarantees. <strong>Last Update: 10/12/15</strong> **
+      </header>
+
+      {% block content %}
+      {% endblock %}
+
+      <div class='clearfix'></div>
+
+      <footer class='copyright'>
+        Copyright &copy; 2014 by the Computer Science &amp; Engineering Club at California State University, San Bernardino.
+      </footer>
+
+    </div>
+
+    <script>window.jQuery || document.write('<script src="{% static 'jquery-1.11.3/jquery.min.js' %}"><\/script>')</script>
+    <script src="{% static 'acm/plugins.js' %}"></script>
+    <script src="{% static 'acm/main.js' %}"></script>
+
+  </body>
+</html>

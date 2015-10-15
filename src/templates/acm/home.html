@@ -1,0 +1,374 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Home | {{ block.super }}{% endblock %}
+
+{% block content %}
+			<aside class='sidebar'>
+				<div style="border:1px solid silver; text-align:center; padding:10px;">
+					{% if user.is_authenticated %}
+					<img src="{{ user.photo.thumbnail.100x100 }}" /><br />
+					{{ user.get_full_name }}
+					<hr />
+          {% if user.is_staff %}
+          <a href="{% url 'admin:index' %}">Site Administration</a><br />
+          {% endif %}
+          <a href="{% url 'userprofile' %}">My Profile</a><br />
+          <a href="{% url 'auth_logout' %}">Logout</a>
+          {% else %}
+	        <a href="{% url 'auth_login' %}">Login</a><br />
+	        <a href="{% url 'registration_register' %}">Join</a>
+					{% endif %}
+				</div>
+				<nav class='nav'>
+					<ul>
+						<li class='nav-item'>
+							<a href='#membership'>Membership</a>
+						</li>
+						<li class='nav-item'>
+							<a href='#labs'>Labs</a>
+						</li>
+						<li class='nav-item'>
+							<a href='#hangouts'>Hangouts</a>
+						</li>
+						<li class='nav-item'>
+							<a href='#projects'>Projects</a>
+						</li>
+						<li class='nav-item'>
+							<a href='#office-hours'>Office&nbsp;Hours</a>
+						</li>
+						<li class='nav-item'>
+							<a href='#tutoring'>Tutoring</a>
+						</li>
+						<li class='nav-item'>
+							<a href='#contact'>Contact</a>
+						</li>
+					</ul>
+				</nav>
+			</aside>
+
+			<div class='content'>
+				<p>Association for Computing Machinery Club is a club at CSU, San Bernardino devoted to computer science, computer engineering, and computer systems. Interested in us? Feel free to checkout our <a href='https://www.facebook.com/groups/csec.sb/'>Facebook Group</a> or <a href='https://github.com/ACM-CSUSB'>GitHub</a> account. We also have a page on the <a href='http://www.cse.csusb.edu/resources/club/'>CSE Department</a> website. The club office is in Jack Brown room 540.</p>
+
+				<h2 id='membership' data-title='Apply Now!'>Membership Application</h2>
+
+				<p>Our club is open to everyone, and we encourage you to join! You can do so by filling out the <a href="">membership application</a> and either turning it into an officer, or dropping it off in our office. We do have a membership fee of $10 per quarter. At this time we can only accept either cash or check.</p>
+
+				<h2 id='labs' data-title='Sometimes there&rsquo;s pizza!'>Labs</h2>
+
+				<p>Every week, we hold labs where you can improve your skills and learn new things. Unless otherwise announced, our meetings and labs are held:</p>
+
+				<table>
+					<tr>
+						<th>Day</th>
+						<th>Time</th>
+						<th>Location</th>
+					</tr>
+					<tr>
+						<td>Friday</td>
+						<td>1:00 PM</td>
+						<td>CSE Labs, third floor of JBH</td>
+					</tr>
+				</table>
+
+				<p>To see our full lab schedule and past lab documents, visit <a href="{% url 'labs' %}">our labs page</a>. If you have an idea for a lab, please <a href="#contact">let us know</a>!</p>
+
+				<h2 id='hangouts' data-title='Let&rsquo;s Have Fun!'>Hangouts</h2>
+
+				<p>Every week, we host a hangout on TeamSpeak where you can come and collaborate with fellow members and discuss interesting topics.</p>
+
+				<table>
+					<tr>
+						<th>Day</th>
+						<th>Time</th>
+						<th>Server</th>
+					</tr>
+					<tr>
+						<td>Sunday</td>
+						<td>6pm - 9pm</td>
+						<td>acm-csusb.org</td>
+					</tr>
+				</table>
+
+				<p><strong>TeamSpeak Instructions</strong></p>
+				<ol>
+					<li>Download and install TeamSpeak 3 Client from their <a href="https://www.teamspeak.com/downloads">download page</a>.</li>
+					<li>Launch TeamSpeak 3 and go under "Bookmarks" >> "Manage Bookmarks" then click "Add Bookmark"</li>
+					<li>
+						Fill in the following information under the respected fields:
+						<ul>
+							<li><strong>Label</strong>: ACM Club</li>
+							<li><strong>Address</strong>: acm-csusb.org</li>
+							<li><strong>Nickname</strong>: (Alias we may refer to you by)</li>
+						</ul>
+					</li>
+					<li>Hit "Apply" then "Ok"</li>
+					<li>Select "Bookmartks" >> "ACM Club"</li>
+					<li><strong>Welcome To The Club's TeamSpeak Server!!</strong></li>
+				</ol>
+
+				<h2 id='projects' data-title='Build you a thing!'>Projects</h2>
+
+				<p>As a member of the ACM Club, you are able to participate or lead any of the club projects we may have. Participating in these projects is a great way to broaden and improve your abilities in our field. One of the most important things that you can have on your resume is a portfolio of work that you have done outside of university classes.</p>
+
+				<p>For more information on each of our individual projects, see our <a href="{% url 'projects' %}">projects page</a>.</p>
+
+				<h2 id='office-hours' data-title='Talk to us&hellip;please'>
+					Office Hours
+				</h2>
+
+				<table>
+					<tr>
+						<th>Day</th>
+						<th>Officer</th>
+						<th>Time</th>
+					</tr>
+					<tr>
+						<td rowspan="2">Monday</td>
+						<td>Juan Nevares</td>
+						<td>10:40AM - 12:00PM</td>
+					</tr>
+					<tr>
+						<td>Ruben Castaneda</td>
+						<td>12:30PM - 1:30PM</td>
+					</tr>
+					<tr>
+						<td rowspan="2">Wednesday</td>
+						<td>Juan Nevares</td>
+						<td>10:40AM - 12:00PM</td>
+					</tr>
+					<tr>
+						<td>Ruben Castaneda</td>
+						<td>12:30PM - 1:30PM</td>
+					</tr>
+					<tr>
+						<td rowspan="1">Thursday</td>
+						<td>Richarn Quon</td>
+						<td>8:00AM - 10:00AM</td>
+					</tr>
+					<tr>
+						<td rowspan="1">Friday</td>
+						<td>Juan Nevares</td>
+						<td>10:40AM - 12:00PM</td>
+					</tr>
+				</table>
+
+
+				<h2 id='tutoring' data-title='Get help!'>
+					Tutoring Schedule
+				</h2>
+
+				<p>To get tutoring, simply show up to the CSE Department labs (JB 358, 359, and 360) during the times listed below. For tutoring in a specific class, look at the tutor course listing. If you can't make it to tutoring, or want additional help, always feel free to come by the ACM Club office in JB 540. Remember to <a href="{% url 'tutoring' %}">sign in</a> when you go!</p>
+
+				<table>
+					<thead>
+						<tr>
+							<th>Tutor</th>
+							<th>Classes</th>
+							<th>Hours</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td rowspan="3">
+								Beverly Abadines
+							</td>
+							<td>CSE 201, Computer Science I</td>
+							<td rowspan="3">
+								Tuesday: 4:15PM - 6:15PM
+							</td>
+						</tr>
+						<tr>
+							<td>CSE 202, Computer Science II</td>
+						</tr>
+						<tr>
+							<td>CSE 330, Data Structures</td>
+						</tr>
+
+						<tr>
+							<td rowspan="3">
+								Juan Nevares
+							</td>
+							<td>CSE 201, Computer Science I</td>
+							<td rowspan="3">
+								Tuesday: 1:00PM - 3:00PM<br />
+								Thursday: 1:00PM - 3:00PM
+							</td>
+						</tr>
+						<tr>
+							<td>CSE 202, Computer Science II</td>
+						</tr>
+						<tr>
+							<td>CSE 360, Script Programming</td>
+						</tr>
+
+						<tr>
+							<td rowspan="4">
+								Miguel Saldivar
+							</td>
+							<td>CSE 201, Computer Science I</td>
+							<td rowspan="4">
+								Tuesday 9:30AM - 12:00PM<br />
+								Friday 1:00PM - 2:30PM
+							</td>
+						</tr>
+						<tr>
+							<td>CSE 202, Computer Science II</td>
+						</tr>
+						<tr>
+							<td>CSE 310, Digital Logic</td>
+						</tr>
+						<tr>
+							<td>CSE 330, Data Structures</td>
+						</tr>
+
+						<tr>
+							<td rowspan="3">
+								Richard Quon
+							</td>
+							<td>CSE 201, Computer Science I</td>
+							<td rowspan="3">
+								Monday 1:30PM - 3:30PM<br />
+								Wednesday 1:30PM - 3:30PM
+							</td>
+						</tr>
+						<tr>
+							<td>CSE 202, Computer Science II</td>
+						</tr>
+						<tr>
+							<td>CSE 310, Digital Logic</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<h2 id='contact' data-title='Get in touch!'>
+					Contact
+				</h2>
+
+				<p>You can visit us in person during our office hours listed above in JB-540, or you can contact us via email at <a
+																																	class='email
+					href="mailto:x@y"
+					'
+																																	href
+																																	=  '
+					&#x20;m&#97;&#x69;&#x6C;&#116;o&#x3a;&#x25;2&#48;%&#54;f&#x66;f&#105;%&#x36;&#x33;&#x65;&#x25;72&#115;&#37;4&#48;&#x25;&#x36;&#49;&#99;&#37;&#x36;&#100;&#x25;2&#x64;c%&#x37;&#x33;&#x75;s%6&#x32;%&#x32;e&#111;&#x72;%67?
+					'>o&#x66;f&#105;c&#x65;&#x72;&#115;&#64;a&#99;<!--
+mailto:abuse@hotmail.com
+</a>
+-->&shy;&#x6d;-&#x63;su&#x73;&#98;&#46;o&#x72;&#x67;</a>. You can also contact any of our officers individually via email.</p>
+
+				<table>
+					<tr>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Email</th>
+					</tr>
+					<tr>
+						<td>Ruben Castaneda</td>
+						<td>President</td>
+						<td><a
+							   class='email
+							href="mailto:x@y"
+							'
+							   href
+							   ='
+							&#x20;ma&#x69;l&#x74;&#111;&#58;%&#50;0pr&#37;&#x36;5%7&#x33;%69%64en&#116;%&#x34;0a&#99;%6&#x64;&#37;&#x32;d&#x25;&#54;3&#115;&#x75;%&#55;&#x33;b&#37;2e&#x6F;&#x25;72&#x25;6&#55;&#63;
+							'>p&#x72;e&#x73;&#x69;d&#x65;&#x6e;&#x74;@a<!--
+mailto:abuse@hotmail.com
+</a>
+-->&shy;&#x63;m&#45;cs&#117;sb&#46;o&#x72;&#x67;</a></td>
+					</tr>
+					<tr>
+						<td>Mike Korcha</td>
+						<td>Vice President</td>
+						<td><a
+							   class='email
+							href="mailto:x@y"
+							'
+							   href
+							   =  '
+							&#x20;&#x6d;&#x61;&#105;&#x6C;t&#x6f;&#58;%20v%&#54;9&#x25;6&#x33;&#37;65&#x25;&#x32;&#100;&#37;7&#x30;%&#x37;&#x32;e&#x73;id&#x65;n%&#x37;4&#x25;&#52;0acm%2&#x64;c&#x73;&#x25;&#x37;&#x35;sb&#x25;&#x32;&#101;&#x6f;&#x72;&#x67;&#x3f;
+							'>vic&#x65;&#x2d;pr&#x65;&#115;&#x69;den&#116;<!--
+mailto:abuse@hotmail.com
+</a>
+-->&shy;&#x40;a&#x63;&#x6d;&#x2d;&#99;s&#117;s&#x62;&#x2e;&#x6F;rg</a></td>
+					</tr>
+					<tr>
+						<td>Beverly Abadines</td>
+						<td>Treasurer</td>
+						<td><a
+							   class='email
+							href="mailto:x@y"
+							'
+							   href
+							   =  '
+							&#x20;&#x6d;&#x61;&#105;lto&#58;%&#x32;&#x30;&#x74;%&#x37;2&#x65;&#x25;&#x36;&#49;&#x25;73u&#37;72&#101;&#114;&#37;&#52;&#x30;%&#x36;&#x31;&#x25;&#x36;&#x33;&#37;&#x36;&#x64;&#x25;&#x32;d&#x25;6&#x33;&#x73;&#x25;&#x37;&#x35;&#x73;&#x62;&#37;&#50;eo&#114;g?
+							'>t&#x72;ea&#x73;&#x75;&#114;&#x65;r&#x40;a<!--
+mailto:abuse@hotmail.com
+</a>
+-->&shy;cm&#x2d;&#x63;&#x73;u&#x73;b&#46;o&#114;g</a></td>
+					</tr>
+					<tr>
+						<td>Keaton Boardman</td>
+						<td>Secretary</td>
+						<td><a
+							   class='email
+							href="mailto:x@y"
+							'
+							   href
+							   =  '
+							&#x20;m&#97;&#105;lt&#x6F;&#58;&#x25;&#x32;&#x30;&#x25;73&#37;6&#x35;c&#x25;7&#x32;&#x25;6&#53;t&#97;r&#x79;&#37;40a&#99;&#x6D;&#37;&#x32;d&#x63;&#115;&#x75;%&#x37;&#x33;&#x62;%2&#101;%&#x36;f&#x72;&#103;&#63;
+							'>&#115;e&#x63;&#x72;&#x65;&#x74;&#x61;&#114;y&#x40;a<!--
+mailto:abuse@hotmail.com
+</a>
+-->&shy;&#x63;&#x6D;&#x2d;csus&#98;&#x2e;org</a></td>
+					</tr>
+					<tr>
+						<td>Richard Quon</td>
+						<td>Information Officer</td>
+						<td><a
+							   class='email
+							href="mailto:x@y"
+							'
+							   href
+							   =  '
+							&#x20;ma&#105;&#108;t&#x6F;&#x3A;&#37;&#x32;&#x30;&#x69;&#x6E;%&#x36;6%&#54;f&#x25;40%&#54;&#49;&#37;&#x36;&#51;%&#x36;d%&#50;&#x64;&#x25;&#x36;&#51;&#115;&#37;75&#x25;&#x37;3&#x25;6&#50;&#37;&#x32;e&#x6f;r%67&#63;
+							'>&#x69;&#x6E;&#x66;o@&#x61;&#x63;&#x6d;-<!--
+mailto:abuse@hotmail.com
+</a>
+-->&shy;&#x63;&#x73;&#x75;&#115;b&#x2e;&#x6F;r&#x67;</a></td>
+					</tr>
+					<tr>
+						<td>Alex Lazo</td>
+						<td>Event Coordinator</td>
+						<td><a
+							   class='email
+							href="mailto:x@y"
+							'
+							   href
+							   =  '
+							&#x20;&#x6d;&#x61;&#x69;l&#116;&#x6F;&#x3A;&#x25;&#x32;&#x30;&#37;&#54;5%&#x37;&#x36;&#x25;&#x36;5n&#x74;%73%&#52;&#x30;&#x25;&#x36;&#49;cm%&#50;d&#x25;&#54;3%&#x37;3&#x25;&#x37;&#x35;&#x25;7&#x33;&#x25;&#54;2&#x25;2&#101;&#x25;6f&#114;g?
+							'>ev&#101;n&#116;s&#64;acm<!--
+mailto:abuse@hotmail.com
+</a>
+-->&shy;-c&#115;usb&#46;o&#114;g</a></td>
+					</tr>
+					<tr>
+						<td>Juan Nevares</td>
+						<td>Historian</td>
+						<td><a
+							   class='email
+							href="mailto:x@y"
+							'
+							   href
+							   =  '
+							&#x20;&#x6d;&#97;&#x69;l&#x74;&#x6F;&#x3A;&#x25;&#50;&#x30;&#37;&#x36;&#x38;i&#x73;&#37;7&#x34;&#x6f;%72%69an&#37;&#x34;&#48;&#x25;61%&#x36;&#51;&#37;&#54;&#x64;&#37;&#x32;&#100;%&#x36;&#x33;s&#37;&#x37;5s&#x25;&#x36;&#50;%2e%&#x36;f%&#x37;&#x32;%&#x36;&#x37;&#63;
+							'>&#x68;is&#x74;ori&#x61;&#x6E;&#x40;a<!--
+mailto:abuse@hotmail.com
+</a>
+-->&shy;&#99;&#x6d;-&#99;s&#x75;&#x73;b&#46;&#111;&#x72;g</a></td>
+					</tr>
+				</table>
+
+			</div>
+{% endblock %}

@@ -1,15 +1,14 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
-{% block title %}Page | {{ block.super }}{% endblock %}
+{% block title %}{{title}} | {{ block.super }}{% endblock %}
 
 {% block extrahead %}
-<link rel='stylesheet' href="{% static 'css/markdown.css' %}" />
-<link rel='stylesheet' href="{% static 'css/splitvieweditor.css' %}" />
+<link rel='stylesheet' href="{% static 'infosec/splitvieweditor.css' %}" />
 <script type="text/javascript" src="{% static 'js/lodash.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/commonmark.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/autosize.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/splitvieweditor.js' %}"></script>
+<script type="text/javascript" src="{% static 'infosec/splitvieweditor.js' %}"></script>
 {% endblock %}
 
 {% block content %}

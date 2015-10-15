@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-{% load crispy_forms_tags %}
-{% load infosec_tags %}
+{% load acm_tags %}
 
 {% block title %}Profile | {{ block.super }}{% endblock %}
 
@@ -35,5 +34,14 @@
 </div>
 {% endfor %}
 
-{% crispy form %}
+<p></p>
+
+<legend>Profile</legend>
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+<table>
+{{ form }}
+</table>
+<input type="submit" name="save" value="Save Changes" id="submit-id-save" />
+</form>
 {% endblock %}

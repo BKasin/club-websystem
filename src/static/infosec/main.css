@@ -25,6 +25,13 @@ h4, .h4 {
   font-style:italic;
 }
 
+legend {
+  border-bottom-style:solid;
+  border-image:linear-gradient(to right, rgba(176,176,176,255), rgba(176,176,176,255) 40%, rgba(0,0,0,0) 50%) 1;
+  border-width:0px 0px 1px 0px;
+  padding-bottom:1px;
+}
+
 blockquote {
   font-size:14px;
   border-left:4px solid #DDD;

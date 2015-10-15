@@ -76,6 +76,7 @@ def contentblock_view(request, page):
 
   context = {
     'uniquetitle': page,
+    'title': contentblock.description,
     'renderedblob': blob,
   }
   return render(request, "contentblock_view.html", context)
@@ -120,6 +121,7 @@ def contentblock_edit(request, page):
   context = {
     'form': form,
     'uniquetitle': page,
+    'title': contentblock.description,
     'blob': contentblock.blob,
   }
   return render(request, "contentblock_edit.html", context)

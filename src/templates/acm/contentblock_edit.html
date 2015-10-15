@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}{{title}} | {{ block.super }}{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript" src="{% static 'js/commonmark.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert {{ message.tags }}" role="alert">{{ message }}</div>
+  {% endfor %}
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+    <h2>{{ form.datatype }}&nbsp;&nbsp;&nbsp;{{ form.published.label_tag }} {{ form.published }}</h2>
+    <textarea name="blob" id="sv-textarea" class="sv-textarea">{{ blob|safe }}</textarea>
+    <input type="submit" name="save" value="Save Changes" class="btn btn-primary">
+  </form>
+{% endblock %}

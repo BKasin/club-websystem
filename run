@@ -1,11 +1,27 @@
 #!/bin/sh
 
-# Run the development server
-export DJANGO_SETTINGS_MODULE='system.settings.dev'
+# Runs the development server. Specify the settings file (without the .py extension) as the first
+#   parameter. The remaining parameters will be passed directly to manage.py
+
+P="runserver 0.0.0.0:8000"
 if [ $# -gt 0 ]; then
-  P="$*"
+  settings=$1
+  shift
+  if [ $# -gt 0 ]; then
+    P="$*"
+  fi
 else
-  P="runserver 0.0.0.0:8000"
+  settings="dev_infosec"
 fi
-echo python $VIRTUAL_ENV/src/manage.py $P
-python $VIRTUAL_ENV/src/manage.py $P
+
+if [[ -f "$VIRTUAL_ENV/src/system/settings/$settings.py" ]]; then
+  export DJANGO_SETTINGS_MODULE="system.settings.$settings"
+  echo DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+
+  r="python $VIRTUAL_ENV/src/manage.py $P"
+  echo $r
+  echo ------------------------------------
+  $r
+else
+  echo "Cannot find settings file named '$settings'"
+fi
