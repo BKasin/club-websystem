@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from transactionalemail import mailer
+from utils.templateemail import send_template_email
 
 from .forms import ContactForm
 
@@ -20,7 +20,7 @@ def about_contact(request):
 
   if form.is_valid():
     senderemail = form.cleaned_data['email']
-    mailer.send_template_email(request,
+    send_template_email(request,
       template_prefix='contact_email',
       to=settings.GENERIC_CONTACT_EMAIL,
       reply_to=[senderemail],

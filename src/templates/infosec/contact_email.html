@@ -1,12 +1,9 @@
-<!doctype html>
-<html lang="en">
-<body>
+{% extends "emailbase.html" %}
 
+{% block subject %}Message from {{ sendername }} <{{ senderemail }}>{% endblock %}
+
+{% block bodyarea %}
 <p>A message has been submitted through the contact form at <a href="{{ protocol }}://{{ domain }}{% url 'about_contact' %}">{{ protocol }}://{{ domain }}{% url 'about_contact' %}</a>.</p>
-
 <p>From: <b>{{ sendername }}</b> &lt;{{ senderemail }}&gt;</p>
-
 <p>{{ message }}</p>
-
-</body>
-</html>
+{% endblock %}

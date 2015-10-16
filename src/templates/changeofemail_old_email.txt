@@ -1,7 +1,0 @@
-{% extends "emailbase.txt" %}
-
-{% block content %}
-This is just a courtesy notice that you have requested a change to the email address you have on file with us.
-
-If this was you, great! But if you did not request this change, your password may have been compromised. Login to your account and change your password. Also, verify the email address on file is correct.
-{% endblock %}

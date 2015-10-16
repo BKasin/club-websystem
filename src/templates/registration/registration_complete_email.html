@@ -1,11 +1,10 @@
 {% extends "emailbase.html" %}
 
+{% block subject %}Account activation for {{ domain }}{% endblock %}
+
 {% block content %}
 <p>You have asked to register an account at <a href="{{ protocol }}://{{ domain }}/">{{ protocol }}://{{ domain }}/</a>.</p>
-
 <p>If this wasn't you, please ignore this email and your address will be removed from our records automatically.</p>
-
 <p>To activate your new account, please click the following link within the next {{ expiration_days }} days:</p>
-
 <p><a href="{{ protocol }}://{{ domain }}{% url 'registration_activate' activation_key %}">{{ protocol }}://{{ domain }}{% url 'registration_activate' activation_key %}</a></p>
 {% endblock %}

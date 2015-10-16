@@ -29,7 +29,6 @@ INSTALLED_APPS += [
   'events',
   'mainsite_infosec',
   'regbackend',
-  'transactionalemail',
 ]
 
 # Look in the club-specific template folder first

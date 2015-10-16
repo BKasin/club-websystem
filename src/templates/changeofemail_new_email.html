@@ -1,7 +1,8 @@
 {% extends "emailbase.html" %}
 
+{% block subject %}Activate your new email at {{ domain }}{% endblock %}
+
 {% block content %}
 <p>You have requested a change of your email address on file. To confirm your new email, you must follow this link within the next {{ expiration_days }} days:</p>
-
 <p><a href="{{ protocol }}://{{ domain }}{% url 'confirmemail' confirmation_key %}">{{ protocol }}://{{ domain }}{% url 'confirmemail' confirmation_key %}</a></p>
 {% endblock %}

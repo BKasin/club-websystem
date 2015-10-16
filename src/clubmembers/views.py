@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import transaction
-from transactionalemail import mailer
+from utils.templateemail import send_template_email
 
 from .models import Member, Membership, PendingEmailChange
 from .forms import MemberForm
@@ -39,14 +39,14 @@ def userprofile(request):
         form.instance.save()
 
         # Notify the old email address of the change
-        mailer.send_template_email(request,
+        send_template_email(request,
           template_prefix='changeofemail_old_email',
           to=[oldemail],
           extra_context={'user': member}
         )
 
         # Send activation link to new email address
-        mailer.send_template_email(request,
+        send_template_email(request,
           template_prefix='changeofemail_new_email',
           to=[newemail],
           extra_context={

@@ -5,7 +5,7 @@ from django.contrib.sites.requests import RequestSite
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.db import transaction
-from transactionalemail import mailer
+from utils.templateemail import send_template_email
 
 from registration import signals
 from registration.models import RegistrationProfile
@@ -32,9 +32,11 @@ class RegistrationView(BaseRegistrationView):
     registration_profile = RegistrationProfile.objects.create_profile(new_user_instance)
 
     # Send the mail ourselves, so we have control over the templates used
+    # We also use a different template name (instead of activation_email.html), so
+    #   send_template_email won't inadvertently pull in the original template
     if self.send_email:
-      mailer.send_template_email(request,
-        template_prefix='registration/activation_email',
+      send_template_email(request,
+        template_prefix='registration/registration_complete_email',
         to=[new_user_instance.email],
         extra_context={
           'user': new_user_instance,

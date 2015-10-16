@@ -1,9 +1,12 @@
+{% block subject %}{% endblock %}
 <!doctype html>
 <html lang="en">
 <body>
+{% block bodyarea %}
 <p>Hello {{ user.get_short_name }},</p>
 {% block content %}
 {% endblock %}
 <p>Sincerely,<br />InfoSec Club Officers</p>
+{% endblock %}
 </body>
 </html>
