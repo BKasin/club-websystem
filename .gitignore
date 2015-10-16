@@ -90,3 +90,6 @@ uwsgi.ini
 
 # Ignore the development database, since each developer may have custom data
 *.sqlite3
+
+# Ignore the file-based emails created by our development email backend
+emails_filebased/

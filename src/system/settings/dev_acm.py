@@ -53,11 +53,12 @@ DATABASES = {
 
 ############################################## Email ###############################################
 
-# Email server to send outbound mail
-# This uses Python's built-in development SMTP server; start it by running this in a terminal:
-#     python -m smtpd -n -c DebuggingServer localhost:1025
-EMAIL_HOST = '127.0.0.1'
-EMAIL_PORT = 1025
+# Pretend email server for development use
+if True:
+  EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+  EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+  EMAIL_FILE_PATH = os.path.join(os.path.dirname(BASE_DIR), 'emails_filebased')
 
 # All outbound email will have this as the From: header, unless overridden
 DEFAULT_FROM_EMAIL = '"Test Club" <support@test-club.org>'

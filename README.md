@@ -93,15 +93,6 @@ For development use only, Django provides a simple webserver that you can start 
 
     python manage.py runserver 0.0.0.0:8000
 
-If you want to test email features within your development environment, you can start Python's debug SMTP server and see the emails in the terminal without actually needing a working email server:
-
-    python -m smtpd -n -c DebuggingServer localhost:1025
-
-Then configure your settings file accordingly:
-
-    EMAIL_HOST = 'localhost'
-    EMAIL_PORT = 1025
-
 # Passwords
 
 For development purposes only, the django superuser is `root` with a password of `password123`. You can log into the main site or the /admin site using these credentials. To be consistent, use the same `password123` for any other accounts used for development.
