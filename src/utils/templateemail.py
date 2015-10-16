@@ -33,7 +33,6 @@ def send_template_email(request, template_prefix='default_email', extra_context=
   # Attempt to load HTML template
   try:
     body_html = get_template(template_prefix + '.html').render(context)
-    print('html = %s' % body_html)
   except TemplateDoesNotExist:
     body_html = None
 
@@ -66,7 +65,6 @@ def send_template_email(request, template_prefix='default_email', extra_context=
     if not body_html is None:
       import html2text
       h = html2text.HTML2Text()
-      # h.ignore_links = True
       body_txt = h.handle(body_html)
     else:
       # Of course, if there's no HTML version either, then we're kind of stuck

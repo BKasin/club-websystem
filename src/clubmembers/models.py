@@ -70,7 +70,6 @@ class MemberManager(BaseUserManager):
 
   # Parameters should be any field that is required (blank=False) and missing any default value
   def create_user(self, username, email, password, name_first, name_last, **extra_fields):
-    print(extra_fields)
     return self._create_user(username, email, password, name_first, name_last, False, False,
                              **extra_fields)
 

@@ -26,6 +26,14 @@ Some other dependencies that are included in this source code but should be moni
 * Autosize <http://www.jacklmoore.com/autosize/>
 * FullCalendar <http://fullcalendar.io/download/>
 
+For email to work in production, you must add django-mailer to the server's crontab. Since django-mailer puts all outbound email into the database instead of immediately sending it, we use its `send_mail` command to actually send out the emails. Any email that fails will be changed to priority `deferred`. The `retry_deferred` command will mark all deferred emails as medium priority, so the next pass of `send_mail` will attempt to send them again.
+
+As an example, to send mail each 5 minutes and queue the failed emails for retry each 20 minutes, add this to the server's crontab:
+
+    0,5,10,15,20,25,30,35,40,45,50,55  * * * * (< path to venv >/mailer send_mail --cron 1)
+    1,21,41                            * * * * (< path to venv >/mailer retry_deferred --cron 1)
+
+
 # Developers
 
 * Kenneth Johnson, [*securedirective*](https://github.com/securedirective) - *lead developer*

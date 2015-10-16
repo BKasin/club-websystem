@@ -16,9 +16,8 @@ fi
 
 if [[ -f "$VIRTUAL_ENV/src/system/settings/$settings.py" ]]; then
   export DJANGO_SETTINGS_MODULE="system.settings.$settings"
-  echo DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
 
-  r="python $VIRTUAL_ENV/src/manage.py $P"
+  r="$VIRTUAL_ENV/bin/python $VIRTUAL_ENV/src/manage.py $P"
   echo $r
   echo ------------------------------------
   $r

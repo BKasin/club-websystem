@@ -2,10 +2,8 @@
 Base settings module. Not meant to be used alone.
 
 Each website should have their own settings file under system/settings,
-which starts with these lines:
+which imports from base:
   from .base import *
-  import os
-  print("  + settings/%s" % os.path.basename(os.path.abspath(__file__)))
 
 In development, set the appropriate settings file like this:
   export DJANGO_SETTINGS_MODULE='system.settings.yourfilehere'
@@ -19,7 +17,6 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
 import os
-print("  + settings/%s" % os.path.basename(os.path.abspath(__file__)))
 
 # To ensure everything will work on both Linux and Windows, build paths
 # inside your the project like this: os.path.join(BASE_DIR, ...)
@@ -53,7 +50,8 @@ INSTALLED_APPS = [
   # third party apps
   'crispy_forms',
   'registration',
-  'versatileimagefield'
+  'versatileimagefield',
+  'mailer',
 ] # + add your own in your custom settings file
 
 # Middleware
@@ -98,9 +96,10 @@ AUTHENTICATION_BACKENDS = ('clubmembers.models.MemberAuthenticationBackend',)
 
 ############################################## Email ###############################################
 
-# Email server to send outbound mail
-#EMAIL_HOST = '127.0.0.1'     # You must define this in your custom settings file
-#EMAIL_PORT = 25              # You must define this in your custom settings file
+# Specify the default backend
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = '127.0.0.1'
+EMAIL_PORT = 25
 
 # All outbound email will have this as the From: header, unless overridden
 #DEFAULT_FROM_EMAIL = ''      # You must define this in your custom settings file

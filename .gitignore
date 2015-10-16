@@ -80,13 +80,11 @@ pip-selfcheck.json
 static_in_env/
 
 # Don't put production passwords in the repo
-*production*
+_production*
+_staging*
 
 # Ignore fullcalendar's demos
 demos
-
-# Ignore uwsgi settings
-uwsgi.ini
 
 # Ignore the development database, since each developer may have custom data
 *.sqlite3

@@ -4,7 +4,6 @@ Settings file for use in development only.
 
 from .base import *
 import os
-print("  + settings/%s" % os.path.basename(os.path.abspath(__file__)))
 
 
 ############################################## Basics ##############################################
@@ -16,8 +15,7 @@ DEBUG = True
 # This allows django.template.context_processors.debug to work
 INTERNAL_IPS = ['127.0.0.1', '10.0.2.2']
 
-# Secret key used for cryptographic signing of sessions, password reset tokens, etc.
-# SECURITY WARNING: never allow this key to be stored in any source control (GitHub)!
+# Fake key for development only
 SECRET_KEY = '00000000000000000000000000000000000000000000000000'
 
 
