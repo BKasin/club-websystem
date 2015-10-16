@@ -53,7 +53,8 @@ INSTALLED_APPS = [
   # third party apps
   'crispy_forms',
   'registration',
-  'versatileimagefield'
+  'versatileimagefield',
+  'mailer',
 ] # + add your own in your custom settings file
 
 # Middleware

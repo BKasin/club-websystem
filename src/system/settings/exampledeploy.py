@@ -78,6 +78,10 @@ DEFAULT_FROM_EMAIL = '"Information Security Club" <support@infosec-csusb.org>'
 # Messages submitted through the contact page will be sent to these addresses
 GENERIC_CONTACT_EMAIL = ['csusb.infosec.club@gmail.com']
 
+# Configure django-mailer as the primary backend, and configure it to use our original backend
+MAILER_EMAIL_BACKEND = EMAIL_BACKEND
+EMAIL_BACKEND = 'mailer.backend.DbBackend'
+
 
 ############################################### Site ###############################################
 
