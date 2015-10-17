@@ -9,8 +9,8 @@ else
   settings="_production_infosec"
 fi
 
-if [[ -f "$VIRTUAL_ENV/src/system/settings/$settings.py" ]]; then
-  if [[ -f "$VIRTUAL_ENV/src/system/settings/$settings.ini" ]]; then
+if [ -f "$VIRTUAL_ENV/src/system/settings/$settings.py" ]; then
+  if [ -f "$VIRTUAL_ENV/src/system/settings/$settings.ini" ]; then
     export DJANGO_SETTINGS_MODULE="system.settings.$settings"
 
     r="uwsgi --ini $VIRTUAL_ENV/src/system/settings/$settings.ini"
