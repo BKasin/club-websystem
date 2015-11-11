@@ -1,6 +1,61 @@
 {% extends "simplecenter.html" %}
 {% load crispy_forms_tags %}
 
+{% block extrahead %}
+<script type="text/javascript">
+  var usernameblock;
+  var usernameinput;
+  var usernamecheck;
+
+  $(function() {
+    usernameblock = $('#div_id_username');
+
+    usernameinput = $('#id_username');
+    usernameinput.on('blur', checkusername);
+
+    usernamecheck = $('#error_1_id_username');
+    if (usernamecheck.length==0) {
+      usernamecheck = $('<span></span>');
+      usernamecheck.insertAfter(usernameinput);
+    }
+  });
+  function checkusername() {
+    var u = usernameinput.val();
+    if (u.length>0) {
+      usernamecheck.attr('class', 'help-block username_checking');
+      usernamecheck.html('<b>Checking...</b>');
+
+      $.get(
+        "/accounts/register/check/",
+        {username: u},
+        function(response) {
+          if (response==='1') {
+            usernamecheck.attr('class', 'help-block username_taken');
+            usernamecheck.html('<b>Another member with that username already exists.</b>');
+          }else if (response==='0') {
+            usernamecheck.attr('class', 'help-block username_available');
+            usernamecheck.html('<b>Username is available! :)</b>');
+          }
+        }
+      );
+    }else{
+      usernamecheck.html('');
+    }
+  }
+</script>
+<style>
+  .username_taken {
+    color:#a94442 !important;
+  }
+  .username_available {
+    color:green !important;
+  }
+  .username_checking {
+    color:silver !important;
+  }
+</style>
+{% endblock %}
+
 {% block content2 %}
 <h1>Join the Club</h1>
 

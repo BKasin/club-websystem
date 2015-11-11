@@ -5,6 +5,7 @@ from django.contrib.sites.requests import RequestSite
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.db import transaction
+from django.http import HttpResponse
 from utils.templateemail import send_template_email
 
 from registration import signals
@@ -13,6 +14,13 @@ from registration.views import ActivationView as BaseActivationView
 from registration.views import RegistrationView as BaseRegistrationView
 
 from clubmembers.models import Member
+
+
+def check_username_available(request):
+  if Member.objects.filter(username__iexact=request.GET['username'].lower()).exists():
+    return HttpResponse('1')
+  else:
+    return HttpResponse('0')
 
 class RegistrationView(BaseRegistrationView):
   send_email = getattr(settings, 'SEND_ACTIVATION_EMAIL', True)
