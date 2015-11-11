@@ -27,3 +27,6 @@ class CustomRegistrationForm(UserCreationForm):
       )
     )
     super(CustomRegistrationForm, self).__init__(*args, **kwargs)
+
+  def clean_username(self):
+    return self.cleaned_data['username'].lower()

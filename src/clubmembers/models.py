@@ -34,13 +34,15 @@ class MemberAuthenticationBackend(ModelBackend):
     if len(username) == 0:
       return
 
+    username = username.lower()
+
     try:
-      user = Member._default_manager.get(**{'username': username})
+      user = Member._default_manager.get(username__iexact=username)
       if user.check_password(password):
         return user
     except Member.DoesNotExist:
       try:
-        user = Member._default_manager.get(**{'email': username})
+        user = Member._default_manager.get(email__iexact=username)
         if user.check_password(password):
           return user
       except Member.DoesNotExist:
