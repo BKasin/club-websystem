@@ -34,15 +34,15 @@ class MemberAuthenticationBackend(ModelBackend):
     if len(username) == 0:
       return
 
-    username = username.lower()
-
     try:
-      user = Member._default_manager.get(username__iexact=username)
+      #All usernames are lowercase (case-insensitive)
+      user = Member._default_manager.get(username__iexact=username.lower())
       if user.check_password(password):
         return user
     except Member.DoesNotExist:
       try:
-        user = Member._default_manager.get(email__iexact=username)
+        #Check the email for an exact match (case-sensitive)
+        user = Member._default_manager.get(email=username)
         if user.check_password(password):
           return user
       except Member.DoesNotExist:
@@ -63,7 +63,9 @@ class MemberManager(BaseUserManager):
     """
     if not username:
         raise ValueError('The given username must be set')
-    user = self.model(username=username, email=self.normalize_email(email),
+    # All usernames are forced to lowercase
+    # The domain portion of the email is changed to lowercase
+    user = self.model(username=username.lower(), email=self.normalize_email(email),
                       name_first=name_first, name_last=name_last,
                       **extra_fields)
     user.set_password(password)
@@ -98,6 +100,7 @@ class Member(AbstractBaseUser, PermissionsMixin):
   date_joined           = models.DateTimeField('Date created',
                             default=timezone.now,
                             editable=False)
+  # All usernames will be forced to lowercase
   username              = models.CharField('User name',
                             help_text='Letters, digits or the following symbols only: <span style="font-size:1.2em">@.+-_</span>',
                             max_length=50,

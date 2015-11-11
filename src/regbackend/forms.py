@@ -28,5 +28,8 @@ class CustomRegistrationForm(UserCreationForm):
     )
     super(CustomRegistrationForm, self).__init__(*args, **kwargs)
 
+  """
+  Force all usernames to be lowercase
+  """
   def clean_username(self):
     return self.cleaned_data['username'].lower()
