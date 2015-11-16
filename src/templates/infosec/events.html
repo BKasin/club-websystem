@@ -16,26 +16,6 @@
 <script type="text/javascript" src="{% static 'fullcalendar-2.4.0/gcal.js' %}"></script>
 
 <script type="text/javascript">
-function dir(obj) {
-  var r = '';
-  for (var propertyName in obj) {
-    r += propertyName + ": " + obj[propertyName] + '\n';
-  }
-  return r;
-}
-
-function conv(t) {
-  if (t == null) {
-    return 0;
-  }else{
-    return new Date(t).toISOString();
-  }
-}
-
-function clog(t) {
-  document.getElementById('clog').innerHTML += '<pre>' + t + '</pre>';
-}
-
 $(document).ready(function() {
   handle_eventDrop = function(event, delta, revertFunc, jsEvent, ui, view) {
     if (event.end == null) {
