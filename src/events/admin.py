@@ -4,7 +4,7 @@ from .models import Event
 
 
 class EventAdmin(admin.ModelAdmin):
-  list_display = ('title', 'start', 'end', 'allDay')
+  list_display = ('title', 'start', 'duration', 'all_day')
   ordering = ('start',)
 
 

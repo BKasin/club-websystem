@@ -21,7 +21,6 @@ class CustomEventManager(models.Manager):
     return super(CustomEventManager, self).get_queryset().filter(
       models.Q(club=self._get_current_club_id()) | models.Q(club=None))
 
-
 class Event(models.Model):
   id                    = models.AutoField(
                             primary_key=True)
@@ -31,17 +30,15 @@ class Event(models.Model):
                             blank=True, # Field is optional
                             on_delete=models.SET_NULL)  # Deleting a club will leave all associated events behind as global events
   title                 = models.CharField('Title',
-                            help_text='This will show directly on the calendar.',
                             blank=True, max_length=200)
-  start                 = models.DateTimeField('Start date/time')
-  end                   = models.DateTimeField('End date/time')
-  allDay                = models.BooleanField('All day event?',
+  start                 = models.DateTimeField('Start date/time',
+                            help_text='Specify as <i>yyyy-mm-dd hh:mm</i>')
+  duration              = models.DurationField('Duration',
+                            help_text='Specify as <i>hh:mm:ss</i>')
+  all_day               = models.BooleanField('All day event?',
                             default=False)
 
   objects = CustomEventManager()
-
-  def get_start(self):
-    return self.start
 
   class Meta:
       verbose_name = 'Event'
