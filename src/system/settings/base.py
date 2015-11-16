@@ -157,7 +157,8 @@ USE_I18N = False
 # Do not format numbers and dates using the system locale
 USE_L10N = False
 
-# Project is not timezone-aware
+# Project is in the Pacific timezone, but will use timezone-unaware dates internally
+TIME_ZONE = 'America/Los_Angeles'
 USE_TZ = False
 
 # Default date format when displaying dates in templates
