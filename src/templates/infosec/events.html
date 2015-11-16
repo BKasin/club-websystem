@@ -108,8 +108,8 @@ $(document).ready(function() {
     defaultView: initialview,
     fixedWeekCount: true, // Always show months with 6 weeks, even if month has fewer
     timezone: false,
-    defaultTimedEventDuration: '02:00:00',
-    defaultAllDayEventDuration: {days: 1},
+    defaultTimedEventDuration: {hours: {{defaulthours}} },
+    defaultAllDayEventDuration: {days: {{defaultdays}} },
     businessHours: {
       start: '10:00',
       end: '18:00',

@@ -1,16 +1,46 @@
 import json
 from datetime import datetime, timedelta
 
+from django.conf import settings
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
+from django.utils import timezone
 
 from .models import Event
 from .forms import EventEditForm
+
+
+
+# Helper functions
+
+def round_time(dt, roundTo):
+  """Round a datetime object to any time laps in seconds
+  dt = datetime.datetime object
+  roundTo = Closest number of seconds to round to
+  """
+  seconds = (dt - dt.min).seconds
+  rounding = (seconds+roundTo/2) // roundTo * roundTo
+  return dt + timedelta(0,rounding-seconds,-dt.microsecond)
+
+def get_default_event_hours():
+  # By default, timed events are 2 hours long
+  return getattr(settings, 'EVENTS_DEFAULT_HOURS', 2)
+
+def get_default_event_days():
+  # By default, all-day events are 1 day long
+  return getattr(settings, 'EVENTS_DEFAULT_DAYS', 1)
+
+
+
+
+# Views
 
 def events(request):
   context = {
     'addperm': request.user.has_perm('events.add_event'),
     'changeperm': request.user.has_perm('events.change_event'),
+    'defaulthours': get_default_event_hours(),
+    'defaultdays': get_default_event_days(),
   }
   return render(request, "events.html", context)
 
@@ -55,19 +85,25 @@ def event_new(request):
 
   if not request.method == 'POST':
     # Initial load of the form
+    initialdata = {}
     initialstart = request.GET.get('start', None)
     if initialstart:
       try:
-        initialstart = datetime.strptime(initialstart, "%Y-%m-%dT%H:%M:%S")
-        form = EventEditForm(initial={'start': initialstart})
+        initialdata['start'] = datetime.strptime(initialstart, "%Y-%m-%dT%H:%M:%S")
+        initialdata['duration'] = timedelta(hours=get_default_event_hours())
       except ValueError:
         try:
-          initialstart = datetime.strptime(initialstart, "%Y-%m-%d")
-          form = EventEditForm(initial={'start': initialstart, 'all_day': True})
+          initialdata['start'] = datetime.strptime(initialstart, "%Y-%m-%d")
+          initialdata['duration'] = timedelta(days=get_default_event_days())
+          initialdata['all_day'] = True
         except ValueError:
-          form = EventEditForm()
-    else:
-      form = EventEditForm()
+          pass
+
+    if not 'start' in initialdata:
+      initialdata['start'] = round_time(timezone.now(), 60*60)   # Round the current time to the nearest hour
+      initialdata['duration'] = timedelta(hours=get_default_event_hours())
+
+    form = EventEditForm(initial=initialdata)
 
   else:
     # User posted changes
@@ -104,7 +140,6 @@ def jsonsearch(request):
   # Format it for JSON
   jsondump = []
   for e in events:
-    print(type(e.start))
     jsondump += [{
           'id': e.id,
           'title': e.title,
@@ -124,23 +159,20 @@ def fcdragmodify(request):
   newallday = True if (request.GET["allday"]=='true') else False
   newstart = datetime.utcfromtimestamp(float(request.GET["newstart"]))
   newend = request.GET["newend"]
-  if (newend=='null'):
+  if (newend!='null'):
+    # If end time is provided by fullcalendar, we will use it
+    e.duration = datetime.utcfromtimestamp(float(newend)) - newstart
+  else:
     if ((e.all_day == True) and (newallday == False)):
       # If user just dragged the event from the all-day section to the hourly section,
-      # fullcalendar will show the event as 2 hours long, regardless of what it was before,
-      # so force the database to match
-      e.end = newstart + timedelta(hours=2)
+      # fullcalendar will show the event as [defaultTimedEventDuration] long, regardless of what
+      # it was before, so force the database to match
+      e.duration = timedelta(hours=get_default_event_hours())
     elif ((e.all_day == False) and (newallday == True)):
       # If user just dragged the event from the hourly section to the all-day section,
-      # fullcalendar will show the event as 1 day long, regardless of what it was before,
-      # so force the database to match
-      e.end = newstart + timedelta(days=1)
-    else:
-      # Sometimes, fullcalendar just fails to give us the end time, so we must calculate it
-      e.end = (e.end - e.start) + newstart
-  else:
-    # If end time is provided by fullcalendar, we will use it
-    e.end = datetime.utcfromtimestamp(float(newend))
+      # fullcalendar will show the event on only one day, even if it was a multi-day event before.
+      # So force the database to match this behavior.
+      e.duration = timedelta(days=get_default_event_days())
   e.start = newstart
   e.all_day = newallday
   e.save()
