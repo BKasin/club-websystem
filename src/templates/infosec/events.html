@@ -74,6 +74,10 @@ function onNewEvent() {
     PopupCenter("{% url 'newevent' %}", 'popupwin', 360, 360);
 }
 
+function onViewRender(view, element) {
+  window.location.hash = view.name;
+}
+
 function onPopupClosed(win) {
   $('#calendar').fullCalendar('refetchEvents');
   win.close();
@@ -88,6 +92,9 @@ $(document).ready(function() {
     $('#ajaxloading').hide();
   });
 
+  var initialview = window.location.hash.substring(1);
+  if (!initialview) initialview = "month";
+
   //Initialize the calendar module
   $('#calendar').fullCalendar({
     customButtons: {
@@ -98,8 +105,7 @@ $(document).ready(function() {
       center: '{% if addperm %}newevent{% endif %}',
       right: 'month,agendaWeek,agendaDay today',
     },
-    defaultView: 'month',
-    //aspectRatio: 2,
+    defaultView: initialview,
     fixedWeekCount: true, // Always show months with 6 weeks, even if month has fewer
     timezone: false,
     defaultTimedEventDuration: '02:00:00',
@@ -118,6 +124,7 @@ $(document).ready(function() {
     eventClick: onEventClick,
     {% if changeperm %}eventDrop: onEventDrop, eventResize: onEventDrop,{% endif %}
     {% if addperm %}dayClick: onDayClick,{% endif %}
+    viewRender: onViewRender,
 
     events: {
         url: "/events/json/",
