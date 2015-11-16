@@ -1,37 +1,91 @@
-from django.shortcuts import render
-from django.http import HttpResponse, Http404
-from .models import Event
 import json
 from datetime import datetime, timedelta
 
-# Method #1: multiple event sources
-CALSOURCES = """
-    googleCalendarApiKey: 'AIzaSyDKSBh7lXk8DS8TASIywg6E2JD8ZvGA9Lo',
-    eventSources: [
-      {
-        url: "/events/json/",
-        className: 'calitem_blue'
-      },
-      {
-        googleCalendarId: 'csusb.infosec.club@gmail.com',
-        className: 'calitem_red'
-      }
-    ]
-"""
+from django.shortcuts import render, redirect
+from django.http import HttpResponse, Http404
 
-# Method #2: single event source
-'''CALSOURCES = """
-    events: {
-        url: "/events/json/",
-        className: 'calitem_blue'
-    }
-"""'''
+from .models import Event
+from .forms import EventEditForm
 
 def events(request):
   context = {
-    'calendar_config_options': CALSOURCES
+    'addperm': request.user.has_perm('events.add_event'),
+    'changeperm': request.user.has_perm('events.change_event'),
   }
   return render(request, "events.html", context)
+
+def event_view(request, eventid):
+  return HttpResponse('(to be implemented)')
+
+def event_edit(request, eventid):
+  if not request.user.has_perm('events.change_event'):
+    raise Http404("You do not have privileges to edit events.")
+
+  if not request.method == 'POST':
+    # Initial load of the form
+    event = Event.objects.get(id=eventid)
+    form = EventEditForm(instance=event)
+
+  else:
+    if '_submitdelete' in request.POST:
+      # User wants to delete the item
+      Event.objects.get(id=eventid).delete()
+      return render(request, "events_submitandrefresh.html")
+
+    else:
+      # User posted changes
+      event = Event.objects.get(id=eventid)
+      form = EventEditForm(request.POST, instance=event)
+
+      if form.is_valid():
+        form.instance.save()
+        return render(request, "events_submitandrefresh.html")
+
+  context = {
+    'form': form,
+    'add': False,
+    'eventid': eventid,
+    'is_popup': True
+  }
+  return render(request, "events_editform.html", context)
+
+def event_new(request):
+  if not request.user.has_perm('events.add_event'):
+    raise Http404("You do not have privileges to create events.")
+
+  if not request.method == 'POST':
+    # Initial load of the form
+    initialstart = request.GET.get('start', None)
+    if initialstart:
+      try:
+        initialstart = datetime.strptime(initialstart, "%Y-%m-%dT%H:%M:%S")
+        form = EventEditForm(initial={'start': initialstart})
+      except ValueError:
+        try:
+          initialstart = datetime.strptime(initialstart, "%Y-%m-%d")
+          form = EventEditForm(initial={'start': initialstart, 'all_day': True})
+        except ValueError:
+          form = EventEditForm()
+    else:
+      form = EventEditForm()
+
+  else:
+    # User posted changes
+    form = EventEditForm(request.POST)
+
+    if form.is_valid():
+      form.instance.save()
+      context = {
+        'form': form,
+      }
+      return render(request, "events_submitandrefresh.html", context)
+
+  context = {
+    'form': form,
+    'add': True,
+    'is_popup': True
+  }
+  return render(request, "events_editform.html", context)
 
 def jsonsearch(request):
   # Determine what date range to query. This is an efficient, but not correct, way of finding
@@ -62,7 +116,10 @@ def jsonsearch(request):
   jsondump = json.dumps(jsondump)
   return HttpResponse(jsondump, content_type='application/json')
 
-def eventmodify(request):
+def fcdragmodify(request):
+  if not request.user.has_perm('events.change_event'):
+    raise Http404("You do not have privileges to edit events.")
+
   e = Event.objects.get(pk=int(request.GET["id"]))
   newallday = True if (request.GET["allday"]=='true') else False
   newstart = datetime.utcfromtimestamp(float(request.GET["newstart"]))

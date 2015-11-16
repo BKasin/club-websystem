@@ -13,34 +13,89 @@
 <script src="{% static 'fullcalendar-2.4.0/fullcalendar.js' %}"></script>
 
 <!-- Extra script needed to import any Google Calendars -->
-<script type="text/javascript" src="{% static 'fullcalendar-2.4.0/gcal.js' %}"></script>
+<!--<script type="text/javascript" src="{% static 'fullcalendar-2.4.0/gcal.js' %}"></script>-->
 
 <script type="text/javascript">
-$(document).ready(function() {
-  handle_eventDrop = function(event, delta, revertFunc, jsEvent, ui, view) {
-    if (event.end == null) {
-      e = 'null';
-    }else{
-      e = event.end/1000;
+function PopupCenter(url, title, w, h) {
+    // Fixes dual-screen position                         Most browsers      Firefox
+    var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+    var dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+
+    width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+    height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+    var left = ((width / 2) - (w / 2)) + dualScreenLeft;
+    var top = ((height / 2) - (h / 2)) + dualScreenTop;
+    var newWindow = window.open(url, title, 'scrollbars=yes,resizable=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+
+    // Puts focus on the newWindow
+    if (window.focus) {
+        newWindow.focus();
     }
-    $.ajax({
-      url: "{% url 'eventmodify' %}",
-      data: {
-        id: event.id,
-        newstart: event.start/1000,
-        newend: e,
-        allday: event.allDay
-      },
-      error: function(xhr, status, error) {
-        revertFunc();
-      }
-    });
+}
+
+function onEventDrop(event, delta, revertFunc, jsEvent, ui, view) {
+  // From http://www.xtf.dk/2011/08/center-new-popup-window-even-on.html
+  if (event.end == null) {
+    e = 'null';
+  }else{
+    e = event.end/1000;
   }
-  // page is now ready, initialize the calendar...
+  $.ajax({
+    url: "{% url 'fcdragmodify' %}",
+    data: {
+      id: event.id,
+      newstart: event.start/1000,
+      newend: e,
+      allday: event.allDay
+    },
+    error: function(xhr, status, error) {
+      revertFunc();
+    }
+  });
+}
+
+function onEventClick(event) {
+  if (event.url) {
+    {% if changeperm %}
+    PopupCenter(event.url, 'popupwin', 360, 360);
+    {% else %}
+    PopupCenter(event.url.replace('/edit/','/'), 'popupwin', 600, 500);
+    {% endif %}
+    return false;
+  }
+}
+
+function onDayClick(date, jsEvent, view) {
+  PopupCenter("{% url 'newevent' %}?start=" + date.format(), 'popupwin', 360, 360);
+}
+
+function onNewEvent() {
+    PopupCenter("{% url 'newevent' %}", 'popupwin', 360, 360);
+}
+
+function onPopupClosed(win) {
+  $('#calendar').fullCalendar('refetchEvents');
+  win.close();
+}
+
+$(document).ready(function() {
+  //Initialize the ajax loading indicator for all ajax requests
+  $(document).ajaxStart(function() {
+    $('#ajaxloading').show();
+  })
+  .ajaxStop(function() {
+    $('#ajaxloading').hide();
+  });
+
+  //Initialize the calendar module
   $('#calendar').fullCalendar({
+    customButtons: {
+      newevent: {text: 'new event', click: onNewEvent},
+    },
     header: {
       left: 'prev,next title',
-      center: '',
+      center: '{% if addperm %}newevent{% endif %}',
       right: 'month,agendaWeek,agendaDay today',
     },
     defaultView: 'month',
@@ -54,17 +109,20 @@ $(document).ready(function() {
       end: '18:00',
       dow: [1,2,3,4]
     },
-    minTime: '09:00:00',
-    maxTime: '19:00:00',
+    scrollTime: '10:00:00',
     slotDuration: '00:30:00',
     snapDuration: '00:15:00',
     contentHeight: 520,
     allDaySlot: true,     // Show all-day events in their own section above the rest (if false, they aren't shown at all)
-    editable: {{ user.is_staff|yesno:"true,false" }},
-    eventDrop: handle_eventDrop,
-    eventResize: handle_eventDrop,
+    editable: {{ changeperm|yesno:"true,false" }},
+    eventClick: onEventClick,
+    {% if changeperm %}eventDrop: onEventDrop, eventResize: onEventDrop,{% endif %}
+    {% if addperm %}dayClick: onDayClick,{% endif %}
 
-    {{ calendar_config_options|safe }}
+    events: {
+        url: "/events/json/",
+        className: 'calitem_blue'
+    }
   })
 });
 </script>
@@ -73,8 +131,6 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block content %}
-<h1>Event Calendar</h1>
-<p>Items in <span class="calitem_red" style="font-size:16px">&nbsp;red&nbsp;</span> are being pulled in from the <a href="https://www.google.com/calendar/embed?src=csusb.infosec.club%40gmail.com&ctz=America/Los_Angeles">InfoSec Club's google calendar</a>. Items in <span class="calitem_blue" style="font-size:16px">&nbsp;blue&nbsp;</span> are from the website's internal database.</p>
-
+<h1>Event Calendar&nbsp;&nbsp;<span class="badge" id="ajaxloading" style="display:none">Loading data from server...</span></h1>
 <div id='calendar'></div>
 {% endblock %}
