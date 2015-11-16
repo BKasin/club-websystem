@@ -31,23 +31,25 @@
   {% endblock %}
 </head>
 
-<body>
-  {% include "navbar.html" %}
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}">
+  {% if not is_popup %}{% include "navbar.html" %}{% endif %}
 
   {% block bodyarea %}
   <div class="container">
-    <div class="row">
-      <!-- begin content area -->
-      {% block content %}
-      {% endblock %}
-      <!-- end content area -->
-    </div> <!-- row -->
+    <!-- begin content area -->
+    {% block content %}
+    {% endblock %}
+    <!-- end content area -->
+    {% if not is_popup %}
+    {% block footer %}
     <hr>
     <footer>
       <center>
         <p>Copyright &copy; 2015&nbsp;&nbsp;&nbsp;&nbsp;An open-source project by the students at CSUSB. To contribute, <a href="https://github.com/Alofoxx/club-websystem">visit the GitHub page</a>.</p>
       </center>
     </footer>
+    {% endblock %}
+    {% endif %}
   </div> <!-- container -->
   {% endblock %}
 
