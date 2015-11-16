@@ -136,3 +136,7 @@ div.versatileimagefield {
 .editableblock:hover .editblockbutton {
   display:block;
 }
+.fc-toolbar h2 {
+  border-width:0px;
+  padding-top:3px;
+}
