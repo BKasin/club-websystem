@@ -86,21 +86,12 @@ def contentblock_edit(request, page):
   if not request.user.may_edit_blocks:  # No need to check is_authenticated, since login is already required
     raise Http404("You do not have privileges to edit content blocks.")
 
-  if not request.method == 'POST':
-    # Initial load of the form
-    try:
-      contentblock = Block.objects.get(uniquetitle=page)
-    except Block.DoesNotExist:
-      messages.warning(request, "This block does not yet exist, but you may create it below.")
-      contentblock = Block(uniquetitle=page, site=Site.objects.get_current())
-
-    form = BlockForm(instance=contentblock)
-
-  else:
+  if request.method == 'POST':
     # User posted changes
     try:
       contentblock = Block.objects.get(uniquetitle=page)
     except Block.DoesNotExist:
+      # Block doesn't exist, so we'll create a new one
       contentblock = Block(uniquetitle=page, site=Site.objects.get_current())
     form = BlockForm(request.POST, instance=contentblock)
 
@@ -115,8 +106,17 @@ def contentblock_edit(request, page):
 
       messages.success(request, "Changes made successfully.")
       return redirect(contentblock_view, page)
-    else:
+    else:  # form.is_valid() failed
       messages.error(request, "Form data is not valid.")
+
+  else:  # request.method is GET
+    # Initial load of the form
+    try:
+      contentblock = Block.objects.get(uniquetitle=page)
+    except Block.DoesNotExist:
+      messages.warning(request, "This block does not yet exist, but you may create it below.")
+      contentblock = Block(uniquetitle=page, site=Site.objects.get_current())
+    form = BlockForm(instance=contentblock)
 
   context = {
     'form': form,
