@@ -53,12 +53,7 @@ def event_edit(request, eventid):
   if not request.user.has_perm('events.change_event'):
     raise Http404("You do not have privileges to edit events.")
 
-  if not request.method == 'POST':
-    # Initial load of the form
-    event = Event.objects.get(id=eventid)
-    form = EventEditForm(instance=event)
-
-  else:
+  if request.method == 'POST':
     if '_submitdelete' in request.POST:
       # User wants to delete the item
       Event.objects.get(id=eventid).delete()
@@ -68,10 +63,16 @@ def event_edit(request, eventid):
       # User posted changes
       event = Event.objects.get(id=eventid)
       form = EventEditForm(request.POST, instance=event)
-
       if form.is_valid():
         form.instance.save()
         return render(request, "events_submitandrefresh.html")
+      else:
+        pass  # Show the form with the errors
+
+  else:
+    # Initial load of the form
+    event = Event.objects.get(id=eventid)
+    form = EventEditForm(instance=event)
 
   context = {
     'form': form,
@@ -85,38 +86,35 @@ def event_new(request):
   if not request.user.has_perm('events.add_event'):
     raise Http404("You do not have privileges to create events.")
 
-  if not request.method == 'POST':
+  if request.method == 'POST':
+    # User posted changes
+    form = EventEditForm(request.POST)
+    if form.is_valid():
+      form.instance.save()
+      return render(request, "events_submitandrefresh.html")
+    else:
+      pass  # Show the form with the errors
+
+  else:
     # Initial load of the form
     initialdata = {}
-    initialstart = request.GET.get('start', None)
-    if initialstart:
+    st = request.GET.get('start', None)
+    if st:
       try:
-        initialdata['start'] = datetime.strptime(initialstart, "%Y-%m-%dT%H:%M:%S")
+        initialdata['start'] = datetime.strptime(st, "%Y-%m-%dT%H:%M:%S")
         initialdata['duration'] = timedelta(hours=get_default_event_hours())
       except ValueError:
         try:
-          initialdata['start'] = datetime.strptime(initialstart, "%Y-%m-%d")
+          initialdata['start'] = datetime.strptime(st, "%Y-%m-%d")
           initialdata['duration'] = timedelta(days=get_default_event_days())
           initialdata['all_day'] = True
         except ValueError:
-          pass
-
-    if not 'start' in initialdata:
+          pass  # Leave the field blank if we cannot parse the input
+    else:
       initialdata['start'] = round_time(timezone.now(), 60*60)   # Round the current time to the nearest hour
       initialdata['duration'] = timedelta(hours=get_default_event_hours())
 
     form = EventEditForm(initial=initialdata)
-
-  else:
-    # User posted changes
-    form = EventEditForm(request.POST)
-
-    if form.is_valid():
-      form.instance.save()
-      context = {
-        'form': form,
-      }
-      return render(request, "events_submitandrefresh.html", context)
 
   context = {
     'form': form,
