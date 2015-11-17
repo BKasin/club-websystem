@@ -61,7 +61,7 @@ class Migration(migrations.Migration):
                 ('badge_issue_date', models.DateField(null=True, verbose_name=b'Badge issued on', blank=True)),
                 ('badge_type', models.CharField(max_length=20, verbose_name=b'Type of badge issued', blank=True)),
                 ('shirt_received_date', models.DateField(null=True, verbose_name=b'Shirt received on', blank=True)),
-                ('club', models.ForeignKey(verbose_name=b'is a member of', to='clubdata.Club')),
+                ('club', models.ForeignKey(verbose_name=b'Is a member of', to='clubdata.Club')),
                 ('member', models.ForeignKey(verbose_name=b'Member', to=settings.AUTH_USER_MODEL)),
             ],
         ),

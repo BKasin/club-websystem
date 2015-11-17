@@ -44,6 +44,8 @@ def events(request):
   }
   return render(request, "events.html", context)
 
+
+
 def event_view(request, eventid):
   return HttpResponse('(to be implemented)')
 
@@ -77,7 +79,7 @@ def event_edit(request, eventid):
     'eventid': eventid,
     'is_popup': True
   }
-  return render(request, "events_editform.html", context)
+  return render(request, "events_edit.html", context)
 
 def event_new(request):
   if not request.user.has_perm('events.add_event'):
@@ -121,7 +123,9 @@ def event_new(request):
     'add': True,
     'is_popup': True
   }
-  return render(request, "events_editform.html", context)
+  return render(request, "events_edit.html", context)
+
+
 
 def jsonsearch(request):
   # Determine what date range to query. This is an efficient, but not correct, way of finding
@@ -146,7 +150,7 @@ def jsonsearch(request):
           'start': e.start.isoformat(),
           'end': (e.start + e.duration).isoformat(),
           'allDay': e.all_day,
-          'url': '/events/edit/%s/' % e.id,
+          'url': '/events/%s/edit/' % e.id,
     }]
   jsondump = json.dumps(jsondump)
   return HttpResponse(jsondump, content_type='application/json')

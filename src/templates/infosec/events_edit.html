@@ -13,18 +13,18 @@ $(function() {
 
 {% block content %}
 {% if add %}
-<form  action="/events/new/" method="post" >
+<form action="{% url 'newevent' %}" method="post">
 {% else %}
-<form  action="/events/edit/{{eventid}}/" method="post" >
+<form action="{% url 'editevent' eventid %}" method="post">
 {% endif %}
 {% csrf_token %}
 {{ form|crispy }}
 <div class="form-actions">
   {% if add %}
-  <input type="submit" name="_submitadd" value="Add" class="btn btn-primary" id="submit-id-action">
+  <input type="submit" name="_submitadd" value="Add" class="btn btn-primary">
   {% else %}
-  <input type="submit" name="_submitsave" value="Save" class="btn btn-primary" id="submit-id-action">
-  <input type="submit" name="_submitdelete" value="Delete" class="btn btn-danger test" id="submit-id-action">
+  <input type="submit" name="_submitsave" value="Save" class="btn btn-primary">
+  <input type="submit" name="_submitdelete" value="Delete" class="btn btn-danger">
   {% endif %}
 </div>
 </form>

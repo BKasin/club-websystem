@@ -30,7 +30,8 @@ class Event(models.Model):
                             blank=True, # Field is optional
                             on_delete=models.SET_NULL)  # Deleting a club will leave all associated events behind as global events
   title                 = models.CharField('Title',
-                            blank=True, max_length=200)
+                            blank=True, # Field is optional
+                            max_length=200)
   start                 = models.DateTimeField('Start date/time',
                             help_text='Specify as <i>yyyy-mm-dd hh:mm</i>')
   duration              = models.DurationField('Duration',
