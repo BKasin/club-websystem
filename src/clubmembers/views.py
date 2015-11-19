@@ -15,11 +15,7 @@ from .forms import MemberForm
 @login_required
 def userprofile(request):
   member = request.user
-  if not request.method == 'POST':
-    # Initial load of the form; populate from the existing Member instance
-    form = MemberForm(instance=member)
-
-  else:
+  if request.method == 'POST':
     # User posted changes; populate the form from those changes instead,
     #   but still bind to the member instance
     form = MemberForm(request.POST, request.FILES, instance=member)
@@ -60,7 +56,7 @@ def userprofile(request):
         messages.success(request, "Changes made successfully.")
         messages.warning(request, "Email change is pending activation (see below).")
 
-      else:  # NOT if 'email' in form.changed_data
+      else:  # 'email' is not in form.changed_data
         # Save the Member instance
         form.instance.save()
 
@@ -70,9 +66,13 @@ def userprofile(request):
       # Everything looks good, so redirect the user to their updated profile page
       return redirect(userprofile)
 
-    else:
+    else:  # form.is_valid() failed
       # Validation errors on the form, so show the errors instead of redirecting
       messages.error(request, "Changes not applied. Please correct the errors hilighted below.")
+
+  else:  # request.method is GET
+    # Initial load of the form; populate from the existing Member instance
+    form = MemberForm(instance=member)
 
   # Lookup all memberships, except if they expired more than 180 days ago
   context = {
