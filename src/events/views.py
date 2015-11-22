@@ -125,6 +125,20 @@ def event_new(request):
 
 
 
+def event_editrecurring(request, eventid):
+  if not request.user.has_perm('events.change_eventrecurring'):
+    raise Http404("You do not have privileges to edit recurring events.")
+
+  return HttpResponse('ok')
+
+def event_newrecurring(request):
+  if not request.user.has_perm('events.add_eventrecurring'):
+    raise Http404("You do not have privileges to create recurring events.")
+
+  return HttpResponse('ok')
+
+
+
 def jsonsearch(request):
   # Determine what date range to query. This is an efficient, but not correct, way of finding
   #   events within the desired range. A more correct way would be to query the database as

@@ -3,6 +3,49 @@ from django.contrib.sites.models import Site
 
 from clubdata.models import Club
 
+
+
+
+
+class RecurringEvent(models.Model):
+  DAILY = 100
+  WEEKLY = 200
+  MONTHLY = 300
+  ruletypes = (
+    (DAILY, 'Every day'),
+    (WEEKLY, 'Specified days of the week'),
+    (MONTHLY, 'Specified days of the month'),
+  )
+
+  id                    = models.AutoField(
+                            primary_key=True)
+
+  # Range
+  starts_on             = models.DateField('Starts on')
+  ends_on               = models.DateField('Ends on')
+
+  # Rule
+  rule_type             = models.IntegerField('Recurring rule',
+                            choices=ruletypes,
+                            default=WEEKLY)
+  repeat_each           = models.IntegerField('Repeat each',
+                            help_text='Repeat every X days/weeks/months.',
+                            default=1)
+  criteria              = models.CharField('Criteria',
+                            max_length=200)
+
+  class Meta:
+    verbose_name = 'Recurring Event'
+    verbose_name_plural = 'Recurring Events'
+
+  def __unicode__(self): #Python 3.3 is __str__
+    return str(self.id)
+
+
+
+
+
+
 class CustomEventManager(models.Manager):
   # Custom manager to show only the items that either
   #   (a) belong to the current Club, or
@@ -38,12 +81,16 @@ class Event(models.Model):
                             help_text='Specify as <i>hh:mm:ss</i>')
   all_day               = models.BooleanField('All day event?',
                             default=False)
+  recurring             = models.ForeignKey(RecurringEvent, verbose_name='Belongs to recurring group',
+                            null=True,  # Blank is stored as Null
+                            blank=True, # Field is optional
+                            on_delete=models.SET_NULL)  # Deleting an EventGroup will leave all linked events as isolated events
 
   objects = CustomEventManager()
 
   class Meta:
-      verbose_name = 'Event'
-      verbose_name_plural = 'Events'
+    verbose_name = 'Event'
+    verbose_name_plural = 'Events'
 
   def __unicode__(self): #Python 3.3 is __str__
-      return self.title
+    return self.title

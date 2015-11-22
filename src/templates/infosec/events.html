@@ -71,6 +71,10 @@ function onNewEvent() {
   PopupCenter("{% url 'newevent' %}", 'popupwin', 360, 360);
 }
 
+function onNewRecurringEvent() {
+  PopupCenter("{% url 'newrecurringevent' %}", 'popupwin', 600, 500);
+}
+
 function onViewRender(view, element) {
   window.location.hash = view.name;
 }
@@ -83,6 +87,7 @@ function onPopupClosed(win) {
 $(document).ready(function() {
   //Initialize the ajax loading indicator for all ajax requests
   $(document).ajaxStart(function() {
+    $('#ajaxerror').hide();
     $('#ajaxloading').show();
   })
   .ajaxStop(function() {
@@ -96,10 +101,11 @@ $(document).ready(function() {
   $('#calendar').fullCalendar({
     customButtons: {
       newevent: {text: 'new event', click: onNewEvent},
+      newrecurringevent: {text: 'new recurring event', click: onNewRecurringEvent}
     },
     header: {
       left: 'prev,next title',
-      center: '{% if addperm %}newevent{% endif %}',
+      center: '{% if addperm %}newevent,newrecurringevent{% endif %}',
       right: 'month,agendaWeek,agendaDay today',
     },
     defaultView: initialview,
@@ -123,10 +129,14 @@ $(document).ready(function() {
     {% if addperm %}dayClick: onDayClick,{% endif %}
     viewRender: onViewRender,
 
-    events: {
+    eventSources: [
+      {
         url: "/events/json/",
-        className: 'calitem_blue'
-    }
+        className: 'calitem_blue',
+        success: function() {$('#ajaxerror').hide();},
+        error: function() {$('#ajaxerror').show();}
+      }
+    ]
   })
 });
 </script>
@@ -135,6 +145,6 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block content %}
-<h1>Event Calendar&nbsp;&nbsp;<span class="badge" id="ajaxloading" style="display:none">Loading data from server...</span></h1>
+<h1>Event Calendar&nbsp;&nbsp;<span class="badge" id="ajaxloading" style="display:none">Loading data from server...</span><span class="badge" id="ajaxerror" style="display:none">** ERROR LOADING DATA! **</span></h1>
 <div id='calendar'></div>
 {% endblock %}
