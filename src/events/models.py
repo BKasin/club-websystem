@@ -1,7 +1,63 @@
+from datetime import date, timedelta
+
 from django.db import models
 from django.contrib.sites.models import Site
+from django.core.validators import MinValueValidator
 
 from clubdata.models import Club
+
+
+
+
+
+def range_date_inclusive(start_date, end_date):
+  for n in range((end_date - start_date).days+1):
+    yield start_date + timedelta(n)
+
+def num_days_in_month(d):
+  dmonth = d.month
+  if dmonth == 12:
+    return 31
+  else:
+    return (d.replace(month=dmonth+1, day=1) - timedelta(days=1)).day
+
+def last_day_in_month(d):
+  dmonth = d.month
+  if dmonth == 12:
+    return d.replace(day=31)
+  else:
+    return d.replace(month=dmonth+1, day=1) - timedelta(days=1)
+
+def decode_weekly_criteria(criteria):
+  c = criteria.split(",")
+  dow_possible = ('mo','tu','we','th','fr','sa','su')
+  dow = [False,False,False,False,False,False,False]
+  for x in c: dow[dow_possible.index(x)] = True
+  return dow
+
+def decode_monthly_criteria(criteria):
+  c = criteria.split(",")
+  specificdays = []
+  daystocalculate = []
+  dow_possible = ('mo','tu','we','th','fr','sa','su')
+  for x in c:
+    if x.isdigit():
+      # Specific numbered day (same every month)
+      specificdays.append(int(x))
+    else:
+      # A code to represent a day. We'll convert from strings to integers for later.
+      if x == 'last':
+        # Last day of the month (must be calculated later)
+        daystocalculate.append( (99, -1) )
+      else:
+        y,z = x.split("-")
+        if y == 'last':
+          # Last DOW of the month (must be calculated later)
+          daystocalculate.append( (99, dow_possible.index(z)) )
+        else:
+          # Specified DOW of the month (must be calculated later)
+          daystocalculate.append( (int(y), dow_possible.index(z)) )
+  return specificdays,daystocalculate
 
 
 
@@ -12,9 +68,9 @@ class RecurringEvent(models.Model):
   WEEKLY = 200
   MONTHLY = 300
   ruletypes = (
-    (DAILY, 'Every day'),
-    (WEEKLY, 'Specified days of the week'),
-    (MONTHLY, 'Specified days of the month'),
+    (DAILY, 'Daily'),
+    (WEEKLY, 'Weekly'),
+    (MONTHLY, 'Monthly'),
   )
 
   id                    = models.AutoField(
@@ -29,18 +85,139 @@ class RecurringEvent(models.Model):
                             choices=ruletypes,
                             default=WEEKLY)
   repeat_each           = models.IntegerField('Repeat each',
-                            help_text='Repeat every X days/weeks/months.',
-                            default=1)
+                            default=1,
+                            validators=[MinValueValidator(1)])
   criteria              = models.CharField('Criteria',
-                            max_length=200)
+                            max_length=200,
+                            null=True,  # Blank is stored as Null
+                            blank=True) # Field is optional
 
   class Meta:
     verbose_name = 'Recurring Event'
     verbose_name_plural = 'Recurring Events'
 
   def __unicode__(self): #Python 3.3 is __str__
-    return str(self.id)
+    rt = self.rule_type
+    for t in self.ruletypes:
+      if t[0] == rt:
+        rt = t[1]
+        break
+    return "%s Event, %s to %s, \"%s\"" % (rt, self.starts_on, self.ends_on, self.criteria)
 
+  def dates_per_rule_iter(self):
+    if self.rule_type == self.WEEKLY:
+      # criteria = Must be a comma-separated list of lowercase 2-letter abbreviations for the days
+      #   of the week. Ex: mo,we,fr,su
+      # repeat_each = If this is 2, then every other week (Mon-Sun) will be skipped. If it is 3,
+      #   then two weeks (Mon-Sun) will be skipped between each filled week. etc...
+
+      # Deconstruct the criteria
+      criteria = decode_weekly_criteria(self.criteria)
+
+      # Generate a list of dates that match
+      if self.repeat_each == 1:
+        # If repeat_each is 1, then our calculation is much simpler
+        for x in range_date_inclusive(self.starts_on, self.ends_on):
+          if criteria[x.weekday()]: yield x
+      else:
+        # Special handling because we're not doing every week
+        r = 2 # Set this to 2 so the first iteration will set it to 1
+        dow_begin = self.starts_on.weekday()
+        for x in range_date_inclusive(self.starts_on, self.ends_on):
+          wd = x.weekday()
+          if wd == dow_begin:
+            # It's the beginning of a new week (rather than assuming the user considers Monday to be
+            #   the first day of the week, we use the DOW of the start of the range for this purpose.
+            if r == 1:
+              # Reset the counter
+              r = self.repeat_each
+            else:
+              # Decrease the counter
+              r -= 1
+          if r == 1:
+            # If counter is 1, then this week should be included
+            if criteria[wd]: yield x
+
+    elif self.rule_type == self.MONTHLY:
+      # criteria = Must be a comma-separated list of the following types of codes:
+      #   * 1,2,3,4, etc                specific days of the month
+      #   * 1-mo, 3-fr, last-we, etc    first Monday, third Friday, last Wednesday, etc.
+      #   * last                        last day of the month
+      # repeat_each = If this is 2, then every other month will be skipped. If it is 3, then two
+      #   months will be skipped between each filled month. etc...
+
+      # Deconstruct the criteria
+      specificdays,daystocalculate = decode_monthly_criteria(self.criteria)
+
+      # Generate a list of dates that match
+      calcdays = None
+      oneday = timedelta(days=1)
+      r = 2 # Set this to 2 so the first iteration will set it to 1
+      for x in range_date_inclusive(self.starts_on, self.ends_on):
+        xday = x.day
+        if (xday == 1) or (calcdays is None):
+          # It's the first day of the month (or first iteration of this loop)
+          if r == 1:
+            # Reset the counter
+            r = self.repeat_each
+          else:
+            # Decrease the counter
+            r -= 1
+          if r == 1:  # Putting this within the above 'else' will malfunction if repeat_each is 1
+            # Since this month is included, we must turn those vague days into specific numbered days
+            #   for this current month (each month is different, so they couldn't have been calculated earlier.
+            calcdays = []
+            for y in daystocalculate:
+              if y[0] == 99:
+                if y[1] == -1:
+                  # Calculate the last day of the month
+                  calcdays.append(num_days_in_month(x))
+                else:
+                  # Calculate the last DOW of the month
+                  end_date = last_day_in_month(x)
+                  for z in range(end_date.day):
+                    d = end_date - timedelta(z)
+                    if d.weekday() == y[1]:
+                      calcdays.append(d.day)
+                      break
+              else:
+                # Calculate the specified DOW of the month
+                start_date = date(x.year, x.month, 1)
+                found_count = 0
+                for z in range(num_days_in_month(start_date)):
+                  d = start_date + timedelta(z)
+                  if d.weekday() == y[1]:
+                    found_count += 1
+                    if found_count == y[0]:
+                      calcdays.append(z+1)
+                      break
+            print(calcdays)
+        # Check if this month is included (not a skipped month per the repeat_each rule)
+        if r == 1:
+          if (xday in specificdays) or (xday in calcdays):
+            # Assuming the daystocalculate have been calculated (above), simply check if the day is
+            #   in one of the two lists
+            yield x
+
+    elif self.rule_type == self.DAILY:
+      # criteria = Not used
+      # repeat_each = If this is 2, then every other day will be skipped. If it is 3, only every
+      #   third day will be chosen. etc...
+
+      # Generate a list of dates that match
+      if self.repeat_each == 1:
+        # If repeat_each is 1, then our calculation is much simpler
+        for x in range_date_inclusive(self.starts_on, self.ends_on):
+          yield x
+      else:
+        # Use the repeat value.
+        r = self.repeat_each # Include the first day of the range, and then start counting from there
+        for x in range_date_inclusive(self.starts_on, self.ends_on):
+          if r == self.repeat_each:
+            yield x
+            r = 1
+          else:
+            r += 1
 
 
 
@@ -93,4 +270,4 @@ class Event(models.Model):
     verbose_name_plural = 'Events'
 
   def __unicode__(self): #Python 3.3 is __str__
-    return self.title
+    return "%s %s" % (self.start, self.title)
