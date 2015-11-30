@@ -67,7 +67,7 @@ class RecurringEvent(models.Model):
   DAILY = 100
   WEEKLY = 200
   MONTHLY = 300
-  ruletypes = (
+  rule_type_choices = (
     (DAILY, 'Daily'),
     (WEEKLY, 'Weekly'),
     (MONTHLY, 'Monthly'),
@@ -82,7 +82,7 @@ class RecurringEvent(models.Model):
 
   # Rule
   rule_type             = models.IntegerField('Recurring rule',
-                            choices=ruletypes,
+                            choices=rule_type_choices,
                             default=WEEKLY)
   repeat_each           = models.IntegerField('Repeat each',
                             default=1,
@@ -98,7 +98,7 @@ class RecurringEvent(models.Model):
 
   def __unicode__(self): #Python 3.3 is __str__
     rt = self.rule_type
-    for t in self.ruletypes:
+    for t in self.rule_type_choices:
       if t[0] == rt:
         rt = t[1]
         break
@@ -108,8 +108,8 @@ class RecurringEvent(models.Model):
     if self.rule_type == self.WEEKLY:
       # criteria = Must be a comma-separated list of lowercase 2-letter abbreviations for the days
       #   of the week. Ex: mo,we,fr,su
-      # repeat_each = If this is 2, then every other week (Mon-Sun) will be skipped. If it is 3,
-      #   then two weeks (Mon-Sun) will be skipped between each filled week. etc...
+      # repeat_each = If this is 2, then every other week will be skipped. If it is 3,
+      #   then two weeks will be skipped between each filled week. etc...
 
       # Deconstruct the criteria
       criteria = decode_weekly_criteria(self.criteria)
@@ -252,10 +252,8 @@ class Event(models.Model):
   title                 = models.CharField('Title',
                             blank=True, # Field is optional
                             max_length=200)
-  start                 = models.DateTimeField('Start date/time',
-                            help_text='Specify as <i>yyyy-mm-dd hh:mm</i>')
-  duration              = models.DurationField('Duration',
-                            help_text='Specify as <i>hh:mm:ss</i>')
+  start                 = models.DateTimeField('Start date/time')
+  duration              = models.DurationField('Duration')
   all_day               = models.BooleanField('All day event?',
                             default=False)
   recurring             = models.ForeignKey(RecurringEvent, verbose_name='Belongs to recurring group',

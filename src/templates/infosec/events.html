@@ -13,6 +13,8 @@
 <script src="{% static 'fullcalendar-2.4.0/fullcalendar.js' %}"></script>
 
 <script type="text/javascript">
+var pw = 550;
+var ph = 580;
 function PopupCenter(url, title, w, h) {
     // Fixes dual-screen position                         Most browsers      Firefox
     var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
@@ -55,24 +57,24 @@ function onEventDrop(event, delta, revertFunc, jsEvent, ui, view) {
 function onEventClick(event) {
   if (event.url) {
     {% if changeperm %}
-    PopupCenter(event.url, 'popupwin', 360, 360);
+    PopupCenter(event.url, 'popupwin', pw, ph);
     {% else %}
-    PopupCenter(event.url.replace('/edit/','/'), 'popupwin', 600, 500);
+    PopupCenter(event.url.replace('/edit/','/'), 'popupwin', pw, ph);
     {% endif %}
     return false;
   }
 }
 
 function onDayClick(date, jsEvent, view) {
-  PopupCenter("{% url 'newevent' %}?start=" + date.format(), 'popupwin', 360, 360);
+  PopupCenter("{% url 'newevent' %}?start=" + date.format(), 'popupwin', pw, ph);
 }
 
 function onNewEvent() {
-  PopupCenter("{% url 'newevent' %}", 'popupwin', 360, 360);
+  PopupCenter("{% url 'newevent' %}", 'popupwin', pw, ph);
 }
 
 function onNewRecurringEvent() {
-  PopupCenter("{% url 'newrecurringevent' %}", 'popupwin', 600, 500);
+  PopupCenter("{% url 'newevent' %}?rt=200", 'popupwin', pw, ph);
 }
 
 function onViewRender(view, element) {

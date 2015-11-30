@@ -9,8 +9,6 @@ urlpatterns = [
 
   url(r'^new/', views.event_new, name='newevent'),
   url(r'^(?P<eventid>.+)/edit/', views.event_edit, name='editevent'),
-
-  url(r'^recurring/new/', views.event_newrecurring, name='newrecurringevent'),
   url(r'^recurring/(?P<eventid>.+)/edit/', views.event_editrecurring, name='editrecurringevent'),
 
   # Must be last...

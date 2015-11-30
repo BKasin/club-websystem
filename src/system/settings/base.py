@@ -162,28 +162,33 @@ TIME_ZONE = 'America/Los_Angeles'
 USE_TZ = False
 
 # Default date format when displaying dates in templates
-DATE_FORMAT = 'N j, Y'              #ex: Feb. 4, 2003
+DATE_FORMAT = 'N j, Y'                  #ex: Feb. 4, 2003
 DATETIME_FORMAT = 'N j, Y, g:i A'       #ex: Feb. 4, 2003, 4:13 PM
 TIME_FORMAT = 'g:i A'                   #ex: 4:13 PM
-MONTH_DAY_FORMAT = 'F j'            #ex: January 4
-YEAR_MONTH_FORMAT = 'F Y'           #ex: January 2003
-SHORT_DATE_FORMAT = 'm/d/Y'         #ex: 12/31/2003
+MONTH_DAY_FORMAT = 'F j'                #ex: January 4
+YEAR_MONTH_FORMAT = 'F Y'               #ex: January 2003
+SHORT_DATE_FORMAT = 'm/d/Y'             #ex: 12/31/2003
 SHORT_DATETIME_FORMAT = 'm/d/Y g:i A'   #ex: 12/31/2003 4:13 PM
 
 # Customize the input formats to prefer the seconds hidden
 DATETIME_INPUT_FORMATS = (
-    '%Y-%m-%d %H:%M',        # '2006-10-25 14:30'
-    '%Y-%m-%d %H:%M:%S',     # '2006-10-25 14:30:59'
-    '%Y-%m-%d %H:%M:%S.%f',  # '2006-10-25 14:30:59.000200'
-    '%Y-%m-%d',              # '2006-10-25'
-    '%m/%d/%Y %H:%M',        # '10/25/2006 14:30'
-    '%m/%d/%Y %H:%M:%S',     # '10/25/2006 14:30:59'
-    '%m/%d/%Y %H:%M:%S.%f',  # '10/25/2006 14:30:59.000200'
-    '%m/%d/%Y',              # '10/25/2006'
-    '%m/%d/%y %H:%M',        # '10/25/06 14:30'
-    '%m/%d/%y %H:%M:%S',     # '10/25/06 14:30:59'
-    '%m/%d/%y %H:%M:%S.%f',  # '10/25/06 14:30:59.000200'
-    '%m/%d/%y',              # '10/25/06'
+  '%Y-%m-%d %H:%M',         # '2006-10-25 14:30'
+  '%Y-%m-%d %H:%M:%S',      # '2006-10-25 14:30:59'
+  '%Y-%m-%d %H:%M:%S.%f',   # '2006-10-25 14:30:59.000200'
+  '%Y-%m-%d',               # '2006-10-25'
+  '%m/%d/%Y %H:%M',         # '10/25/2006 14:30'
+  '%m/%d/%Y %H:%M:%S',      # '10/25/2006 14:30:59'
+  '%m/%d/%Y %H:%M:%S.%f',   # '10/25/2006 14:30:59.000200'
+  '%m/%d/%Y',               # '10/25/2006'
+  '%m/%d/%y %H:%M',         # '10/25/06 14:30'
+  '%m/%d/%y %H:%M:%S',      # '10/25/06 14:30:59'
+  '%m/%d/%y %H:%M:%S.%f',   # '10/25/06 14:30:59.000200'
+  '%m/%d/%y',               # '10/25/06'
+)
+TIME_INPUT_FORMATS = (
+  '%H:%M',                  # '14:30'
+  '%H:%M:%S',               # '14:30:59'
+  '%H:%M:%S.%f',            # '14:30:59.000200'
 )
 
 ############################################## Misc. ###############################################

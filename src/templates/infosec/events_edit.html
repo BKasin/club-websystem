@@ -1,31 +1,139 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% load crispy_forms_tags %}
 
 {% block title %}{% if add %}New Event{% else %}Edit Event{% endif %}{% endblock %}
 
 {% block extrahead %}
+<link rel='stylesheet' href="{% static 'csstoggle/toggle-switch.css' %}" />
 <script type="text/javascript">
+var cur_rt = {{rt}};
+function on_rule_type_change(rt) {
+  cur_rt = rt;
+  if (rt=={{form.NORECURRING}}) {
+    // One-time event
+    $('#rule_type_selector').removeClass("progress-bar-warning").addClass("progress-bar-info");
+    $('.hide_if_onetime').hide();
+
+  }else{
+    // Recurring event
+    $('#rule_type_selector').removeClass("progress-bar-info").addClass("progress-bar-warning");
+    $('.hide_if_onetime').show();
+    if (rt==100) {
+      $('#id_criteria').prop("disabled", "true");
+    }else{
+      $('#id_criteria').prop("disabled", "");
+    }
+    if (false) {
+    {% for rt_id,rt_help in form.criteria_help_texts %}
+    }else if (rt=={{rt_id}}) {
+      $('#criteria_help_text').html('{{rt_help|safe}}');
+    {% endfor %}
+    }
+  }
+}
+function on_all_day_change(e) {
+  if ($('#id_all_day').prop("checked") === true) {
+    $('#id_start_time').val('').prop("disabled", "true");
+    if (e) $('#id_duration').val('1 day, 00:00');
+  }else{
+    $('#id_start_time').prop("disabled", "");
+  }
+}
 $(function() {
+  // Initialize the Rule Type switch
+  $('#id_rule_type_' + {{rt}}).prop('checked', true);
+  on_rule_type_change({{rt}});
+
+  // Initialize the All Day switch
+  on_all_day_change(false);
+
+  {% if events %}
+  document.getElementById('events_preview').scrollIntoView();
+  {% else %}
+  // Set initial focus
   $('#id_title').focus();
+  {% endif %}
 })
+
 </script>
 {% endblock %}
 
 {% block content %}
-{% if add %}
-<form action="{% url 'newevent' %}" method="post">
-{% else %}
-<form action="{% url 'editevent' eventid %}" method="post">
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert {{ message.tags }}" role="alert">{{ message }}</div>
+{% endfor %}
 {% endif %}
-{% csrf_token %}
-{{ form|crispy }}
-<div class="form-actions">
-  {% if add %}
-  <input type="submit" name="_submitadd" value="Add" class="btn btn-primary">
-  {% else %}
-  <input type="submit" name="_submitsave" value="Save" class="btn btn-primary">
-  <input type="submit" name="_submitdelete" value="Delete" class="btn btn-danger">
-  {% endif %}
-</div>
+
+<form id="mainform" action="{% if add %}{% url 'newevent' %}{% elif rt > 0 %}{% url 'editrecurringevent' eventid %}{% else %}{% url 'editevent' eventid %}{% endif %}" method="post">
+  {% csrf_token %}
+
+  <label class="control-label">{{ form.rule_type.label|safe }}</label>
+  <div class="switch-toggle well progress-striped">
+    {% for rt_id,rt_name in form.current_rule_type_choices %}
+    <input {% if rt == rt_id %}checked {% endif %}id="id_rule_type_{{rt_id}}" name="rule_type" value="{{rt_id}}" type="radio" onclick="on_rule_type_change({{rt_id}})">
+    <label for="id_rule_type_{{rt_id}}">{{rt_name}}</label>
+    {% endfor %}
+    <a id="rule_type_selector" class="progress-bar {% if rt > 0 %}progress-bar-warning{% else %}progress-bar-info{% endif %}"></a>
+  </div>
+
+  {{ form.title|as_crispy_field }}
+
+  <div class="row">
+    <div class="col-xs-4">{{ form.start_date|as_crispy_field }}</div>
+    <div class="col-xs-4 hide_if_onetime"{% if rt == 0 %} style="display:none"{% endif %}>{{ form.end_date|as_crispy_field }}</div>
+    <div class="col-xs-4 hide_if_onetime"{% if rt == 0 %} style="display:none"{% endif %}>{{ form.repeat_each|as_crispy_field }}</div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-4">{{ form.start_time|as_crispy_field }}</div>
+    <div class="col-xs-4">{{ form.duration|as_crispy_field }}</div>
+    <div class="col-xs-4">
+      <label for="id_all_day" class="switch-light">
+        <input {% if form.all_day.value == True %}checked {% endif %}class="checkboxinput" id="id_all_day" name="all_day" type="checkbox" onclick="on_all_day_change(true)">
+        <span>{{ form.all_day.label|safe }}</span>
+        <span class="well">
+          <span>No</span>
+          <span>Yes</span>
+          <a class="btn btn-success"></a>
+        </span>
+      </label>
+    </div>
+  </div>
+
+  <div class="hide_if_onetime"{% if rt == 0 %} style="display:none"{% endif %}>
+    {{ form.criteria|as_crispy_field }}
+
+    {% if show_events_preview %}
+    <div class="panel panel-primary" id="events_preview">
+      <div class="panel-heading">Preview of recurring events that will be created</div>
+      <table class="table">
+        <thead><tr><th>Date</th><th>Time</th><th>Duration</th><th>Action</th></tr></thead>
+        <tbody>
+        {% for date in events %}
+        <tr><td>{{date|date:"D, M j Y"}}</td><td>{{events_time}}</td><td>{{events_duration}}</td><td>Will be added.</td></tr>
+        {% empty %}
+        <tr><td colspan="4">No events match the criteria.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <br>
+    <br>
+    <br>
+    {% endif %}
+  </div>
+
+  <div class="form-actions">
+    {% if add %}
+    <input type="submit" name="_submitpreview" value="Preview" class="btn btn-default hide_if_onetime"{% if rt == 0 %} style="display:none"{% endif %}>
+    <input type="submit" name="_submitadd" value="Add" class="btn btn-primary">
+    {% else %}
+    <input type="submit" name="_submitsave" value="Save" class="btn btn-primary">
+    <input type="submit" name="_submitdelete" value="Delete" class="btn btn-danger">
+    {% endif %}
+  </div>
 </form>
 {% endblock %}
