@@ -36,10 +36,6 @@ def get_default_event_days():
 
 
 # Views
-NORECURRING = 0
-extra_rule_type_choice = (
-  (NORECURRING, 'One-time'),
-)
 
 def events(request):
   context = {
@@ -55,22 +51,29 @@ def events(request):
 def event_view(request, eventid):
   return HttpResponse('(to be implemented)')
 
-def event_new(request):
+
+
+
+
+
+NORECURRING = 0
+rule_type_onetime = (
+  (NORECURRING, 'One-time'),
+)
+
+def event_manage(request, eventid=None, editrecurring=False):
   if not request.user.has_perm('events.add_event'):
     raise Http404("You do not have privileges to create events.")
 
-  context = {
-    'add': True,
-    'is_popup': True,
-  }
-  rt = None
+  context = {}
 
   if request.method == 'POST':
     # User posted changes
     form = EventEditForm(request.POST)
-    form.fields['rule_type'].choices = extra_rule_type_choice + RecurringEvent.rule_type_choices
+    form.fields['rule_type'].choices = rule_type_onetime + RecurringEvent.rule_type_choices
     if form.is_valid():
       rt = form.cleaned_data['rule_type']
+      context['rule_type_int'] = rt
       if rt == NORECURRING:
         # It's a regular event, so we can just create it and move on
         all_day = form.cleaned_data['all_day']
@@ -142,48 +145,86 @@ def event_new(request):
             # By this point, Django has already rolled back the transaction
             messages.error(request, "An error occured while attempting to create the events.")
 
-    # If we got to this point, then there must have been form errors.
-    # Just in case nothing above set 'rt', we'll set it here
-    if not rt: rt = form.cleaned_data['rule_type']
+    else:
+      # Even if the form failed validation, we still need this...
+      context['rule_type_int'] = form.cleaned_data['rule_type']
+
+    # If we got to this point, then there must have been form errors, so show the form
+    context['add'] = True
 
   else:
-    # Initial load of the form
-    rt = int(request.GET.get('rt', NORECURRING))
-    now = timezone.now()
-    now_date = now.date()
-    initialdata = {
-      'rule_type': rt,
-      'start_date': now_date,
-      'end_date': now_date,
-      'repeat_each': 1,
-      'start_time': round_time(now, 60*60).time(),   # Round the current time to the nearest hour
-      'duration': timedelta(hours=get_default_event_hours()),
-      'all_day': False,
-    }
-    initial_start = request.GET.get('start', None)
-    if initial_start:
-      try:
-        d = datetime.strptime(initial_start, "%Y-%m-%dT%H:%M:%S")
-        # If the above succeeded, then 'start' is a date/time
-        initialdata['start_date'] = d.date()
-        initialdata['start_time'] = d.time()
-        initialdata['duration'] = timedelta(hours=get_default_event_hours())
-      except ValueError:
-        try:
-          d = datetime.strptime(initial_start, "%Y-%m-%d")
-          # If the above succeeded, then 'start' is only a date
-          initialdata['start_date'] = d.date()
-          initialdata['start_time'] = None
-          initialdata['duration'] = timedelta(days=get_default_event_days())
-          initialdata['all_day'] = True
-        except ValueError:
-          pass
-    form = EventEditForm(initial=initialdata)
-    form.fields['rule_type'].choices = extra_rule_type_choice + RecurringEvent.rule_type_choices
+    if eventid:
+      if not editrecurring:
+        # Initial load of the form (editing an existing regular event)
+        e = Event.objects.get(id=eventid)
+        context['eventid'] = eventid
+        if e.recurring:
+          context['linked_recurringevent'] = e.recurring
+        rt = NORECURRING
+        context['rule_type_int'] = rt
+        initialdata = {
+          'title': e.title,
+          'rule_type': rt,
+          'start_date': e.start.date(),
+          'start_time': e.start.time(),
+          'duration': e.duration,
+          'all_day': e.all_day,
+        }
+        form = EventEditForm(initial=initialdata)
+        form.fields['rule_type'].choices = rule_type_onetime
 
+      else:
+        # Initial load of the form (editing an existing recurring event)
+        return HttpResponse('not implemented yet')
+
+    else:
+      # Initial load of the form (creating a new event)
+      rt = int(request.GET.get('rt', NORECURRING))
+      context['rule_type_int'] = rt
+      now = timezone.now()
+      now_date = now.date()
+      initialdata = {
+        'rule_type': rt,
+        'start_date': now_date,
+        'end_date': now_date,
+        'repeat_each': 1,
+        'start_time': round_time(now, 60*60).time(),   # Round the current time to the nearest hour
+        'duration': timedelta(hours=get_default_event_hours()),
+        'all_day': False,
+      }
+      initial_start = request.GET.get('start', None)
+      if initial_start:
+        try:
+          d = datetime.strptime(initial_start, "%Y-%m-%dT%H:%M:%S")
+          # If the above succeeded, then 'start' is a date/time
+          initialdata['start_date'] = d.date()
+          initialdata['start_time'] = d.time()
+          initialdata['duration'] = timedelta(hours=get_default_event_hours())
+        except ValueError:
+          try:
+            d = datetime.strptime(initial_start, "%Y-%m-%d")
+            # If the above succeeded, then 'start' is only a date
+            initialdata['start_date'] = d.date()
+            initialdata['start_time'] = None
+            initialdata['duration'] = timedelta(days=get_default_event_days())
+            initialdata['all_day'] = True
+          except ValueError:
+            pass
+      form = EventEditForm(initial=initialdata)
+      form.fields['rule_type'].choices = rule_type_onetime + RecurringEvent.rule_type_choices
+      context['add'] = True
+
+  context['is_popup'] = True
   context['form'] = form
-  context['rt'] = rt
   return render(request, "events_edit.html", context)
+
+
+
+
+
+
+
+
 
 def event_edit(request, eventid):
   if not request.user.has_perm('events.change_event'):

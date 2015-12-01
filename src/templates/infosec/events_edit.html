@@ -7,7 +7,7 @@
 {% block extrahead %}
 <link rel='stylesheet' href="{% static 'csstoggle/toggle-switch.css' %}" />
 <script type="text/javascript">
-var cur_rt = {{rt}};
+var cur_rt = {{rule_type_int}};
 function on_rule_type_change(rt) {
   cur_rt = rt;
   if (rt=={{form.NORECURRING}}) {
@@ -42,8 +42,8 @@ function on_all_day_change(e) {
 }
 $(function() {
   // Initialize the Rule Type switch
-  $('#id_rule_type_' + {{rt}}).prop('checked', true);
-  on_rule_type_change({{rt}});
+  $('#id_rule_type_' + {{rule_type_int}}).prop('checked', true);
+  on_rule_type_change({{rule_type_int}});
 
   // Initialize the All Day switch
   on_all_day_change(false);
@@ -67,24 +67,28 @@ $(function() {
 {% endfor %}
 {% endif %}
 
-<form id="mainform" action="{% if add %}{% url 'newevent' %}{% elif rt > 0 %}{% url 'editrecurringevent' eventid %}{% else %}{% url 'editevent' eventid %}{% endif %}" method="post">
+<form id="mainform" action="{% if add %}{% url 'newevent' %}{% elif rule_type_int > 0 %}{% url 'editrecurringevent' eventid %}{% else %}{% url 'editevent' eventid %}{% endif %}" method="post">
   {% csrf_token %}
 
+  {% if add %}
   <label class="control-label">{{ form.rule_type.label|safe }}</label>
   <div class="switch-toggle well progress-striped">
     {% for rt_id,rt_name in form.current_rule_type_choices %}
-    <input {% if rt == rt_id %}checked {% endif %}id="id_rule_type_{{rt_id}}" name="rule_type" value="{{rt_id}}" type="radio" onclick="on_rule_type_change({{rt_id}})">
+    <input {% if rule_type_int == rt_id %}checked {% endif %}id="id_rule_type_{{rt_id}}" name="rule_type" value="{{rt_id}}" type="radio" onclick="on_rule_type_change({{rt_id}})">
     <label for="id_rule_type_{{rt_id}}">{{rt_name}}</label>
     {% endfor %}
-    <a id="rule_type_selector" class="progress-bar {% if rt > 0 %}progress-bar-warning{% else %}progress-bar-info{% endif %}"></a>
+    <a id="rule_type_selector" class="progress-bar {% if rule_type_int > 0 %}progress-bar-warning{% else %}progress-bar-info{% endif %}"></a>
   </div>
+  {% elif linked_recurringevent %}
+  <div class="alert alert-warning" role="alert"><strong>Note:</strong> This event is part of a recurring series, but changing data here will not update any other event in the series. Would you like to <a class="alert-link" href="{% url 'editrecurringevent' linked_recurringevent.id %}">edit the series</a> instead?</div>
+  {% endif %}
 
   {{ form.title|as_crispy_field }}
 
   <div class="row">
     <div class="col-xs-4">{{ form.start_date|as_crispy_field }}</div>
-    <div class="col-xs-4 hide_if_onetime"{% if rt == 0 %} style="display:none"{% endif %}>{{ form.end_date|as_crispy_field }}</div>
-    <div class="col-xs-4 hide_if_onetime"{% if rt == 0 %} style="display:none"{% endif %}>{{ form.repeat_each|as_crispy_field }}</div>
+    <div class="col-xs-4 hide_if_onetime"{% if rule_type_int == 0 %} style="display:none"{% endif %}>{{ form.end_date|as_crispy_field }}</div>
+    <div class="col-xs-4 hide_if_onetime"{% if rule_type_int == 0 %} style="display:none"{% endif %}>{{ form.repeat_each|as_crispy_field }}</div>
   </div>
 
   <div class="row">
@@ -103,7 +107,7 @@ $(function() {
     </div>
   </div>
 
-  <div class="hide_if_onetime"{% if rt == 0 %} style="display:none"{% endif %}>
+  <div class="hide_if_onetime"{% if rule_type_int == 0 %} style="display:none"{% endif %}>
     {{ form.criteria|as_crispy_field }}
 
     {% if show_events_preview %}
@@ -128,7 +132,7 @@ $(function() {
 
   <div class="form-actions">
     {% if add %}
-    <input type="submit" name="_submitpreview" value="Preview" class="btn btn-default hide_if_onetime"{% if rt == 0 %} style="display:none"{% endif %}>
+    <input type="submit" name="_submitpreview" value="Preview" class="btn btn-default hide_if_onetime"{% if rule_type_int == 0 %} style="display:none"{% endif %}>
     <input type="submit" name="_submitadd" value="Add" class="btn btn-primary">
     {% else %}
     <input type="submit" name="_submitsave" value="Save" class="btn btn-primary">

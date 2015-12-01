@@ -7,10 +7,10 @@ urlpatterns = [
   url(r'^json/', views.jsonsearch, name='jsonsearch'),
   url(r'^modify/', views.fcdragmodify, name='fcdragmodify'),
 
-  url(r'^new/', views.event_new, name='newevent'),
-  url(r'^(?P<eventid>.+)/edit/', views.event_edit, name='editevent'),
-  url(r'^recurring/(?P<eventid>.+)/edit/', views.event_editrecurring, name='editrecurringevent'),
+  url(r'^new/', views.event_manage, name='newevent'),
+  url(r'^(?P<eventid>\d+)/edit/', views.event_manage, name='editevent'),
+  url(r'^recurring/(?P<eventid>\d+)/edit/', views.event_manage, {'editrecurring': True}, name='editrecurringevent'),
 
   # Must be last...
-  url(r'^(?P<eventid>.+)/', views.event_view, name='viewevent'),
+  url(r'^(?P<eventid>\d+)/', views.event_view, name='viewevent'),
 ]
