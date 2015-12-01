@@ -103,11 +103,12 @@ $(document).ready(function() {
   $('#calendar').fullCalendar({
     customButtons: {
       newevent: {text: 'new event', click: onNewEvent},
-      newrecurringevent: {text: 'new recurring event', click: onNewRecurringEvent}
+      newrecurringevent: {text: 'new recurring event', click: onNewRecurringEvent},
+      refresh: {text: 'refresh', click: function(){$('#calendar').fullCalendar('refetchEvents');}}
     },
     header: {
       left: 'prev,next title',
-      center: '{% if addperm %}newevent,newrecurringevent{% endif %}',
+      center: 'refresh{% if addperm %} newevent,newrecurringevent{% endif %}',
       right: 'month,agendaWeek,agendaDay today',
     },
     defaultView: initialview,
