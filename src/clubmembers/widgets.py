@@ -4,7 +4,7 @@ from django.utils.html import format_html
 class PendingEmailWidget(forms.Widget):
   def render(self, name, value, attrs):
     if value:
-      return format_html("""<div class="alert alert-warning">
+      return format_html("""<div class="alert alert-warning" role="alert">
 An activation email has been sent to <b>{}</b>.
 Until that address is verified, your old email (listed above) will still be the active one.
 To cancel this pending change, speak to a club officer.</div>""", value)

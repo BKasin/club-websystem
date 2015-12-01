@@ -149,7 +149,7 @@ This file is a hybrid from our own infosec/base.html and django-admin-bootstrapp
         <div class="row">
             <div class="col-sm-12">
                 {% for message in messages %}
-                <div class="alert {{ message.tags|default:"alert-info" }}">
+                <div class="alert {{ message.tags|default:"alert-info" }}" role="alert">
                     {{ message|capfirst }}
                 </div>
                 {% endfor %}
