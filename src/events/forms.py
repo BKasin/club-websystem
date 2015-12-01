@@ -139,6 +139,9 @@ class EventEditForm(forms.Form):
 
     # Some fields are always required, but we handle the validation here for consistency
 
+    if not self.cleaned_data.get('title'):
+      self.add_error('title', "This field is required.")
+
     start_date = self.cleaned_data.get('start_date')
     if start_date is None:
       self.add_error('start_date', "This field is required.")
