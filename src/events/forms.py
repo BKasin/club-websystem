@@ -26,19 +26,23 @@ def duration_string(duration):
   hours = minutes // 60
   minutes = minutes % 60
 
-  string = '{:02d}:{:02d}'.format(hours, minutes)
-
   if days:
     if days == 1:
-      string = '{} day, '.format(days) + string
+      string = '{} day'.format(days)
     else:
-      string = '{} days, '.format(days) + string
+      string = '{} days'.format(days)
+  else:
+    string = None
 
-  if seconds:
-    string += ':{:02d}'.format(seconds)
-
-  if microseconds:
-    string += '.{:06d}'.format(microseconds)
+  if hours or minutes or seconds or microseconds:
+    if string is None:
+      string = '{:02d}:{:02d}'.format(hours, minutes)
+    else:
+      string += ', {:02d}:{:02d}'.format(hours, minutes)
+    if seconds:
+      string += ':{:02d}'.format(seconds)
+    if microseconds:
+      string += '.{:06d}'.format(microseconds)
 
   return string
 
@@ -96,43 +100,46 @@ class EventEditForm(forms.Form):
     (RecurringEvent.MONTHLY, 'Comma-separated list of codes. Example:<i>1,7,2-Mo,26,Last-Fr,Last</i>'
       '<ul>'
         '<li>Days of the month: 1, 17, 24, etc.</li>'
-        '<li>1st, 2nd, ..., or last of a specific day of week: 1-Mo, 3-Fr, Last-Sa, etc.</li>'
+        '<li>Specific instance of a day-of-week: 3-Mo, 1-Fr, Last-Sa, etc.</li>'
         '<li>Last day of the month: Last</li>'
       '</ul>'),
   )
 
-  # Fields from Event model
+  event_type            = forms.TypedChoiceField(label='Event type',
+                            coerce=int,
+                            empty_value=NORECURRING,
+                            required=False)
+  start_date            = forms.DateField(label='<span class="hide-if-onetime">Start of range</span><span class="show-if-onetime">Date</span>',
+                            required=False,
+                            widget=forms.DateInput(attrs={'type':'date'}))
+  end_date              = forms.DateField(label='End of range',
+                            required=False,
+                            widget=forms.DateInput(attrs={'type':'date'}))
+  repeat_each           = forms.IntegerField(label='Repeat',
+                            required=False)
+  criteria              = forms.CharField(label='Criteria',
+                            help_text='<span id="criteria_help_text">&nbsp;</span>',
+                            required=False)
+
   title                 = forms.CharField(label='Title',
                             required=False)
-  start_date            = forms.DateField(label='Start date',
-                            help_text='<i>yyyy-mm-dd</i>',
+  club_global           = forms.BooleanField(label='Club',
                             required=False)
   start_time            = forms.TimeField(label='Time',
-                            help_text='<i>hh:mm</i>',
-                            required=False)
+                            required=False,
+                            widget=forms.TimeInput(attrs={'type':'time'}))
   duration              = SimpleDurationField(label='Duration',
                             help_text='<i>[D days,] hh:mm</i>',
                             required=False)
   all_day               = forms.BooleanField(label='All day?',
                             required=False)
 
-  # Additional fields from RecurringEvent model
-  rule_type             = forms.TypedChoiceField(label='Event type',
-                            #widget=forms.RadioSelect,
-                            coerce=int,
-                            empty_value=NORECURRING,
-                            required=False)
-  end_date              = forms.DateField(label='End date',
-                            help_text='<i>yyyy-mm-dd</i>',
-                            required=False)
-  criteria              = forms.CharField(label='Criteria',
-                            help_text='<span id="criteria_help_text">&nbsp;</span>',
-                            required=False)
-  repeat_each           = forms.IntegerField(label='Repeat each',
-                            required=False)
+  def __init__(self, event_type_choices=None, *args, **kwargs):
+    super(EventEditForm, self).__init__(*args, **kwargs)
+    self.fields['event_type'].choices = event_type_choices
 
-  def current_rule_type_choices(self):
-    return self.fields['rule_type'].choices
+  def current_event_type_choices(self):
+    return self.fields['event_type'].choices
 
   def clean(self):
     super(EventEditForm, self).clean()
@@ -157,8 +164,8 @@ class EventEditForm(forms.Form):
       if self.cleaned_data.get('start_time') is None:
         self.add_error('start_time', "This field is required.")
 
-    rule_type = self.cleaned_data.get('rule_type')
-    if rule_type != self.NORECURRING:
+    event_type = self.cleaned_data.get('event_type')
+    if event_type != self.NORECURRING:
       end_date = self.cleaned_data.get('end_date')
       if end_date is None:
         self.add_error('end_date', "This field is required.")
@@ -172,7 +179,7 @@ class EventEditForm(forms.Form):
         self.add_error('repeat_each', "Must be at least 1.")
 
       criteria = self.cleaned_data.get('criteria')
-      if rule_type == RecurringEvent.WEEKLY:
+      if event_type == RecurringEvent.WEEKLY:
         if criteria:
           criteria = criteria.replace(' ','').lower()
           if bool(re_weekly.search(criteria + ',')):
@@ -182,7 +189,7 @@ class EventEditForm(forms.Form):
         else:
           self.add_error('criteria', "Weekly events must specify a criteria string.")
 
-      elif rule_type == RecurringEvent.MONTHLY:
+      elif event_type == RecurringEvent.MONTHLY:
         if criteria:
           criteria = criteria.replace(' ','').lower()
           if bool(re_monthly.search(criteria + ',')):

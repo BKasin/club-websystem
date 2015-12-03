@@ -102,7 +102,7 @@ class RecurringEvent(models.Model):
       if t[0] == rt:
         rt = t[1]
         break
-    return "%s Event, %s to %s, \"%s\"" % (rt, self.starts_on, self.ends_on, self.criteria)
+    return "%s Event, %s to %s, Criteria=\"%s\"" % (rt, self.starts_on, self.ends_on, self.criteria)
 
   def dates_per_rule_iter(self):
     if self.rule_type == self.WEEKLY:

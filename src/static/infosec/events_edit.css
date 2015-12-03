@@ -1,0 +1,36 @@
+tr.preview-add td {
+  color:green;
+}
+tr.preview-remove td {
+  color:red;
+}
+tr.preview-updatedata td {
+}
+tr.preview-unchanged td {
+  color:silver;
+  font-style:italic;
+}
+.top-msg {
+  text-align:center;
+  margin-top:8px;
+  margin-bottom:8px;
+  color:#DC8600;
+  font-style:italic;
+}
+.top-msg a {
+  color:#B97100;
+  font-weight:bold;
+}
+@media only screen {
+  .switch-toggle {
+    margin-bottom:2px;
+  }
+  .switch-light span {
+    font-size:13px;
+    font-weight:normal;
+  }
+  .switch-light > span {
+    margin-top:3px;
+    margin-bottom:13px;
+  }
+}
