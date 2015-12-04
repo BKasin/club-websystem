@@ -216,7 +216,7 @@ class Membership(models.Model):
   # Which member is a member of which club
   member                = models.ForeignKey(Member, verbose_name='Member',
                             on_delete=models.CASCADE)  # Deleting a member will delete all memberships that reference it
-  club                  = models.ForeignKey(Club, verbose_name='is a member of',
+  club                  = models.ForeignKey(Club, verbose_name='Is a member of',
                             on_delete=models.CASCADE)  # Deleting a club will delete all memberships that reference it (won't delete the members themselves)
 
   # Membership dues

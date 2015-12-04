@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if addmode %}New Event{% else %}Edit Event{% endif %}{% endblock %}
+
+{% block extrahead %}
+<link rel='stylesheet' href="{% static 'csstoggle/toggle-switch.css' %}" />
+<link rel='stylesheet' href="{% static 'infosec/events_edit.css' %}" />
+<style>
+{% if initial_event_type == 0 %}
+.hide-if-onetime {display:none}
+{% else %}
+.show-if-onetime {display:none}
+{% endif %}
+</style>
+<script type="text/javascript">
+var coll_hideifonetime, coll_showifonetime;
+var event_type_selector;
+var div_id_start_date, start_date_parent_if_onetime, start_date_parent_if_recurring;
+var id_criteria, criteria_help_text;
+var id_all_day, id_start_time, id_duration;
+function on_event_type_change(et) {
+  if (et=={{form.NORECURRING}}) {   // One-time event
+    coll_hideifonetime.hide();
+    coll_showifonetime.show();
+
+    // Change color of Event Type slider
+    event_type_selector.removeClass("progress-bar-warning").addClass("progress-bar-info");
+
+    // Move the date field
+    div_id_start_date.prependTo(start_date_parent_if_onetime)
+
+  }else{                            // Recurring event
+    var ws = [750,600];
+    iw = ws[0]-window.innerWidth; if (iw<0) {iw=0;}
+    ih = ws[1]-window.innerHeight; if (ih<0) {ih=0;}
+    if ((iw>0) || (ih>0)) {window.resizeBy(iw,ih);}
+
+    coll_showifonetime.hide();
+    coll_hideifonetime.show();
+
+    // Change color of Event Type slider
+    event_type_selector.removeClass("progress-bar-info").addClass("progress-bar-warning");
+
+    // Move the date field
+    div_id_start_date.prependTo(start_date_parent_if_recurring)
+
+    // Disable the criteria field for Daily events only
+    if (et==100) {
+      id_criteria.prop("disabled", "true");
+    }else{
+      id_criteria.prop("disabled", "");
+    }
+
+    // Update help_text for the criteria field
+    if (false) {
+    {% for et_id,et_help in form.criteria_help_texts %}
+    }else if (et=={{et_id}}) {
+      criteria_help_text.html('{{et_help|safe}}');
+    {% endfor %}
+    }
+  }
+}
+function on_all_day_change(e) {
+  if (id_all_day.prop("checked") === true) {
+    id_start_time.val('').prop("disabled", "true");
+    if (e) id_duration.val('1 day');
+  }else{
+    id_start_time.prop("disabled", "");
+  }
+}
+$(function() {
+  // Preload the elements we'll be working with
+  coll_hideifonetime = $('.hide-if-onetime'); coll_showifonetime = $('.show-if-onetime');
+  event_type_selector = $('#event_type_selector');
+  div_id_start_date = $('#div_id_start_date'); start_date_parent_if_onetime = $('#start_date_parent_if_onetime'); start_date_parent_if_recurring = $('#start_date_parent_if_recurring');
+  id_criteria = $('#id_criteria'); criteria_help_text = $('#criteria_help_text');
+  id_all_day = $('#id_all_day'); id_start_time = $('#id_start_time'); id_duration = $('#id_duration');
+
+  // Initialize the Rule Type switch
+  $('#id_event_type_' + {{initial_event_type}}).prop('checked', true);
+  on_event_type_change({{initial_event_type}});
+
+  // Initialize the All Day switch
+  on_all_day_change(false);
+
+  {% if show_events_preview %}
+  // Scroll to the preview of events
+  $(document.body).animate({
+    scrollTop: document.getElementById('events_preview').getBoundingClientRect().top + document.body.scrollTop - 10
+  }, 500);
+  {% else %}
+  // Set initial focus
+  $('#id_title').focus();
+  {% endif %}
+})
+
+</script>
+{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert {{ message.tags }}" role="alert">{{ message }}</div>
+{% endfor %}
+{% endif %}
+
+<form id="mainform" action="{% if addmode %}{% url 'newevent' %}{% elif initial_event_type == 0 %}{% url 'editevent' eventid %}{% else %}{% url 'editrecurringevent' eventid %}{% endif %}" method="post">
+  {% csrf_token %}
+
+  <label class="control-label">{{ form.event_type.label|safe }}</label>
+  <div class="switch-toggle well progress-striped">
+    {% if form.current_event_type_choices|length > 1 %}
+      {% for et_id,et_name in form.current_event_type_choices %}
+      <input {% if initial_event_type == et_id %}checked {% endif %}id="id_event_type_{{et_id}}" name="event_type" value="{{et_id}}" type="radio" onclick="on_event_type_change({{et_id}})">
+      <label for="id_event_type_{{et_id}}">{{et_name}}</label>
+      {% endfor %}
+      <a id="event_type_selector" class="progress-bar {% if initial_event_type != 0 %}progress-bar-warning{% else %}progress-bar-info{% endif %}"></a>
+    {% else %}
+      {% for et_id,et_name in form.current_event_type_choices %}
+      <input checked id="id_event_type_{{et_id}}" name="event_type" value="{{et_id}}" type="radio">
+      <label for="id_event_type_{{et_id}}" style="width:100%">{{et_name}}</label>
+      {% endfor %}
+      <a id="event_type_selector" style="width:100%" class="progress-bar {% if initial_event_type != 0 %}progress-bar-warning{% else %}progress-bar-info{% endif %}"></a>
+    {% endif %}
+  </div>
+
+  {% if original_event_id %}
+    <div class="top-msg">Did you mean to <a class="alert-link" href="{% url 'editevent' original_event_id %}?noredir=1">edit the individual event</a> instead?</div>
+  {% endif %}
+  {% if linked_recurringevent_id %}
+    <div class="top-msg">This event is part of a recurring series. Would you like to <a class="alert-link" href="{% url 'editrecurringevent' linked_recurringevent_id eventid %}">edit that instead</a>?</div>
+  {% endif %}
+
+  <div class="well hide-if-onetime" style="padding-bottom:0px;">
+    <div class="row">
+      <div class="col-xs-5" id="start_date_parent_if_recurring">{% if initial_event_type != 0 %}{{ form.start_date|as_crispy_field }}{% endif %}</div>
+      <div class="col-xs-5">{{ form.end_date|as_crispy_field }}</div>
+      <div class="col-xs-2">{{ form.repeat_each|as_crispy_field }}</div>
+    </div>
+
+    {{ form.criteria|as_crispy_field }}
+  </div>
+
+  <div class="row">
+    <div class="col-xs-9">{{ form.title|as_crispy_field }}</div>
+    <div class="col-xs-3">
+      <label for="id_club_global" class="control-label">{{ form.club_global.label|safe }}</label>
+      <label class="switch-light">
+        <input {% if form.club_global.value == True %}checked {% endif %}class="checkboxinput" id="id_club_global" name="club_global" type="checkbox">
+        <span class="well">
+          <span>{{current_club_shortname}}</span>
+          <span>Global</span>
+          <a class="btn btn-info"></a>
+        </span>
+      </label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-3" id="start_date_parent_if_onetime">
+      {% if initial_event_type == 0 %}{{ form.start_date|as_crispy_field }}{% endif %}
+      <div class="form-group hide-if-onetime">
+        <label class="control-label">Date</label>
+        <div class="controls"><input class="dateinput form-control" value="see criteria above" disabled style="font-size:11px; font-style:italic;"></div>
+      </div>
+    </div>
+    <div class="col-xs-3">{{ form.start_time|as_crispy_field }}</div>
+    <div class="col-xs-3">{{ form.duration|as_crispy_field }}</div>
+    <div class="col-xs-3">
+      <label for="id_all_day" class="control-label">{{ form.all_day.label|safe }}</label>
+      <label class="switch-light">
+        <input {% if form.all_day.value == True %}checked {% endif %}class="checkboxinput" id="id_all_day" name="all_day" type="checkbox" onclick="on_all_day_change(true)">
+        <span class="well">
+          <span>Timed</span>
+          <span>All day</span>
+          <a class="btn btn-info"></a>
+        </span>
+      </label>
+    </div>
+  </div>
+
+  <div class="hide-if-onetime">
+    {% if show_events_preview %}
+    <div class="panel panel-primary" id="events_preview">
+      <div class="panel-heading">Preview of recurring events to be added/changed/deleted</div>
+      <table class="table">
+        <thead><tr><th>ID</th><th>Date/Time</th><th>Duration</th><th>All day?</th><th>Action</th></tr></thead>
+        <tbody>
+        {% for e in events %}
+        <tr class="{{ e.class }}"><td>{{e.id_str}}</td><td>{% if e.all_day %}{{e.start|date:"D, M j Y"}}{% else %}{{e.start|date:"D, M j Y g:i A"}}{% endif %}</td><td>{{e.duration}}</td><td>{% if e.all_day %}All day{% endif %}</td><td>{{e.action}}</td></tr>
+        {% empty %}
+        <tr><td colspan="5">No events match the criteria.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <br>
+    <br>
+    <br>
+    {% endif %}
+  </div>
+
+  <div class="form-actions">
+    {% if addmode %}
+      <input type="submit" name="_submitpreview" value="Preview Recurring Events" class="btn btn-default hide-if-onetime">
+      <input type="submit" name="_submitsave" value="Save" class="btn btn-primary">
+    {% else %}
+      {% if initial_event_type == 0 %}
+      <input type="submit" name="_submitsave" value="Save" class="btn btn-primary">
+      <input type="submit" name="_submitdelete" value="Delete" class="btn btn-danger">
+      {% else %}
+      <input type="submit" name="_submitpreview" value="Preview Changes" class="btn btn-default">
+      <input type="submit" name="_submitsave" value="Apply Changes" class="btn btn-primary">
+      <input type="submit" name="_submitdelete" value="Delete Series" class="btn btn-danger">
+      {% endif %}
+    {% endif %}
+  </div>
+</form>
+{% endblock %}

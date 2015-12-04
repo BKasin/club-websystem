@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Confirm Delete{% endblock %}
+
+{% block extrahead %}
+<link rel='stylesheet' href="{% static 'infosec/events_edit.css' %}" />
+{% endblock %}
+
+{% block content %}
+<form id="mainform" action="{% url 'editrecurringevent' eventid %}" method="post">
+  {% csrf_token %}
+  <input type="hidden" name="delete_confirm" value="true">
+
+  <div class="panel panel-primary" id="events_preview">
+    <div class="panel-heading">Please confirm delete of the following events</div>
+    <table class="table">
+      <thead><tr><th>Recurring Event</th><th>Definition</th></tr></thead>
+      <tbody>
+      <tr class="preview-remove"><td>#{{recurringevent.id}}</td><td>{{recurringevent}}</td></tr>
+      </tbody>
+    </table>
+    <table class="table">
+      <thead><tr><th>Event</th><th>Date/Time</th><th>Duration</th><th>All day?</th></tr></thead>
+      <tbody>
+      {% for e in events %}
+      <tr class="preview-remove"><td>#{{e.id}}</td><td>{% if e.all_day %}{{e.start|date:"D, M j Y"}}{% else %}{{e.start|date:"D, M j Y g:i A"}}{% endif %}</td><td>{{e.duration}}</td><td>{% if e.all_day %}All day{% endif %}</td></tr>
+      {% empty %}
+      <tr><td colspan="4">No events match the criteria.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="form-actions">
+    <input type="submit" name="_submitdelete" value="Confirm Delete" class="btn btn-danger">
+  </div>
+</form>
+{% endblock %}

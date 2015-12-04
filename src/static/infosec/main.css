@@ -2,6 +2,9 @@ body {
   padding-top:60px;
   line-height:1.5;
 }
+body.popup {
+  padding-top:10px;
+}
 h1, .h1 {
   font-size:30px;
   border-bottom-style:solid;
@@ -132,4 +135,8 @@ div.versatileimagefield {
 }
 .editableblock:hover .editblockbutton {
   display:block;
+}
+.fc-toolbar h2 {
+  border-width:0px;
+  padding-top:3px;
 }
