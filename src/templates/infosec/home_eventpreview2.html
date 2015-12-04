@@ -1,0 +1,17 @@
+<table class="table eventtable">
+  <thead>
+    <tr>
+      <th width="190">Date</th>
+      <th>Title</th>
+      <th width="80">Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for event in events %}
+    <tr><td>{% if event.all_day %}{{event.start|date:"D, M j Y"}}{% else %}{{event.start|date:"D, M j Y g:i A"}}{% endif %}</td><td>{{event.title}}</td><td></td></tr>
+    {% empty %}
+    <tr><td colspan="3">No events in the next {{event_preview_days}} days.</td></tr>
+    {% endfor %}
+    <tr class='event_msg'><td colspan="3">{% if show_bookmark_link %}View this list on its <a href="{% url 'eventspreview' %}">own page.</a> {% endif %}Visit our <a href="{% url 'events' %}">Events Page</a> for the full list.</td><tr
+  </tbody>
+</table>

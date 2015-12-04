@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load staticfiles crispy_forms_tags contentblock_renderer %}
+{% load contentblock_renderer %}
 
 {% block title %}Welcome | {{ block.super }}{% endblock %}
 
@@ -11,28 +11,12 @@
     {% load_contentblock 'home_part2' %}
   </div>
   <div class="col-md-6">
-    <h2>News</h2>
-    <p>(Work in progress)</p>
     <h2>Upcoming events</h2>
-    <p>This is a preview of events in the next 7 days only. Visit our <a href="{% url 'events' %}">Events Page</a> for the full list.</p>
-    <div class="panel panel-primary">
-      <!-- Table -->
-      <table class="table eventtable">
-        <thead>
-          <tr>
-            <th width="120">Date</th>
-            <th>Description</th>
-            <th width="120">Location</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class='event_ours'>
-            <td colspan="3">(Work in progress. Visit the <a href="{% url 'events' %}">main calendar page</a> instead.)</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="panel panel-default">
+    {% with show_bookmark_link=True %}
+      {% include 'home_eventpreview2.html' %}
+    {% endwith %}
     </div>
-    <center><span class="eventlegend eventlegend_ours">green</span> = InfoSec Club Events&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="eventlegend eventlegend_acm">blue</span> = ACM Club Events</center>
   </div>
 </div>
 {% endblock %}

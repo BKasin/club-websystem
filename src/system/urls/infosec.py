@@ -3,12 +3,13 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 
-from mainsite_infosec.views import home, about_contact
+from mainsite_infosec.views import home, events_preview, about_contact
 from contentblocks.views import contentblock_view, contentblock_edit
 
 urlpatterns = [
   # Main site
-  url(r'^$', home, name='home'),
+  url(r'^$', home, {'event_preview_days': 14}, name='home'),
+  url(r'^events_preview/$', events_preview, {'event_preview_days': 14}, name='eventspreview'),
   url(r'^about_contact/$', about_contact, name='about_contact'),
 
   # URLConfs from apps
