@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load events_formatting %}
 
 {% block title %}Confirm Delete{% endblock %}
 
@@ -23,8 +24,8 @@
     <table class="table">
       <thead><tr><th>Event</th><th>Date/Time</th><th>Duration</th><th>All day?</th></tr></thead>
       <tbody>
-      {% for e in events %}
-      <tr class="preview-remove"><td>#{{e.id}}</td><td>{% if e.all_day %}{{e.start|date:"D, M j Y"}}{% else %}{{e.start|date:"D, M j Y g:i A"}}{% endif %}</td><td>{{e.duration}}</td><td>{% if e.all_day %}All day{% endif %}</td></tr>
+      {% for event in events %}
+      <tr class="preview-remove"><td>{{event.id|eventid}}</td><td>{{ event.start|eventdate:event.all_day }}</td><td>{{event.duration}}</td><td>{% if event.all_day %}All day{% endif %}</td></tr>
       {% empty %}
       <tr><td colspan="4">No events match the criteria.</td></tr>
       {% endfor %}

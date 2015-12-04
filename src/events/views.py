@@ -423,7 +423,7 @@ class EventManager(View):
           # Generate initial list of events to be created
           for d in dates:
             events.append({
-              'id_str': '-',
+              'id': None,
               'start': datetime.combine(d, tm),
               'duration': duration_str,
               'all_day': all_day,
@@ -451,13 +451,13 @@ class EventManager(View):
                     else:
                       eventdict['action'] = 'Update ' + ", ".join(data_to_update)
                       eventdict['class'] = 'preview-updatedata'
-                    eventdict['id_str'] = '#' + str(e.id)
+                    eventdict['id'] = e.id
                     found = True
                     break
               if not found:
                 # This one doesn't match anything in our list, so it must be removed
                 events.append({
-                  'id_str': '#' + str(e.id),
+                  'id': e.id,
                   'start': e.start,
                   'duration': duration_string(e.duration),
                   'all_day': e.all_day,

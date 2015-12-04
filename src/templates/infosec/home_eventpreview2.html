@@ -1,3 +1,4 @@
+{% load events_formatting %}
 <table class="table eventtable">
   <thead>
     <tr>
@@ -8,7 +9,7 @@
   </thead>
   <tbody>
     {% for event in events %}
-    <tr><td>{% if event.all_day %}{{event.start|date:"D, M j Y"}}{% else %}{{event.start|date:"D, M j Y g:i A"}}{% endif %}</td><td>{{event.title}}</td><td></td></tr>
+    <tr><td>{{ event.start|eventdate:event.all_day }}</td><td>{{event.title}}</td><td></td></tr>
     {% empty %}
     <tr><td colspan="3">No events in the next {{event_preview_days}} days.</td></tr>
     {% endfor %}

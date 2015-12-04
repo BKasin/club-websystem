@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
+{% load events_formatting %}
 
 {% block title %}{% if addmode %}New Event{% else %}Edit Event{% endif %}{% endblock %}
 
@@ -189,8 +190,8 @@ $(function() {
       <table class="table">
         <thead><tr><th>ID</th><th>Date/Time</th><th>Duration</th><th>All day?</th><th>Action</th></tr></thead>
         <tbody>
-        {% for e in events %}
-        <tr class="{{ e.class }}"><td>{{e.id_str}}</td><td>{% if e.all_day %}{{e.start|date:"D, M j Y"}}{% else %}{{e.start|date:"D, M j Y g:i A"}}{% endif %}</td><td>{{e.duration}}</td><td>{% if e.all_day %}All day{% endif %}</td><td>{{e.action}}</td></tr>
+        {% for event in events %}
+        <tr class="{{ event.class }}"><td>{{event.id|eventid}}</td><td>{{ event.start|eventdate:event.all_day }}</td><td>{{event.duration}}</td><td>{% if event.all_day %}All day{% endif %}</td><td>{{event.action}}</td></tr>
         {% empty %}
         <tr><td colspan="5">No events match the criteria.</td></tr>
         {% endfor %}
