@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}View Event{% endblock %}
+
+{% block content %}
+<h1>{{event.title}}</h1>
+Start: {{event.start}}<br>
+Duration: {{event.duration}}
+{% endblock %}

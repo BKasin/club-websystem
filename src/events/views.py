@@ -147,11 +147,15 @@ def calendarpage(request):
 
 
 ####################################################################################################
-# Event viewing
+# Event viewing and RSVPs
 ####################################################################################################
 
 def event_view(request, eventid):
-  return HttpResponse('(to be implemented)')
+  event = Event.objects.get(id=eventid)
+  context = {
+    'event': event
+  }
+  return render(request, "events_view.html", context)
 
 
 

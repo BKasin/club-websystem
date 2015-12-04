@@ -13,7 +13,6 @@
 <script src="{% static 'fullcalendar-2.4.0/fullcalendar.min.js' %}"></script>
 
 <script type="text/javascript">
-var popupsize_view = [900,650];
 var popupsize_new = [750,300];
 var popupsize_newrec = [750,600];
 var popupsize_edit = popupsize_new;
@@ -61,7 +60,8 @@ function onEventClick(event) {
     {% if changeperm %}
     PopupCenter(event.url, 'popupwin', popupsize_edit[0], popupsize_edit[1]);
     {% else %}
-    PopupCenter(event.url.replace('/edit/','/'), 'popupwin', popupsize_view[0], popupsize_view[1]);
+    var win = window.open(event.url.replace('/edit/','/'), '_blank');
+    win.focus();
     {% endif %}
     return false;
   }
