@@ -6,4 +6,6 @@ django-mailer==1.1
 django-registration-redux==1.2
 django-versatileimagefield==1.0.5
 html2text==2015.6.21
+lockfile==0.11.0
+Pillow==3.0.0
 uWSGI==2.0.11.2
