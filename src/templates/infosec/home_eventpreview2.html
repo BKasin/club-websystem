@@ -2,9 +2,9 @@
 <table class="table eventtable">
   <thead>
     <tr>
-      <th width="190">Date</th>
+      <th style="width:190px">Date</th>
       <th>Title</th>
-      <th width="80">Location</th>
+      <th style="width:80px">Location</th>
     </tr>
   </thead>
   <tbody>
@@ -13,6 +13,6 @@
     {% empty %}
     <tr><td colspan="3">No events in the next {{event_preview_days}} days.</td></tr>
     {% endfor %}
-    <tr class='event_msg'><td colspan="3">{% if show_bookmark_link %}View this list on its <a href="{% url 'eventspreview' %}">own page.</a> {% endif %}Visit our <a href="{% url 'events' %}">Events Page</a> for the full list.</td><tr
+    <tr class='event_msg'><td colspan="3">{% if show_bookmark_link %}View this list on its <a href="{% url 'eventspreview' %}">own page.</a> {% endif %}Visit our <a href="{% url 'events' %}">Events Page</a> for the full list.</td></tr>
   </tbody>
 </table>

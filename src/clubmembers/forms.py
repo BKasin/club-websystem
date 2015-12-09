@@ -45,7 +45,7 @@ class MemberForm(forms.ModelForm):
       HTML('</div><div class="col-sm-6">'),
       Fieldset(
         'Photo',
-        HTML('<img style="float:right" src="{{ user.photo.thumbnail.100x100 }}" />'),
+        HTML('<img style="float:right" src="{{ user.photo.thumbnail.100x100 }}">'),
         'photo',
       ),
       Fieldset(

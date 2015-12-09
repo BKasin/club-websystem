@@ -12,12 +12,15 @@ h1, .h1 {
   border-width:0px 0px 2px 0px;
   padding-bottom:2px;
 }
-h2, .h2 {
+h2, .h2, legend {
   font-size:22px;
   border-bottom-style:solid;
   border-image:linear-gradient(to right, rgba(176,176,176,255), rgba(176,176,176,255) 40%, rgba(0,0,0,0) 50%) 1;
   border-width:0px 0px 1px 0px;
   padding-bottom:1px;
+  line-height:1.1;
+  margin-top:20px;
+  margin-bottom:10px;
 }
 h3, .h3 {
   font-size:16px;
@@ -28,18 +31,15 @@ h4, .h4 {
   font-style:italic;
 }
 
-legend {
-  border-bottom-style:solid;
-  border-image:linear-gradient(to right, rgba(176,176,176,255), rgba(176,176,176,255) 40%, rgba(0,0,0,0) 50%) 1;
-  border-width:0px 0px 1px 0px;
-  padding-bottom:1px;
-}
-
 blockquote {
   font-size:14px;
   border-left:4px solid #DDD;
   padding:0 15px;
-  color:#777
+  color:#777;
+}
+
+footer {
+  text-align:center;
 }
 
 .dropdown-header {

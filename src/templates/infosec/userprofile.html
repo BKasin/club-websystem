@@ -12,12 +12,12 @@
 {% endfor %}
 {% endif %}
 
-<legend>Memberships</legend>
+<h2>Memberships</h2>
 {% for membership in membershiplist %}
 <div class="panel panel-default">
   <table class="membership">
     <tr class="{% if membership.is_active %}membershipactive{% else %}membershipexpired{% endif %}">
-      <td class="membershiplogo">{% if membership.club.logo_small %}<img src="{% static membership.club.logo_small %}" /><br>{{ membership.club.name_long }}{% else %}{{ membership.club.name_long }}{% endif %}</td>
+      <td class="membershiplogo">{% if membership.club.logo_small %}<img alt="Profile photo" src="{% static membership.club.logo_small %}"><br>{{ membership.club.name_long }}{% else %}{{ membership.club.name_long }}{% endif %}</td>
       {% if membership.is_active %}
       <td>{% if membership.paid_amount %}You paid <b>{{ membership.paid_amount|currency }}</b>{% else %}You joined{% endif %} on {{ membership.paid_date }}, and your membership is <span class="membershiphilight">active until {{ membership.paid_until_date }}</span>.</td>
       {% else %}

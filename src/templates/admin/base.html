@@ -11,10 +11,10 @@ Much of this file is taken from django-admin-bootstrapped's admin/base.html
 {% block extrahead %}
   {% block extrastyle %}{% endblock %}
 
-  <link rel="stylesheet" type="text/css" href="{% static 'admin/css/overrides.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'admin/css/overrides.css' %}">
   {% if LANGUAGE_BIDI %}
-  <link href="{% static 'bootstrap-rtl/css/bootstrap-rtl.min.css' %}" rel="stylesheet"/>
-  <link href="{% static 'bootstrap-rtl/css/bootstrap-flipped.min.css' %}" rel="stylesheet"/>
+  <link rel="stylesheet" href="{% static 'bootstrap-rtl/css/bootstrap-rtl.min.css' %}">
+  <link rel="stylesheet" href="{% static 'bootstrap-rtl/css/bootstrap-flipped.min.css' %}">
   {% endif %}
 
   <script type="text/javascript">
@@ -25,7 +25,7 @@ Much of this file is taken from django-admin-bootstrapped's admin/base.html
   </script>
   <script src="{% static 'admin/js/jquery-migrate-1.2.1.min.js' %}"></script>
 
-  {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
+  {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
   <script type="text/javascript">
   //<![CDATA[
     (function($) {

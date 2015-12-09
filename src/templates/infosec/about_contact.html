@@ -15,9 +15,9 @@
 <div class="row">
   <div class="col-sm-7">
     <p>Please use the form below to send any suggestions, questions, or complaints to the club's primary email:</p>
-    <form method="POST" action="">{% csrf_token %}
+    <form method="POST">{% csrf_token %}
       {{ form|crispy }}
-      <input class="btn btn-default" type="submit" value="Submit" />
+      <input class="btn btn-default" type="submit" value="Submit">
     </form>
   </div>
   <div class="col-sm-5">
