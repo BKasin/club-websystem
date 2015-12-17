@@ -30,15 +30,24 @@ To get involved, follow the instructions below under the Development heading.
 ## Python packages (installed with pip)
 
 * For a web framework, we chose the well-supported [Django](https://docs.djangoproject.com/en/1.8/intro/overview/) because, compared to other frameworks and micro-frameworks, a lot of needed functionality comes ready out of the box. Primarily, Django provides our user authentication, routing of HTTP requests directly to Python functions, and abstracting the database models with its built-in [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping). It also includes built-in protections for many security mistakes, such as cross-site request forgery.
-* [django-registration-redux](https://pypi.python.org/pypi/django-registration-redux/) extends Django's authentication features to also make new user sign-ups easy.
-* [django-versatileimagefield](https://pypi.python.org/pypi/django-versatileimagefield/) is a drop-in replacement for Django's ImageField that will automatically generate the desired resolutions for an image.
-  * This will also install [Pillow](https://pypi.python.org/pypi/Pillow/) for the actual image processing.
-* [django-admin-bootstrapped](https://pypi.python.org/pypi/django-admin-bootstrapped/) customizes the adiministration pages of Django (/admin) to use Bootstrap.
-* [django-crispy-forms](https://pypi.python.org/pypi/django-crispy-forms/) provides a "crispy" template tag that will render forms using Bootstrap. It also allows quite a bit of form layout customization from Python instead of using HTML.
-* [django-mailer](https://pypi.python.org/pypi/django-mailer/) stores all outgoing emails in the database instead of sending them right away. This way, any send failures don't cause the page rendering to fail. Also, it allows us to batch and retry failed emails.
-  * This will also install [lockfile](https://pypi.python.org/pypi/lockfile) for managing file locks.
-* [html2text](https://pypi.python.org/pypi/html2text/) is used in the our custom email template engine to generate a plaintext (markdown-like) version of an email if none is provided.
-* [CommonMark](https://pypi.python.org/pypi/CommonMark/) provides a Python renderer for markdown code using the [CommonMark specifications](http://spec.commonmark.org/0.22/), instead of the older and somewhat vague Markdown specs.
+* [django-registration-redux](https://django-registration-redux.readthedocs.org/en/latest/) extends Django's authentication features to also make new user sign-ups easy.
+* [django-versatileimagefield](http://django-versatileimagefield.readthedocs.org/en/latest/overview.html) is a drop-in replacement for Django's ImageField that will automatically generate the desired resolutions for an image.
+  * This depends on [Pillow](http://pillow.readthedocs.org/en/latest/) for the actual image processing.
+* [django-admin-bootstrapped](https://github.com/django-admin-bootstrapped/django-admin-bootstrapped) customizes the adiministration pages of Django (/admin) to use Bootstrap.
+* [django-crispy-forms](http://django-crispy-forms.readthedocs.org/en/latest/) provides a "crispy" template tag that will render forms using Bootstrap. It also allows quite a bit of form layout customization from Python instead of using HTML.
+* [django-mailer](https://github.com/pinax/django-mailer/) stores all outgoing emails in the database instead of sending them right away. This way, any send failures don't cause the page rendering to fail. Also, it allows us to batch and retry failed emails.
+  * This depends on [lockfile](http://pythonhosted.org/lockfile/) for managing file locks in a platform-independ way.
+* [html2text](http://alir3z4.github.io/html2text/) is used in the our custom email template engine to generate a plaintext (markdown-like) version of an email if none is provided.
+* [CommonMark-py](https://github.com/rolandshoemaker/CommonMark-py) (official package name is *commonmark*) provides a Python renderer for markdown code using the [CommonMark specifications](http://spec.commonmark.org/0.22/), instead of the older and somewhat vague Markdown specs.
+* [django-wiki](http://django-wiki.readthedocs.org/en/latest/) (official package name is simply *wiki*) provides a simple wiki with image upload support and document revision tracking. This also depends on several packages:
+  * [django-sekizai](http://django-sekizai.readthedocs.org/en/latest/)
+    * [django-classy-tags](http://django-classy-tags.readthedocs.org/en/latest/) provides a class-based way of declaring new template tags.
+  * [Pillow](http://pillow.readthedocs.org/en/latest/) for image processing.
+  * [django-nyt](https://github.com/benjaoming/django-nyt) provides a "notifications" menu that is customizable by individual users, based on which notifications they wish to subscribe to.
+  * [django-mptt](http://django-mptt.github.io/django-mptt/) adds support for Modified Preorder Tree Traversal, a technique for storing hierarchical data in a database.
+  * [six](http://pythonhosted.org/six/) allows a single codebase to run on Python 2 and 3.
+  * [sorl-thumbnail](http://sorl-thumbnail.readthedocs.org/en/latest/) adds template tags for loading image thumbnails.
+  * [Markdown](http://pythonhosted.org/Markdown/) is a Python implementation of John Gruber’s Markdown, in contrast to the Commonmark specification we use elsewhere on the website.
 
 ## Front-end
 
