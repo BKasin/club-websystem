@@ -47,7 +47,18 @@ INSTALLED_APPS = [
   'django.contrib.messages',
   'django.contrib.sites',
   'django.contrib.staticfiles',
-  # third party apps
+  # django-wiki
+  'django.contrib.humanize',
+  'django_nyt',
+  'mptt',
+  'sekizai',
+  'sorl.thumbnail',
+  'wiki',
+  'wiki.plugins.attachments',
+  'wiki.plugins.notifications',
+  'wiki.plugins.images',
+  'wiki.plugins.macros',
+  # other third party apps
   'crispy_forms',
   'registration',
   'versatileimagefield',
@@ -75,9 +86,12 @@ TEMPLATES = [
     'OPTIONS': {
       'context_processors': [
         'django.template.context_processors.debug',
+        'django.template.context_processors.media',
         'django.template.context_processors.request',
+        'django.template.context_processors.static',
         'django.contrib.auth.context_processors.auth',
         'django.contrib.messages.context_processors.messages',
+        'sekizai.context_processors.sekizai',
       ],
     },
   },

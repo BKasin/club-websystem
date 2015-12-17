@@ -6,6 +6,9 @@ from django.contrib import admin
 from mainsite_infosec.views import home, events_preview, about_contact
 from contentblocks.views import contentblock_view, contentblock_edit
 
+from wiki.urls import get_pattern as get_wiki_pattern
+from django_nyt.urls import get_pattern as get_nyt_pattern
+
 urlpatterns = [
   # Main site
   url(r'^$', home, {'event_preview_days': 14}, name='home'),
@@ -15,6 +18,10 @@ urlpatterns = [
   # URLConfs from apps
   url(r'^events/', include('events.urls')),
   url(r'^member/', include('clubmembers.urls')),
+
+  # django-wiki
+  url(r'^notifications/', get_nyt_pattern()),
+  url(r'^wiki/', get_wiki_pattern()),
 
   # Django apps
   url(r'^admin/', include(admin.site.urls)),
