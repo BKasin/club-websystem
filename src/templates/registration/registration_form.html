@@ -1,8 +1,24 @@
 {% extends "base_simple.html" %}
-{% load crispy_forms_tags %}
+{% load sekizai_tags crispy_forms_tags %}
 
-{% block extrahead %}
-<script type="text/javascript">
+{% block title %}Join the Club{% endblock %}
+
+{% block content2 %}
+{% addtoblock "css" %}
+  <style>
+  .username_taken {
+    color:#a94442 !important;
+  }
+  .username_available {
+    color:green !important;
+  }
+  .username_checking {
+    color:silver !important;
+  }
+  </style>
+{% endaddtoblock %}
+{% addtoblock "js" %}
+  <script type="text/javascript">
   var usernameblock;
   var usernameinput;
   var usernamecheck;
@@ -42,21 +58,9 @@
       usernamecheck.html('');
     }
   }
-</script>
-<style>
-  .username_taken {
-    color:#a94442 !important;
-  }
-  .username_available {
-    color:green !important;
-  }
-  .username_checking {
-    color:silver !important;
-  }
-</style>
-{% endblock %}
+  </script>
+{% endaddtoblock %}
 
-{% block content2 %}
 <h1>Join the Club</h1>
 
 {% crispy form %}

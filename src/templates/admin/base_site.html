@@ -1,22 +1,22 @@
 {% extends "base.html" %}
 
-{% comment %}
-Much of this file is taken from django-admin-bootstrapped's admin/base.html
-{% endcomment %}
-
-{% load staticfiles i18n admin_static bootstrapped_goodies_tags %}
+{% load sekizai_tags staticfiles i18n admin_static bootstrapped_goodies_tags %}
 {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
 {% load i18n %}
 
-{% block extrahead %}
-  {% block extrastyle %}{% endblock %}
+{% block title %}Site Administration{% endblock %}
 
+{% block bodyarea %}
+{% addtoblock "css" %}
+  {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
+  {% block extrastyle %}{% endblock %}
   <link rel="stylesheet" type="text/css" href="{% static 'admin/css/overrides.css' %}">
   {% if LANGUAGE_BIDI %}
   <link rel="stylesheet" href="{% static 'bootstrap-rtl/css/bootstrap-rtl.min.css' %}">
   <link rel="stylesheet" href="{% static 'bootstrap-rtl/css/bootstrap-flipped.min.css' %}">
   {% endif %}
-
+{% endaddtoblock %}
+{% addtoblock "js" %}
   <script type="text/javascript">
   //<![CDATA[
     window.__admin_media_prefix__ = "{% filter escapejs %}{% static 'admin/' %}{% endfilter %}";
@@ -25,7 +25,6 @@ Much of this file is taken from django-admin-bootstrapped's admin/base.html
   </script>
   <script src="{% static 'admin/js/jquery-migrate-1.2.1.min.js' %}"></script>
 
-  {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
   <script type="text/javascript">
   //<![CDATA[
     (function($) {
@@ -36,10 +35,8 @@ Much of this file is taken from django-admin-bootstrapped's admin/base.html
     }(jQuery));
   //]]>
   </script>
-{% endblock %}
+{% endaddtoblock %}
 
-
-{% block bodyarea %}
 {% if not is_popup %}
 <!-- Admin Header -->
 <nav class="navbar" style="margin-bottom:0px;">

@@ -1,155 +1,143 @@
 {% extends "base.html" %}
-{% load staticfiles %}
+{% load sekizai_tags staticfiles %}
 
-{% block title %}Events | {{ block.super }}{% endblock %}
-
-{% block extrahead %}
-<link rel="stylesheet" href="{% static 'fullcalendar-2.4.0/fullcalendar.min.css' %}">
-<!-- We already have jQuery v1.11.3 included with bootstrap -->
-<!-- <script src="{% static 'fullcalendar-2.4.0/lib/jquery.min.js' %}"></script> -->
-
-<!-- Two standard scripts for FullCalendar -->
-<script src="{% static 'fullcalendar-2.4.0/lib/moment.min.js' %}"></script>
-<script src="{% static 'fullcalendar-2.4.0/fullcalendar.min.js' %}"></script>
-
-<script type="text/javascript">
-var popupsize_new = [750,300];
-var popupsize_newrec = [750,600];
-var popupsize_edit = popupsize_new;
-function PopupCenter(url, title, w, h) {
-    // Fixes dual-screen position                         Most browsers      Firefox
-    var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
-    var dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
-
-    width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
-    height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
-
-    var left = ((width / 2) - (w / 2)) + dualScreenLeft;
-    var top = ((height / 2) - (h / 2)) + dualScreenTop;
-    var newWindow = window.open(url, title, 'scrollbars=yes,resizable=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
-
-    // Puts focus on the newWindow
-    if (window.focus) {
-        newWindow.focus();
-    }
-}
-
-function onEventDrop(event, delta, revertFunc, jsEvent, ui, view) {
-  // From http://www.xtf.dk/2011/08/center-new-popup-window-even-on.html
-  if (event.end == null) {
-    e = 'null';
-  }else{
-    e = event.end/1000;
-  }
-  $.ajax({
-    url: "{% url 'fcdragmodify' %}",
-    data: {
-      id: event.id,
-      newstart: event.start/1000,
-      newend: e,
-      allday: event.allDay
-    },
-    error: function(xhr, status, error) {
-      revertFunc();
-    }
-  });
-}
-
-function onEventClick(event) {
-  if (event.url) {
-    {% if changeperm %}
-    PopupCenter(event.url, 'popupwin', popupsize_edit[0], popupsize_edit[1]);
-    {% else %}
-    var win = window.open(event.url.replace('/edit/','/'), '_blank');
-    win.focus();
-    {% endif %}
-    return false;
-  }
-}
-
-function onDayClick(date, jsEvent, view) {
-  PopupCenter("{% url 'newevent' %}?start=" + date.format(), 'popupwin', popupsize_new[0], popupsize_new[1]);
-}
-
-function onNewEvent() {
-  PopupCenter("{% url 'newevent' %}", 'popupwin', popupsize_new[0], popupsize_new[1]);
-}
-
-function onNewRecurringEvent() {
-  PopupCenter("{% url 'newevent' %}?et=200", 'popupwin', popupsize_newrec[0], popupsize_newrec[1]);
-}
-
-function onViewRender(view, element) {
-  window.location.hash = view.name;
-}
-
-function onPopupClosed(win) {
-  $('#calendar').fullCalendar('refetchEvents');
-  win.close();
-}
-
-$(document).ready(function() {
-  //Initialize the ajax loading indicator for all ajax requests
-  $(document).ajaxStart(function() {
-    $('#ajaxerror').hide();
-    $('#ajaxloading').show();
-  })
-  .ajaxStop(function() {
-    $('#ajaxloading').hide();
-  });
-
-  var initialview = window.location.hash.substring(1);
-  if (!initialview) initialview = "month";
-
-  //Initialize the calendar module
-  $('#calendar').fullCalendar({
-    customButtons: {
-      newevent: {text: 'new event', click: onNewEvent},
-      newrecurringevent: {text: 'new recurring event', click: onNewRecurringEvent},
-      refresh: {text: 'refresh', click: function(){$('#calendar').fullCalendar('refetchEvents');}}
-    },
-    header: {
-      left: 'prev,next title',
-      center: 'refresh{% if addperm %} newevent,newrecurringevent{% endif %}',
-      right: 'month,agendaWeek,agendaDay today',
-    },
-    defaultView: initialview,
-    fixedWeekCount: true, // Always show months with 6 weeks, even if month has fewer
-    timezone: false,
-    defaultTimedEventDuration: {hours: {{defaulthours}} },
-    defaultAllDayEventDuration: {days: {{defaultdays}} },
-    businessHours: {
-      start: '10:00',
-      end: '18:00',
-      dow: [1,2,3,4]
-    },
-    scrollTime: '10:00:00',
-    slotDuration: '00:30:00',
-    snapDuration: '00:15:00',
-    contentHeight: 520,
-    allDaySlot: true,     // Show all-day events in their own section above the rest (if false, they aren't shown at all)
-    editable: {{ changeperm|yesno:"true,false" }},
-    eventClick: onEventClick,
-    {% if changeperm %}eventDrop: onEventDrop, eventResize: onEventDrop,{% endif %}
-    {% if addperm %}dayClick: onDayClick,{% endif %}
-    viewRender: onViewRender,
-
-    eventSources: [
-      {
-        url: "/events/json/",
-        className: 'calitem_blue',
-        success: function() {$('#ajaxerror').hide();},
-        error: function() {$('#ajaxerror').show();}
-      }
-    ]
-  })
-});
-</script>
-
-<link rel="stylesheet" href="{% static 'infosec/events.css' %}">
-{% endblock %}
+{% block title %}Events{% endblock %}
 
 {% block content %}
+{% addtoblock "css" %}
+  <link rel="stylesheet" href="{% static 'fullcalendar-2.4.0/fullcalendar.min.css' %}">
+  <link rel="stylesheet" href="{% static 'infosec/events.css' %}">
+{% endaddtoblock %}
+{% addtoblock "js" %}
+  <!-- Two standard scripts for FullCalendar -->
+  <script src="{% static 'fullcalendar-2.4.0/lib/moment.min.js' %}"></script>
+  <script src="{% static 'fullcalendar-2.4.0/fullcalendar.min.js' %}"></script>
+  <script type="text/javascript">
+  var popupsize_new = [750,300];
+  var popupsize_newrec = [750,600];
+  var popupsize_edit = popupsize_new;
+  function PopupCenter(url, title, w, h) {
+      // Fixes dual-screen position                         Most browsers      Firefox
+      var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+      var dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+
+      width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+      height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+      var left = ((width / 2) - (w / 2)) + dualScreenLeft;
+      var top = ((height / 2) - (h / 2)) + dualScreenTop;
+      var newWindow = window.open(url, title, 'scrollbars=yes,resizable=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+
+      // Puts focus on the newWindow
+      if (window.focus) {
+          newWindow.focus();
+      }
+  }
+  function onEventDrop(event, delta, revertFunc, jsEvent, ui, view) {
+    // From http://www.xtf.dk/2011/08/center-new-popup-window-even-on.html
+    if (event.end == null) {
+      e = 'null';
+    }else{
+      e = event.end/1000;
+    }
+    $.ajax({
+      url: "{% url 'fcdragmodify' %}",
+      data: {
+        id: event.id,
+        newstart: event.start/1000,
+        newend: e,
+        allday: event.allDay
+      },
+      error: function(xhr, status, error) {
+        revertFunc();
+      }
+    });
+  }
+  function onEventClick(event) {
+    if (event.url) {
+      {% if changeperm %}
+      PopupCenter(event.url, 'popupwin', popupsize_edit[0], popupsize_edit[1]);
+      {% else %}
+      var win = window.open(event.url.replace('/edit/','/'), '_blank');
+      win.focus();
+      {% endif %}
+      return false;
+    }
+  }
+  function onDayClick(date, jsEvent, view) {
+    PopupCenter("{% url 'newevent' %}?start=" + date.format(), 'popupwin', popupsize_new[0], popupsize_new[1]);
+  }
+  function onNewEvent() {
+    PopupCenter("{% url 'newevent' %}", 'popupwin', popupsize_new[0], popupsize_new[1]);
+  }
+  function onNewRecurringEvent() {
+    PopupCenter("{% url 'newevent' %}?et=200", 'popupwin', popupsize_newrec[0], popupsize_newrec[1]);
+  }
+  function onViewRender(view, element) {
+    window.location.hash = view.name;
+  }
+  function onPopupClosed(win) {
+    $('#calendar').fullCalendar('refetchEvents');
+    win.close();
+  }
+  $(document).ready(function() {
+    //Initialize the ajax loading indicator for all ajax requests
+    $(document).ajaxStart(function() {
+      $('#ajaxerror').hide();
+      $('#ajaxloading').show();
+    })
+    .ajaxStop(function() {
+      $('#ajaxloading').hide();
+    });
+
+    var initialview = window.location.hash.substring(1);
+    if (!initialview) initialview = "month";
+
+    //Initialize the calendar module
+    $('#calendar').fullCalendar({
+      customButtons: {
+        newevent: {text: 'new event', click: onNewEvent},
+        newrecurringevent: {text: 'new recurring event', click: onNewRecurringEvent},
+        refresh: {text: 'refresh', click: function(){$('#calendar').fullCalendar('refetchEvents');}}
+      },
+      header: {
+        left: 'prev,next title',
+        center: 'refresh{% if addperm %} newevent,newrecurringevent{% endif %}',
+        right: 'month,agendaWeek,agendaDay today',
+      },
+      defaultView: initialview,
+      fixedWeekCount: true, // Always show months with 6 weeks, even if month has fewer
+      timezone: false,
+      defaultTimedEventDuration: {hours: {{defaulthours}} },
+      defaultAllDayEventDuration: {days: {{defaultdays}} },
+      businessHours: {
+        start: '10:00',
+        end: '18:00',
+        dow: [1,2,3,4]
+      },
+      scrollTime: '10:00:00',
+      slotDuration: '00:30:00',
+      snapDuration: '00:15:00',
+      contentHeight: 520,
+      allDaySlot: true,     // Show all-day events in their own section above the rest (if false, they aren't shown at all)
+      editable: {{ changeperm|yesno:"true,false" }},
+      eventClick: onEventClick,
+      {% if changeperm %}eventDrop: onEventDrop, eventResize: onEventDrop,{% endif %}
+      {% if addperm %}dayClick: onDayClick,{% endif %}
+      viewRender: onViewRender,
+
+      eventSources: [
+        {
+          url: "/events/json/",
+          className: 'calitem_blue',
+          success: function() {$('#ajaxerror').hide();},
+          error: function() {$('#ajaxerror').show();}
+        }
+      ]
+    })
+  });
+  </script>
+{% endaddtoblock %}
 <h1>Event Calendar&nbsp;&nbsp;<span class="badge" id="ajaxloading" style="display:none">Loading data from server...</span><span class="badge" id="ajaxerror" style="display:none">** ERROR LOADING DATA! **</span></h1>
 <div id='calendar'></div>
 {% endblock %}

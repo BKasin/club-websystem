@@ -1,40 +1,42 @@
 {% extends "base.html" %}
-{% load staticfiles %}
+{% load sekizai_tags staticfiles %}
 
-{% block title %}{{title}} | {{ block.super }}{% endblock %}
-
-{% block extrahead %}
-<link rel='stylesheet' href="{% static 'infosec/splitvieweditor.css' %}">
-<script type="text/javascript" src="{% static 'js/lodash.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/commonmark.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/autosize.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'infosec/splitvieweditor.js' %}"></script>
-{% endblock %}
+{% block title %}{{title}} (Edit Mode){% endblock %}
 
 {% block content %}
-  {% if messages %}
-  {% for message in messages %}
-  <div class="alert {{ message.tags }}" role="alert">{{ message }}</div>
-  {% endfor %}
-  {% endif %}
+{% addtoblock "css" %}
+  <link rel='stylesheet' href="{% static 'infosec/splitvieweditor.css' %}">
+{% endaddtoblock %}
+{% addtoblock "js" %}
+  <script type="text/javascript" src="{% static 'js/lodash.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/commonmark.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/autosize.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'infosec/splitvieweditor.js' %}"></script>
+{% endaddtoblock %}
 
-  <form method="post">
-    {% csrf_token %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert {{ message.tags }}" role="alert">{{ message }}</div>
+{% endfor %}
+{% endif %}
 
-    <div class="row">
-      <div class="col-xs-6 showresizehandle">
-        <p class="sv-heading">{{ form.datatype }}&nbsp;&nbsp;&nbsp;{{ form.published.label_tag }} {{ form.published }}</p>
-        <textarea name="blob" id="sv-textarea" class="sv-textarea">{{ blob|safe }}</textarea>
-      </div>
-      <div class="col-xs-6">
-        <p class="sv-heading">HTML Preview</p>
-        <div id="sv-preview" class="sv-preview markdown-body"></div>
-      </div>
+<form method="post">
+  {% csrf_token %}
+
+  <div class="row">
+    <div class="col-xs-6 showresizehandle">
+      <p class="sv-heading">{{ form.datatype }}&nbsp;&nbsp;&nbsp;{{ form.published.label_tag }} {{ form.published }}</p>
+      <textarea name="blob" id="sv-textarea" class="sv-textarea">{{ blob|safe }}</textarea>
     </div>
-
-    <div class="form-actions">
-      <input type="submit" name="save" value="Save Changes" class="btn btn-primary" id="sv-submitbutton">
-      <a class="btn btn-default" href="{% url 'contentblock_view' uniquetitle %}">Cancel</a>
+    <div class="col-xs-6">
+      <p class="sv-heading">HTML Preview</p>
+      <div id="sv-preview" class="sv-preview markdown-body"></div>
     </div>
-  </form>
+  </div>
+
+  <div class="form-actions">
+    <input type="submit" name="save" value="Save Changes" class="btn btn-primary" id="sv-submitbutton">
+    <a class="btn btn-default" href="{% url 'contentblock_view' uniquetitle %}">Cancel</a>
+  </div>
+</form>
 {% endblock %}

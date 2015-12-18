@@ -39,10 +39,12 @@ To get involved, follow the instructions below under the Development heading.
   * This depends on [lockfile](http://pythonhosted.org/lockfile/) for managing file locks in a platform-independ way.
 * [html2text](http://alir3z4.github.io/html2text/) is used in the our custom email template engine to generate a plaintext (markdown-like) version of an email if none is provided.
 * [CommonMark-py](https://github.com/rolandshoemaker/CommonMark-py) (official package name is *commonmark*) provides a Python renderer for markdown code using the [CommonMark specifications](http://spec.commonmark.org/0.22/), instead of the older and somewhat vague Markdown specs.
+* [django-sekizai](http://django-sekizai.readthedocs.org/en/latest/) adds a new method for multiple sub-templates to add to blocks in the base template (for example, adding extra Javascript and CSS entries).
+  * [django-classy-tags](http://django-classy-tags.readthedocs.org/en/latest/) provides a class-based way of declaring new template tags.
 * [django-wiki](http://django-wiki.readthedocs.org/en/latest/) (official package name is simply *wiki*) provides a simple wiki with image upload support and document revision tracking. This also depends on several packages:
-  * [django-sekizai](http://django-sekizai.readthedocs.org/en/latest/)
-    * [django-classy-tags](http://django-classy-tags.readthedocs.org/en/latest/) provides a class-based way of declaring new template tags.
-  * [Pillow](http://pillow.readthedocs.org/en/latest/) for image processing.
+  * [django-sekizai](http://django-sekizai.readthedocs.org/en/latest/) (listed above).
+    * [django-classy-tags](http://django-classy-tags.readthedocs.org/en/latest/) (listed above).
+  * [Pillow](http://pillow.readthedocs.org/en/latest/) (listed above).
   * [django-nyt](https://github.com/benjaoming/django-nyt) provides a "notifications" menu that is customizable by individual users, based on which notifications they wish to subscribe to.
   * [django-mptt](http://django-mptt.github.io/django-mptt/) adds support for Modified Preorder Tree Traversal, a technique for storing hierarchical data in a database.
   * [six](http://pythonhosted.org/six/) allows a single codebase to run on Python 2 and 3.

@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-{% load staticfiles events_formatting %}
+{% load sekizai_tags staticfiles events_formatting %}
 
-{% block title %}Confirm Delete{% endblock %}
-
-{% block extrahead %}
-<link rel='stylesheet' href="{% static 'infosec/events_edit.css' %}">
-{% endblock %}
+{% block outertitle %}Confirm Delete{% endblock %}
 
 {% block content %}
+{% addtoblock "css" %}
+  <link rel='stylesheet' href="{% static 'infosec/events_edit.css' %}">
+{% endaddtoblock %}
+
 <form id="mainform" action="{% url 'editrecurringevent' eventid %}" method="post">
   {% csrf_token %}
   <input type="hidden" name="delete_confirm" value="true">

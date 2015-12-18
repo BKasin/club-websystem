@@ -1,8 +1,10 @@
 {% extends "base_simple.html" %}
 
+{% block title %}Join the Club{% endblock %}
+
 {% block content2 %}
 <h1>Join the Club</h1>
-<p class='lead'>Activation failed</p>
+<p class='lead'>Activation Failed</p>
 <p>We're sorry, but something went wrong when we tried to activate your account using activation key <b>{{ activation_key }}</b>.</p>
 <p>Please <a href="{% url 'about_contact' %}">contact an officer</a> for assistance.</p>
 {% endblock %}

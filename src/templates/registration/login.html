@@ -1,15 +1,17 @@
 {% extends "base_simple.html" %}
-{% load crispy_forms_tags %}
+{% load sekizai_tags crispy_forms_tags %}
 
-{% block extrahead %}
-<script type="text/javascript">
-$(function() {
-  $('#id_username').focus();
-})
-</script>
-{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block content2 %}
+{% addtoblock "js" %}
+  <script type="text/javascript">
+  $(function() {
+    $('#id_username').focus();
+  })
+  </script>
+{% endaddtoblock %}
+
 <h1>Login</h1>
 
 <form method="post" action=".">

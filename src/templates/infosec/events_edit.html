@@ -1,104 +1,105 @@
 {% extends "base.html" %}
-{% load staticfiles crispy_forms_tags events_formatting %}
+{% load sekizai_tags staticfiles crispy_forms_tags events_formatting %}
 
-{% block title %}{% if addmode %}New Event{% else %}Edit Event{% endif %}{% endblock %}
-
-{% block extrahead %}
-<link rel='stylesheet' href="{% static 'csstoggle/toggle-switch.css' %}">
-<link rel='stylesheet' href="{% static 'infosec/events_edit.css' %}">
-<style>
-{% if initial_event_type == 0 %}
-.hide-if-onetime {display:none}
-{% else %}
-.show-if-onetime {display:none}
-{% endif %}
-</style>
-<script type="text/javascript">
-var coll_hideifonetime, coll_showifonetime;
-var event_type_selector;
-var div_id_start_date, start_date_parent_if_onetime, start_date_parent_if_recurring;
-var id_criteria, criteria_help_text;
-var id_all_day, id_start_time, id_duration;
-function on_event_type_change(et) {
-  if (et=={{form.NORECURRING}}) {   // One-time event
-    coll_hideifonetime.hide();
-    coll_showifonetime.show();
-
-    // Change color of Event Type slider
-    event_type_selector.removeClass("progress-bar-warning").addClass("progress-bar-info");
-
-    // Move the date field
-    div_id_start_date.prependTo(start_date_parent_if_onetime)
-
-  }else{                            // Recurring event
-    var ws = [750,600];
-    iw = ws[0]-window.innerWidth; if (iw<0) {iw=0;}
-    ih = ws[1]-window.innerHeight; if (ih<0) {ih=0;}
-    if ((iw>0) || (ih>0)) {window.resizeBy(iw,ih);}
-
-    coll_showifonetime.hide();
-    coll_hideifonetime.show();
-
-    // Change color of Event Type slider
-    event_type_selector.removeClass("progress-bar-info").addClass("progress-bar-warning");
-
-    // Move the date field
-    div_id_start_date.prependTo(start_date_parent_if_recurring)
-
-    // Disable the criteria field for Daily events only
-    if (et==100) {
-      id_criteria.prop("disabled", "true");
-    }else{
-      id_criteria.prop("disabled", "");
-    }
-
-    // Update help_text for the criteria field
-    if (false) {
-    {% for et_id,et_help in form.criteria_help_texts %}
-    }else if (et=={{et_id}}) {
-      criteria_help_text.html('{{et_help|safe}}');
-    {% endfor %}
-    }
-  }
-}
-function on_all_day_change(e) {
-  if (id_all_day.prop("checked") === true) {
-    id_start_time.val('').prop("disabled", "true");
-    if (e) id_duration.val('1 day');
-  }else{
-    id_start_time.prop("disabled", "");
-  }
-}
-$(function() {
-  // Preload the elements we'll be working with
-  coll_hideifonetime = $('.hide-if-onetime'); coll_showifonetime = $('.show-if-onetime');
-  event_type_selector = $('#event_type_selector');
-  div_id_start_date = $('#div_id_start_date'); start_date_parent_if_onetime = $('#start_date_parent_if_onetime'); start_date_parent_if_recurring = $('#start_date_parent_if_recurring');
-  id_criteria = $('#id_criteria'); criteria_help_text = $('#criteria_help_text');
-  id_all_day = $('#id_all_day'); id_start_time = $('#id_start_time'); id_duration = $('#id_duration');
-
-  // Initialize the Rule Type switch
-  $('#id_event_type_' + {{initial_event_type}}).prop('checked', true);
-  on_event_type_change({{initial_event_type}});
-
-  // Initialize the All Day switch
-  on_all_day_change(false);
-
-  {% if show_events_preview %}
-  // Scroll to the preview of events
-  $(document.body).animate({
-    scrollTop: document.getElementById('events_preview').getBoundingClientRect().top + document.body.scrollTop - 10
-  }, 500);
-  {% else %}
-  // Set initial focus
-  $('#id_title').focus();
-  {% endif %}
-})
-
-</script>
-{% endblock %}
+{% block outertitle %}{% if addmode %}New Event{% else %}Edit Event{% endif %}{% endblock %}
 
 {% block content %}
+{% addtoblock "css" %}
+  <link rel='stylesheet' href="{% static 'csstoggle/toggle-switch.css' %}">
+  <link rel='stylesheet' href="{% static 'infosec/events_edit.css' %}">
+  <style>
+  {% if initial_event_type == 0 %}
+  .hide-if-onetime {display:none}
+  {% else %}
+  .show-if-onetime {display:none}
+  {% endif %}
+  </style>
+{% endaddtoblock %}
+{% addtoblock "js" %}
+  <script type="text/javascript">
+  var coll_hideifonetime, coll_showifonetime;
+  var event_type_selector;
+  var div_id_start_date, start_date_parent_if_onetime, start_date_parent_if_recurring;
+  var id_criteria, criteria_help_text;
+  var id_all_day, id_start_time, id_duration;
+  function on_event_type_change(et) {
+    if (et=={{form.NORECURRING}}) {   // One-time event
+      coll_hideifonetime.hide();
+      coll_showifonetime.show();
+
+      // Change color of Event Type slider
+      event_type_selector.removeClass("progress-bar-warning").addClass("progress-bar-info");
+
+      // Move the date field
+      div_id_start_date.prependTo(start_date_parent_if_onetime)
+
+    }else{                            // Recurring event
+      var ws = [750,600];
+      iw = ws[0]-window.innerWidth; if (iw<0) {iw=0;}
+      ih = ws[1]-window.innerHeight; if (ih<0) {ih=0;}
+      if ((iw>0) || (ih>0)) {window.resizeBy(iw,ih);}
+
+      coll_showifonetime.hide();
+      coll_hideifonetime.show();
+
+      // Change color of Event Type slider
+      event_type_selector.removeClass("progress-bar-info").addClass("progress-bar-warning");
+
+      // Move the date field
+      div_id_start_date.prependTo(start_date_parent_if_recurring)
+
+      // Disable the criteria field for Daily events only
+      if (et==100) {
+        id_criteria.prop("disabled", "true");
+      }else{
+        id_criteria.prop("disabled", "");
+      }
+
+      // Update help_text for the criteria field
+      if (false) {
+      {% for et_id,et_help in form.criteria_help_texts %}
+      }else if (et=={{et_id}}) {
+        criteria_help_text.html('{{et_help|safe}}');
+      {% endfor %}
+      }
+    }
+  }
+  function on_all_day_change(e) {
+    if (id_all_day.prop("checked") === true) {
+      id_start_time.val('').prop("disabled", "true");
+      if (e) id_duration.val('1 day');
+    }else{
+      id_start_time.prop("disabled", "");
+    }
+  }
+  $(function() {
+    // Preload the elements we'll be working with
+    coll_hideifonetime = $('.hide-if-onetime'); coll_showifonetime = $('.show-if-onetime');
+    event_type_selector = $('#event_type_selector');
+    div_id_start_date = $('#div_id_start_date'); start_date_parent_if_onetime = $('#start_date_parent_if_onetime'); start_date_parent_if_recurring = $('#start_date_parent_if_recurring');
+    id_criteria = $('#id_criteria'); criteria_help_text = $('#criteria_help_text');
+    id_all_day = $('#id_all_day'); id_start_time = $('#id_start_time'); id_duration = $('#id_duration');
+
+    // Initialize the Rule Type switch
+    $('#id_event_type_' + {{initial_event_type}}).prop('checked', true);
+    on_event_type_change({{initial_event_type}});
+
+    // Initialize the All Day switch
+    on_all_day_change(false);
+
+    {% if show_events_preview %}
+    // Scroll to the preview of events
+    $(document.body).animate({
+      scrollTop: document.getElementById('events_preview').getBoundingClientRect().top + document.body.scrollTop - 10
+    }, 500);
+    {% else %}
+    // Set initial focus
+    $('#id_title').focus();
+    {% endif %}
+  })
+
+  </script>
+{% endaddtoblock %}
 
 {% if messages %}
 {% for message in messages %}
