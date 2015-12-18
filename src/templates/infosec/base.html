@@ -41,8 +41,9 @@
     <!-- end content area -->
     {% if not is_popup %}
     {% block footer %}
-    <hr>
     <footer>
+      <hr>
+      <!-- Extra footer stuff from sub-templates -->{% block extrafooter %}{% endblock %}<!-- -->
       <p>Copyright &copy; 2015&nbsp;&nbsp;&nbsp;&nbsp;An open-source project by the students at CSUSB. To contribute, <a href="https://github.com/Alofoxx/club-websystem">visit the GitHub page</a>.</p>
     </footer>
     {% endblock %}

@@ -23,6 +23,16 @@ SECRET_KEY = '00000000000000000000000000000000000000000000000000'
 
 # Add our own apps to the ones defined by the base settings
 INSTALLED_APPS += [
+  # django-wiki
+  'django.contrib.humanize',
+  'django_nyt',
+  'mptt',
+  'sorl.thumbnail',
+  'wiki',
+  'wiki.plugins.attachments',
+  'wiki.plugins.images',
+  'wiki.plugins.macros',
+  # the rest
   'clubdata',
   'clubmembers',
   'contentblocks',
@@ -30,6 +40,9 @@ INSTALLED_APPS += [
   'mainsite_infosec',
   'regbackend',
 ]
+
+# Force django-wiki to use the standard login/logout pages, since it's not a standalone wiki
+WIKI_ACCOUNT_HANDLING = False
 
 # Look in the club-specific template folder first
 TEMPLATES[0]['DIRS'].insert(0,
