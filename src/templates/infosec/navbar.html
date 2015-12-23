@@ -22,12 +22,12 @@
             <li style="text-align:center; font-weight:bold;"><a href="{% url 'userprofile' %}"><img alt="Profile photo" src="{{ user.photo.thumbnail.100x100 }}"><br>{{ user.get_full_name }}</a></li>
             <li class="divider"></li>
             {% if user.is_staff %}
-            <li><a href="{% url 'admin:index' %}" style="color:orange">Site Administration</a></li>
+            <li><a href="{% url 'admin:index' %}"><span class="fa fa-wrench"></span> Site Administration</a></li>
             {% endif %}
             {% if user.may_edit_blocks %}
-            <li><a href="{% url 'contentblock_edit' 'navbar' %}" style="color:orange">Edit the Navbar</a></li>
+            <li><a href="{% url 'contentblock_edit' 'navbar' %}"><span class="fa fa-edit"></span> Edit the Navbar</a></li>
             {% endif %}
-            <li><a href="{% url 'userprofile' %}">My Profile</a></li>
+            <li><a href="{% url 'userprofile' %}"><span class="fa fa-user"></span> My Profile</a></li>
             <li class="divider"></li>
             <li><a href="{% url 'auth_logout' %}">Log out</a></li>
           </ul>

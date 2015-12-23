@@ -24,6 +24,9 @@
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
+  <!-- Font Awesome v4.5.0 -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
   <!-- Custom styles -->
   <link rel='stylesheet' href="{% static 'infosec/main.css' %}">
 
@@ -44,7 +47,7 @@
     <footer>
       <hr>
       <!-- Extra footer stuff from sub-templates -->{% block extrafooter %}{% endblock %}<!-- -->
-      <p>Copyright &copy; 2015&nbsp;&nbsp;&nbsp;&nbsp;An open-source project by the students at CSUSB. To contribute, <a href="https://github.com/Alofoxx/club-websystem">visit the GitHub page</a>.</p>
+      <p>Copyright &copy; 2015&nbsp;&nbsp;&nbsp;&nbsp;An open-source project by the students at CSUSB. To contribute, visit the <a href="https://github.com/Alofoxx/club-websystem"><span class="fa fa-github"></span> GitHub page</a>.</p>
     </footer>
     {% endblock %}
     {% endif %}

@@ -127,3 +127,7 @@ div.versatileimagefield {
   border-width:0px;
   padding-top:3px;
 }
+.dropdown-menu .fa {
+  width:17px;
+  text-align:center;
+}
