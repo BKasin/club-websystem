@@ -8,7 +8,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="{% url 'home' %}"><img alt="Club logo" src="{% static 'infosec/logo.png' %}" width="195" height="46" style='position:relative; top:-12px'></a>
+      <a class="navbar-brand hidden-sm" href="{% url 'home' %}"><img alt="Club logo" src="{% static 'infosec/logo.png' %}" width="195" height="46" style='position:relative; top:-12px'></a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -17,9 +17,9 @@
       <ul class="nav navbar-nav navbar-right">
         {% if user.is_authenticated %}
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><img alt="Profile photo" src="{{ user.photo.thumbnail.20x20 }}"> {{ user.get_short_name }} <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><img alt="Profile photo" src="{{ user.photo.thumbnail.20x20 }}"><span class="hidden-sm hidden-md"> {{ user.get_short_name }} </span><span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li style="text-align:center; font-weight:bold;"><a href="{% url 'userprofile' %}"><img alt="Profile photo" src="{{ user.photo.thumbnail.100x100 }}"><br>{{ user.get_full_name }}</a></li>
+            <li class="hidden-xs" style="text-align:center; font-weight:bold;"><a href="{% url 'userprofile' %}"><img alt="Profile photo" src="{{ user.photo.thumbnail.100x100 }}"><br>{{ user.get_full_name }}</a></li>
             <li class="divider"></li>
             {% if user.is_staff %}
             <li><a href="{% url 'admin:index' %}"><span class="fa fa-wrench"></span> Site Administration</a></li>
