@@ -13,25 +13,27 @@
 {% endif %}
 
 <h2>Memberships</h2>
-{% for membership in membershiplist %}
+{% if membershiplist %}
 <div class="panel panel-default">
-  <table class="membership">
+  <table class="membership table table-condensed">
+    {% for membership in membershiplist %}
     <tr class="{% if membership.is_active %}membershipactive{% else %}membershipexpired{% endif %}">
-      <td class="membershiplogo">{% if membership.club.logo_small %}<img alt="Profile photo" src="{% static membership.club.logo_small %}"><br>{{ membership.club.name_long }}{% else %}{{ membership.club.name_long }}{% endif %}</td>
+      <td class="membershiplogo">{% if membership.club.logo_small %}<img alt="Club logo" src="{% static membership.club.logo_small %}" class="center-block hidden-xs">{% endif %}<span class="hidden-xs">{{ membership.club.name_long }}</span><span class="visible-xs">{{ membership.club.name_short }}</span></td>
       {% if membership.is_active %}
       <td>{% if membership.paid_amount %}You paid <b>{{ membership.paid_amount|currency }}</b>{% else %}You joined{% endif %} on {{ membership.paid_date }}, and your membership is <span class="membershiphilight">active until {{ membership.paid_until_date }}</span>.</td>
       {% else %}
       <td>You membership to this club expired on {{ membership.paid_until_date }}. To get more information about joining, visit the <a href="{% url 'contentblock_view' 'membership' %}">membership information page</a>.</td>
       {% endif %}
     </tr>
+    {% endfor %}
   </table>
 </div>
-{% empty %}
+{% else %}
 <div class="alert alert-warning" role="alert">
   <p class='lead'>No memberships found</p>
   <p>You have a user account on the website, which stores information common accross all clubs. But you are not yet a paid member of any particular club. Once you have joined, you will see your memberships listed here instead. To get more information about joining, visit the <a class="alert-link" href="{% url 'contentblock_view' 'membership' %}">membership information page</a></p>
 </div>
-{% endfor %}
+{% endif %}
 
 {% crispy form %}
 {% endblock %}

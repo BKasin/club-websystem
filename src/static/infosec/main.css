@@ -72,7 +72,7 @@ div.versatileimagefield {
 }
 
 .membership td {
-  padding:0.5em;
+  vertical-align:middle !important;
 }
 .membershipexpired {
   color:silver;
@@ -81,8 +81,8 @@ div.versatileimagefield {
   opacity:0.2;
 }
 .membershiplogo {
-  width:220px;
   text-align:center;
+  font-weight:bold;
 }
 .membershiphilight {
   font-weight:bold;
