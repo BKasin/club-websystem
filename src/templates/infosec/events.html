@@ -88,6 +88,34 @@ function onPopupClosed(win) {
   win.close();
 }
 
+function onKeyPress(event) {
+  switch(event.which) {
+  case 112: //P
+    $('#calendar').fullCalendar('prev');
+    break;
+  case 110: //N
+    $('#calendar').fullCalendar('next');
+    break;
+  case 114: //R
+    $('#calendar').fullCalendar('refetchEvents');
+    break;
+  case 109: //M
+    $('#calendar').fullCalendar('changeView', 'month');
+    break;
+  case 119: //W
+    $('#calendar').fullCalendar('changeView', 'agendaWeek');
+    break;
+  case 100: //D
+    $('#calendar').fullCalendar('changeView', 'agendaDay');
+    break;
+  case 116: //T
+    $('#calendar').fullCalendar('today');
+    break;
+  default:
+    alert(event.which);
+  }
+}
+
 $(document).ready(function() {
   //Initialize the ajax loading indicator for all ajax requests
   $(document).ajaxStart(function() {
@@ -143,7 +171,7 @@ $(document).ready(function() {
       }
     ]
   })
-});
+}).keypress(onKeyPress);
 </script>
 
 <link rel="stylesheet" href="{% static 'infosec/events.css' %}">
