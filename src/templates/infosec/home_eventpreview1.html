@@ -5,6 +5,7 @@
 {% block content %}
 <h2>InfoSec Club Events - next {{event_preview_days}} days</h2>
 <div class="panel panel-default">
-{% include 'home_eventpreview2.html' %}
+  {% include 'home_eventpreview2.html' %}
+  <div class='eventtablefooter'>Visit our <a href="{% url 'events' %}">Events Page</a> for the full list.</div>
 </div>
 {% endblock %}

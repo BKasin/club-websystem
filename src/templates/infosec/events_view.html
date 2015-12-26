@@ -5,6 +5,12 @@
 
 {% block content %}
 <h1>{{event.title}}</h1>
-Start: {{event.start}}<br>
-Duration: {{event.duration}}
+<div class="panel panel-default">
+  <table class="table">
+    <tr><td>Start</td><td>{{event.start}}</td></tr>
+    <tr><td>Duration</td><td>{{event.duration}}</td></tr>
+    <tr><td>Location</td><td>{{event.location}}</td></tr>
+    <tr><td>Open to</td><td>{% if event.club %}{{event.club.name_short}} members only{% else %}All students{% endif %}</td></tr>
+  </table>
+</div>
 {% endblock %}

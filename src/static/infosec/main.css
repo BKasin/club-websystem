@@ -51,7 +51,7 @@ footer {
   border-bottom-width:1px;
   background-color:#499AC5;
 }
-.event_msg td {
+.eventtablefooter {
   text-align:center;
   font-size:13px;
   font-style:italic;
