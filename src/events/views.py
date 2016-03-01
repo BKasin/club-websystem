@@ -71,7 +71,7 @@ def jsonsearch(request):
   #   correct way would be to query the database as .filter(end__gte=start, start__lte=end)
   #   But we can't do this because we don't store the end time in the database, only a duration.
   #   Rather than have SQL compute the end time as start+duration, we just use a margin factor to
-  #   collect a few extra days on each end.
+  #   collect a few extra days on each end. FullCalendar will filter out the extra events.
   margin = timedelta(days=3)
   start = datetime.strptime(request.GET["start"], "%Y-%m-%d") - margin
   end = datetime.strptime(request.GET["end"], "%Y-%m-%d") + margin

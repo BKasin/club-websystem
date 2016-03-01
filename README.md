@@ -39,6 +39,7 @@ To get involved, follow the instructions below under the Development heading.
   * This will also install [lockfile](https://pypi.python.org/pypi/lockfile) for managing file locks.
 * [html2text](https://pypi.python.org/pypi/html2text/) is used in the our custom email template engine to generate a plaintext (markdown-like) version of an email if none is provided.
 * [CommonMark](https://pypi.python.org/pypi/CommonMark/) provides a Python renderer for markdown code using the [CommonMark specifications](http://spec.commonmark.org/0.22/), instead of the older and somewhat vague Markdown specs.
+* [sqlparse](https://pypi.python.org/pypi/sqlparse/) is needed to be able to run custom SQL commands in database migrations (with Django's RunSQL).
 
 ## Front-end
 
@@ -50,6 +51,10 @@ To get involved, follow the instructions below under the Development heading.
 * [Lodash, modern build](https://lodash.com/) provides some extra Javascript functionality used in our split-view CommonMark editor.
 * [Autosize](http://www.jacklmoore.com/autosize/) is also used in the split-view CommonMark editor for resizing the TEXTAREA as necessary to contain all the CommonMark code without using scrollbars.
 * [CSS Toggle](https://ghinda.net/css-toggle-switch/bootstrap.html) is used in the event creating/editing form to theme the HTML Input checkmarks and option buttons into nice colorful sliders.
+
+## Database
+
+* All user data (member list, page content other than templates, etc.) is stored in a [postgresql](http://www.postgresql.org/) database named 'clubwebsystem'. See below for how postgresql is configured.
 
 
 # Development
@@ -69,52 +74,126 @@ Install the following Linux packages. __Note:__ Package names and methods of ins
 
 Make a directory and clone the repository into it:
 
-    mkdir ~/club-websystem
-    cd ~/club-websystem
-    git clone git@github.com:Alofoxx/club-websystem.git ./
+    $ mkdir ~/club-websystem
+    $ cd ~/club-websystem
+    $ git clone git@github.com:Alofoxx/club-websystem.git ./
 
 Before you do anything else, create a virtual environment and activate it:
 
-    virtualenv --python=python2 ./
-    source bin/activate
+    $ virtualenv --python=python2 ./
+    $ source bin/activate
 
 Install all required python dependencies:
 
-    pip install -r requirements.txt
+    $ pip install -r requirements.txt
+
+## Install postgresql database server
+
+If postgresql is not included by default in your distro of Linux, install it. See the [Official Documentation](http://www.postgresql.org/docs/9.4/static/admin.html). The installation will automatically create a `postgres` system user. Make sure than user's home directory (usually `/var/lib/postgres`) is owned by `postgres` and not `root':
+
+    # chown postgres:postgres /var/lib/postgres
+
+For security reasons, do all maintenance of the postgresql databases within this account (shown below as `[postgres]$`). Initially it is a locked account, but it's a simple matter to just bypass that:
+
+    # su - postgres
+
+or:
+
+    $ sudo -i -u postgres
+
+If you really need to be able to login to that account without first having root access or sudo privileges, then set an account password for `postgres`:
+
+    # passwd postgres
+
+If the database clustor (the actual storage area for the various databases) has not yet been initialized, do that with the `initdb` command. You may use any directory for storage, but a good one to choose in `/data` under the `postgresql` user's home directory (check with `cat /etc/passwd`).
+
+    [postgres]$ initdb -D ~/data -E UTF8
+
+This should create a `data` directory owned by the `postgres` user, and unreadable by any other user (permissions=700).
+
+Now, logout of the `postgres` user and enable/start the postgresql service. This is very distro-dependent, so research your distro. As an example, on Arch, you'd do it this way:
+
+    # systemctl enable postgresql
+    # systemctl start postgresql
+
+Now open up a SQL shell (it actually connects to a built-in database named `postgres`).
+
+    $ psql
+
+Type `\?` to see a list of postgres commands, or `\h` for SQL commands.
+
+Now create a limited database user ("role") and a new database:
+
+    postgres=# CREATE ROLE cws;
+    postgres=# CREATE DATABASE clubwebsystem;
+
+
+
+
+
+If you need to connect a SQL shell to that new database, you can run
+
+    [postgres]$ psql -d clubwebsystem
+
+from the `postgres` user, or this from your own account:
+
+    $ psql -d clubwebsystem -U postgres
+
 
 ## Ongoing collaboration
 
 Each development day should start by activating your virtual environment and pulling any recent commits from the team.
 
-    cd ~/club-websystem/src
-    source ../bin/activate
+    $ cd ~/club-websystem/src
+    $ source ../bin/activate
+
+
+
+
+
+
+
+
+
 
 When you pull the recent commits, you have two choices...
 
 1. Pulling the latest database from the repo will overwrite any changes you may have made. If you would rather keep the data in your database and simply use migrations to upgrade the models, do this as your `git pull`:
 
-        mkdir -p ~/tmp
-        mv {./,~/tmp/}db.sqlite3
-        git pull
-        mv {~/tmp/,./}db.sqlite3
+        $ mkdir -p ~/tmp
+        $ mv {./,~/tmp/}db.sqlite3
+        $ git pull
+        $ mv {~/tmp/,./}db.sqlite3
 
 2. The database in the repo usually has the latest migrations. If you want to dump your copy of the database in favor of the one in the repo, just perform `git pull`. But this will give an error if your copy has changed, so just move it out of the way first:
 
-        mv -i db.sqlite3{,.bak}
-        git pull
+        $ mv -i db.sqlite3{,.bak}
+        $ git pull
 
-After pulling recent changes, you should apply the latest migrations:
 
-    python manage.py showmigrations
-    python manage.py migrate
+
+
+
+
+
+
+
+
+After pulling recent changes, you should verify the latest migrations have been applied:
+
+    $ python manage.py showmigrations
+
+If any are listed with a [ ] instead of a [X], then apply them with this command:
+
+    $ python manage.py migrate
 
 Then, collect the various static files into the `static_in_env` folder:
 
-    python manage.py collectstatic
+    $ python manage.py collectstatic
 
 For development use only, Django provides a simple webserver that you can start with the following command. In production, we'll use `apache` or `nginx` instead.
 
-    python manage.py runserver 0.0.0.0:8000
+    $ python manage.py runserver 0.0.0.0:8000
 
 ## Passwords
 

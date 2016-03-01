@@ -8,4 +8,5 @@ django-versatileimagefield==1.1
 html2text==2015.11.4
 lockfile==0.12.2
 Pillow==3.0.0
+sqlparse==0.1.18
 uWSGI==2.0.11.2
