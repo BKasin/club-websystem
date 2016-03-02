@@ -52,7 +52,11 @@ INSTALLED_APPS = [
   'registration',
   'versatileimagefield',
   'mailer',
-] # + add your own in your custom settings file
+]
+# In your custom settings file, add more like this:
+# INSTALLED_APPS += [
+#   'app1',
+# ]
 
 # Middleware
 MIDDLEWARE_CLASSES = [
@@ -120,7 +124,7 @@ SITE_ID = 1 # You must define this in your custom settings file
 #ALLOWED_HOSTS = ['www.yourclubhere.org'] # You must define this in your custom settings file
 
 # Load the initial urlconf
-#ROOT_URLCONF = 'system.urls.yourclubhere' # You must define this in your custom settings file
+ROOT_URLCONF = 'system.urls'
 
 # Static files (CSS, JavaScript, Images). Because we're using try_files
 # in nginx, we serve static content from the same URI root that the pages

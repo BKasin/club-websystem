@@ -15,8 +15,9 @@ DEBUG = True
 # This allows django.template.context_processors.debug to work
 INTERNAL_IPS = ['127.0.0.1', '10.0.2.2']
 
-# Fake key for development only
-SECRET_KEY = '00000000000000000000000000000000000000000000000000'
+# Secret key used for cryptographic signing of sessions, password reset tokens, etc.
+# SECURITY WARNING: Load it from an external file, so the actual key never gets stored in the git repo or GitHub!
+from .SECRETKEY import SECRET_KEY
 
 
 ############################################# Modules ##############################################
@@ -71,9 +72,6 @@ SITE_ID = 8001
 
 
 ############################################### URLs ###############################################
-
-# Load the initial urlconf
-ROOT_URLCONF = 'system.urls.infosec'
 
 # Since manage.py runserver does not understand the static files layout we
 # use at production (static files and django served out of the same root, but using

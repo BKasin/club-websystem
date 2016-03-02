@@ -80,9 +80,9 @@ pip-selfcheck.json
 static_in_env/
 
 # Don't put production passwords in the repo
+production*
 _production*
-_staging*
-production.sqlite3*
+SECRETKEY.py
 
 # Ignore fullcalendar's demos
 demos
@@ -92,3 +92,6 @@ demos
 
 # Ignore the file-based emails created by our development email backend
 emails_filebased/
+
+# Allow users to create files that are automatically untracked
+_ut_*
