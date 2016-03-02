@@ -3,7 +3,7 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 
-from mainsite_infosec.views import home, events_preview, about_contact
+from mainsite.views import home, events_preview, about_contact
 from contentblocks.views import contentblock_view, contentblock_edit
 
 urlpatterns = [

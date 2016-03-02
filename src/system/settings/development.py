@@ -28,14 +28,9 @@ INSTALLED_APPS += [
   'clubmembers',
   'contentblocks',
   'events',
-  'mainsite_infosec',
+  'mainsite',
   'regbackend',
 ]
-
-# Look in the club-specific template folder first
-TEMPLATES[0]['DIRS'].insert(0,
-  os.path.join(BASE_DIR, "templates", 'infosec')
-)
 
 
 ############################################# Database #############################################
