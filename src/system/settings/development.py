@@ -30,6 +30,11 @@ INSTALLED_APPS += [
   'events',
   'mainsite',
   'regbackend',
+
+  'quiz',
+  'multichoice',
+  'true_false',
+  'essay',
 ]
 
 

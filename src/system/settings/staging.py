@@ -28,6 +28,11 @@ INSTALLED_APPS += [
   'events',
   'mainsite',
   'regbackend',
+
+  'quiz',
+  'multichoice',
+  'true_false',
+  'essay',
 ]
 
 # Make django cache the templates to increase speed (still testing this one; not ready for production yet)
