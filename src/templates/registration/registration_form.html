@@ -1,4 +1,5 @@
 {% extends "base_simple.html" %}
+{% load contentblock_renderer %}
 {% load crispy_forms_tags %}
 
 {% block extrahead %}
@@ -58,10 +59,7 @@
 
 {% block content2 %}
 <h1>Join the Club</h1>
-
+{% load_contentblock 'join_top' %}
 {% crispy form %}
-
-<hr>
-
-<p>Already a member? <a href="{% url 'auth_login' %}">Login.</a></p>
+{% load_contentblock 'join_bottom' %}
 {% endblock %}
