@@ -7,7 +7,7 @@ scriptdir=$(dirname $0)
 log=$scriptdir/mailer.log
 if [ $# -gt 0 ]; then
   # Activate the virtual environment
-  source $scriptdir/../bin/activate
+  . $scriptdir/../bin/activate
 
   # Write a header to the log
   (echo -ne "\n\n------------------------------------------------------------------------\n$1 - "; date; [ "$1" != "send_mail" ] && echo "------------------------------------------------------------------------") >> $log
