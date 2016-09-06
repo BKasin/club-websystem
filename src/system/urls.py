@@ -20,6 +20,9 @@ urlpatterns = [
   url(r'^admin/', include(admin.site.urls)),
   url(r'^accounts/', include('regbackend.urls')),
 
+  # Third-party apps
+  url(r'^quiz/', include('quiz.urls')),
+
   # Contentblock processor (must be last)
   url(r'^(?P<page>\w+)/$', contentblock_view, name='contentblock_view'),
   url(r'^(?P<page>\w+)/edit/$', contentblock_edit, name='contentblock_edit'),
