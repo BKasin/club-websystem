@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Uses django-mailer to periodically send out the scheduled/deferred emails.
+
+cd $(dirname $0)
+
+log=../data/mailer.log
+if [ $# -gt 0 ]; then
+  # Write a header to the log
+  echo -e "\n====================== $1 $(date) ======================" >> $log
+
+  # Run the mailer tool
+  ./m $1 -c 1 >> $log 2>&1
+else
+  echo "You must specify one parameter: either send_mail or retry_deferred"
+  exit 1
+fi

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ "$VIRTUAL_ENV" = "" ]; then
   echo "No virtual environment found"

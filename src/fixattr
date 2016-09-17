@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cd $(dirname $0)
+
+echo "Verifying executable scripts have +x..."
+chmod -v +x manage.py
+chmod -v +x m
+chmod -v +x fixattr
+chmod -v +x devserver
+chmod -v +x collectstatic
+chmod -v +x maintmode
+chmod -v +x mailer

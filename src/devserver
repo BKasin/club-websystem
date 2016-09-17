@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd $(dirname $0)
+
+port=$1
+[[ $port == "" ]] && port=8000
+./m runserver 0.0.0.0:$port

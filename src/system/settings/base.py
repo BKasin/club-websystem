@@ -17,10 +17,19 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
 import os
+def get_file_name_only(path):
+  return os.path.splitext(os.path.basename(path))[0]
+CONFIG_FILE_IN_USE = get_file_name_only(__file__)  # Custom setting
 
 # To ensure everything will work on both Linux and Windows, build paths
 # inside your the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Custom settings
+CONF_DIR = os.path.join(os.path.dirname(BASE_DIR), 'conf')
+DATA_DIR = os.path.join(os.path.dirname(BASE_DIR), 'data')
+PROJECT_NAME = 'infosec'
+DOMAIN_NAME = 'infosec-csusb.org'
 
 
 ############################################## Basics ##############################################
@@ -39,6 +48,7 @@ DEBUG = False
 INSTALLED_APPS = [
   # bootstrap the admin (must be before django.contrib.admin)
   'django_admin_bootstrapped',
+
   # django
   'django.contrib.admin',
   'django.contrib.auth',
@@ -47,16 +57,28 @@ INSTALLED_APPS = [
   'django.contrib.messages',
   'django.contrib.sites',
   'django.contrib.staticfiles',
+
+  # our core
+  'system',
+
   # third party apps
   'crispy_forms',
   'registration',
   'versatileimagefield',
   'mailer',
+
+  # our apps
+  'clubdata',
+  'clubmembers',
+  'contentblocks',
+  'events',
+  'mainsite',
+  'regbackend',
+  'quiz',
+  'multichoice',
+  'true_false',
+  'essay',
 ]
-# In your custom settings file, add more like this:
-# INSTALLED_APPS += [
-#   'app1',
-# ]
 
 # Middleware
 MIDDLEWARE_CLASSES = [
@@ -68,13 +90,13 @@ MIDDLEWARE_CLASSES = [
   'django.contrib.messages.middleware.MessageMiddleware',
   'django.middleware.clickjacking.XFrameOptionsMiddleware',
   'django.middleware.security.SecurityMiddleware',
-] # + add your own in your custom settings file
+]
 
 # Templates
 TEMPLATES = [
   {
     'BACKEND': 'django.template.backends.django.DjangoTemplates',
-    'DIRS': [os.path.join(BASE_DIR, "templates")],
+    'DIRS': [],
     'APP_DIRS': True,
     'OPTIONS': {
       'context_processors': [
@@ -93,9 +115,6 @@ TEMPLATES = [
 # Custom user model
 AUTH_USER_MODEL = 'clubmembers.Member'
 AUTHENTICATION_BACKENDS = ('clubmembers.models.MemberAuthenticationBackend',)
-
-# Database backend(s)
-#DATABASES = {} # You must define this in your custom settings file
 
 
 ############################################## Email ###############################################
@@ -120,24 +139,18 @@ SITE_ID = 1 # You must define this in your custom settings file
 
 ############################################### URLs ###############################################
 
-# Restrict connections to a list of hosts (required if DEBUG=False)
-#ALLOWED_HOSTS = ['www.yourclubhere.org'] # You must define this in your custom settings file
-
 # Load the initial urlconf
 ROOT_URLCONF = 'system.urls'
 
 # Static files (CSS, JavaScript, Images). Because we're using try_files
 # in nginx, we serve static content from the same URI root that the pages
 # are in. For development, we can override this with '/static/'.
-STATIC_URL = '/'
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_in_env", "static_root")
-STATICFILES_DIRS = (
-  os.path.join(BASE_DIR, "static"),
-)
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(DATA_DIR, "static")
 
 # Media files (untrusted files uploaded by users)
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_in_env", "media_root")
+MEDIA_ROOT = os.path.join(DATA_DIR, "media")
 
 # Django auth settings
 LOGIN_REDIRECT_URL = '/'

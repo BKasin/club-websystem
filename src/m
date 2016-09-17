@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Shortcut to running src/manage.py that uses the appropriate settings file for the current virtual environment
+
+# Parse the parameters
+params=""
+settings_provided=0
+no_color=0
+for param in "$@"; do
+	[[ $param == "--settings"* ]] && settings_provided=1
+	[[ $param == "--no-color"* ]] && no_color=1
+	[[ $param == *" "* ]] && param="\"$param\""		# Quote any param with spaces
+	params="$params $param"
+done
+
+if [[ "$no_color" == "0" ]]; then
+	clr_error="\E[31m"
+	clr_success="\E[32m"
+	clr_reset="\E[0m"
+fi
+
+if [[ "$VIRTUAL_ENV" = "" ]]; then
+	echo -e "\n${clr_error}Please activate your virtual environment first, by running a command like these:\n    . .venv/bin/activate\n    source .venv/bin/activate${clr_reset}"
+	exit
+fi
+
+cd $(dirname $0)
+
+# Determine which settings file to use
+
+if [[ "$settings_provided" == "0" ]]; then
+	if [ -f ../whichenv.txt ]; then
+		read settings_file < ../whichenv.txt
+	elif [ -f ../conf/whichenv.txt ]; then
+		read settings_file < ../conf/whichenv.txt
+	else
+		settings_file=production
+		echo -e "\n${clr_error}Assuming '$settings_file' environment. To remove this assumption add the word\n'development', 'staging', or 'production' to a file named 'settings_file' in\nthe same directory as this script or one directory higher.${clr_reset}"
+	fi
+	settings_setting=" --settings=system.settings.${settings_file}"
+fi
+
+# Add a --settings parameter if not provided
+[[ $params == "" ]] && params=" help"	# If no parameters were given, show the list of commands available in manage.py
+cmd="python manage.py${params}${settings_setting}"
+
+# Show the command to be run; then run it
+echo -e "${clr_success}${cmd}${clr_reset}\n"
+$cmd

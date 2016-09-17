@@ -1,50 +1,22 @@
-"""
-Settings file for use in development only.
-"""
-
 from .base import *
-import os
+CONFIG_FILE_IN_USE = get_file_name_only(__file__)  # Custom setting
 
-
-############################################## Basics ##############################################
-
-# SECURITY WARNING: don't run with debug turned on in production!
+# Debug mode will help troubleshoot errors
 DEBUG = True
 
 # List all remote IPs you will use to access the website for dev purposes
 # This allows django.template.context_processors.debug to work
 INTERNAL_IPS = ['127.0.0.1', '10.0.2.2']
 
-# Secret key used for cryptographic signing of sessions, password reset tokens, etc.
-# SECURITY WARNING: Load it from an external file, so the actual key never gets stored in the git repo or GitHub!
-from .SECRETKEY import SECRET_KEY
+# Must have some key, so we'll just use bogus one
+SECRET_KEY = '00000000000000000000000000000000000000000000000000'
 
-
-############################################# Modules ##############################################
-
-# Add our own apps to the ones defined by the base settings
-INSTALLED_APPS += [
-  'clubdata',
-  'clubmembers',
-  'contentblocks',
-  'events',
-  'mainsite',
-  'regbackend',
-
-  'quiz',
-  'multichoice',
-  'true_false',
-  'essay',
-]
-
-
-############################################# Database #############################################
 
 # Database backend(s)
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    'NAME': os.path.join(DATA_DIR, 'development.sqlite3'),
   }
 }
 
