@@ -72,7 +72,6 @@ INSTALLED_APPS = [
   'clubmembers',
   'contentblocks',
   'events',
-  'mainsite',
   'regbackend',
   'quiz',
   'multichoice',
