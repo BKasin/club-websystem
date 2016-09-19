@@ -14,9 +14,6 @@ The aim of the project is to build a new website for the CSUSB Information Secur
 ## Developers
 
 * Kenneth Johnson, [*securedirective*](https://github.com/securedirective) - *lead developer*
-* Patrick Gillespie, [*Alofoxx*](https://github.com/Alofoxx)
-* Juan Nevares, [*JuanNevares*](https://github.com/JuanNevares)
-* Brendan Higgins, [*BrendanHiggins*](https://github.com/BrendanHiggins)
 
 To get involved, follow the instructions below under the Development heading.
 
@@ -214,7 +211,14 @@ The production server must at least contain these requirements:
 * python v2.7.x
 * virtualenv for python2
 * libjpeg-dev
+* zlib1g-dev
 * a virtual environment setup with the packages listed in `requirements.txt`
+
+If you get a "decoder zip not available" when uploading a new profile photo, take the following steps:
+
+    # apt-get install libjpeg-dev zlib1g-dev
+    $ pip uninstall Pillow
+    $ pip install --no-cache-dir $(grep ^Pillow requirements.txt)
 
 For email to work in production, you must add django-mailer to the server's crontab. Since django-mailer puts all outbound email into the database instead of immediately sending it, we use its `send_mail` command to actually send out the emails. Any email that fails will be changed to priority `deferred`. The `retry_deferred` command will mark all deferred emails as medium priority, so the next pass of `send_mail` will attempt to send them again.
 
