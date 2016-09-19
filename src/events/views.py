@@ -206,9 +206,11 @@ class EventManager(View):
 
   def __init__(self, **kwargs):
     super(EventManager, self).__init__(**kwargs)
-    current_club = Site.objects.get_current().club
-    self.current_club_id = current_club.id
-    self.current_club_shortname = current_club.name_short
+    current_site = Site.objects.get_current()
+    if current_site.has_club:
+      current_club = current_site.club
+      self.current_club_id = current_club.id
+      self.current_club_shortname = current_club.name_short
 
   def get(self, request, editingregularevent=True, eventid=None, originaleventid=None):
     if not request.user.has_perms(event_manager_perms): raise error_insufficient_perms

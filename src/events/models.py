@@ -234,7 +234,8 @@ class CustomEventManager(models.Manager):
   def _get_current_club_id(self):
     if not self.current_club_id:
       current_site = Site.objects.get_current()
-      self.current_club_id = current_site.club.id
+      if current_site.has_club:
+        self.current_club_id = current_site.club.id
     return self.current_club_id
 
   def get_queryset(self):

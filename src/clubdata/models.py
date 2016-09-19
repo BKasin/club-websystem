@@ -1,10 +1,12 @@
 from django.db import models
 from django.contrib.sites.models import Site
 
+from system.fields import OneToOneFieldWithFlag
+
 class Club(models.Model):
   id                    = models.AutoField(
                             primary_key=True)
-  site                  = models.OneToOneField(Site)
+  site                  = OneToOneFieldWithFlag(Site, flag_name='has_club')
 
   name_short            = models.CharField('Name (short version)',
                             max_length=20)
