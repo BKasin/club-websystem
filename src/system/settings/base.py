@@ -227,8 +227,18 @@ VERSATILEIMAGEFIELD_SETTINGS = {
   'cache_length': 2592000,
   'cache_name': 'versatileimagefield_cache',
   'jpeg_resize_quality': 70,
-  'sized_directory_name': '__sized__',
-  'filtered_directory_name': '__filtered__',
-  'placeholder_directory_name': '__placeholder__',
-  'create_images_on_demand': True
+  # Separate auto-generated images from the originals
+  'sized_directory_name': 'sized',
+  'filtered_directory_name': 'filtered',
+  # Placeholder images have their own subdirectory: sized/placeholder or filtered/placeholder
+  'placeholder_directory_name': 'placeholders',
+  # Do not create any images on demand. That way, we don't have page errors due to missing images.
+  # No need to create these on demand, since they are created on the post-save event of Member
+  'create_images_on_demand': False,
+}
+VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
+  'memberphoto': [
+    ('menu_icon', 'thumbnail__20x20'),
+    ('profile_page', 'thumbnail__100x100'),
+  ],
 }

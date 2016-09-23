@@ -11,9 +11,11 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from django.contrib.auth.backends import ModelBackend
 from django.core import validators
 from django.utils import six
+from django.dispatch import receiver
 
 from versatileimagefield.fields import VersatileImageField, PPOIField
 from versatileimagefield.placeholder import OnDiscPlaceholderImage
+from versatileimagefield.image_warmer import VersatileImageFieldWarmer
 
 from clubdata.models import Club
 
@@ -138,7 +140,7 @@ class Member(AbstractBaseUser, PermissionsMixin):
                             blank=True,    # Field is optional
                             upload_to="memberphotos",
                             width_field="photowidth", height_field="photoheight", #ppoi_field="photoppoi",
-                            placeholder_image=OnDiscPlaceholderImage(os.path.join(settings.BASE_DIR, 'clubmembers/placeholder.png')))
+                            placeholder_image=OnDiscPlaceholderImage(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'memberphoto.png')))
   photowidth            = models.PositiveIntegerField(
                             null=True,     # Blank is stored as Null
                             blank=True,    # Field is optional
@@ -201,8 +203,29 @@ class Member(AbstractBaseUser, PermissionsMixin):
   def __unicode__(self): #Python 3.3 is __str__
     return "%s %s (%s)"%(self.name_first, self.name_last, self.username)
 
+# Delete old unused photo when a new profile photo is added (not working yet)
+# @receiver(models.signals.pre_save, sender=Member)
+# def create_member_profile_photos(sender, instance, **kwargs):
+#   pass
 
+# Create the various sizes of profile photos post-save
+@receiver(models.signals.post_save, sender=Member)
+def create_member_profile_photos(sender, instance, **kwargs):
+  # Note: this will run every time the model is saved, even if the photo field didn't change
+  num_created, failed_to_create = VersatileImageFieldWarmer(
+      instance_or_queryset=instance,
+      rendition_key_set='memberphoto',
+      image_attr='photo'
+  ).warm()
 
+# Delete the associated photo and resized photos for a model post-delete
+@receiver(models.signals.post_delete, sender=Member)
+def delete_member_profile_photo(sender, instance, **kwargs):
+  # Delete all auto-generated images
+  # instance.photo.delete_all_created_images()
+  instance.photo.delete_sized_images()    # Due to a bug in versatileimagefield, the above line fails. For now, we'll use this line instead.
+  # Delete original image, without saving the model back to the database
+  instance.photo.delete(save=False)
 
 
 
