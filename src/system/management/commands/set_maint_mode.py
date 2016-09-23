@@ -1,4 +1,6 @@
+import os
 from django.core.management.base import BaseCommand
+from django.conf import settings
 
 class Command(BaseCommand):
 	help = "Turn on or off a maintenance mode file (defaults to 'maint.html' in your STATIC_ROOT). Configure your webserver to serve this file first if it exists."
@@ -20,9 +22,6 @@ class Command(BaseCommand):
 		)
 
 	def handle(self, *args, **options):
-		import os
-		from django.conf import settings
-
 		# Find the maintenance mode file
 		try:
 			maint_mode_file = settings.MAINT_MODE_FILE

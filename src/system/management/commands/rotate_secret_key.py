@@ -1,4 +1,9 @@
+import os
+import string
+import random
 from django.core.management.base import BaseCommand
+from django.utils.six.moves import input
+from django.conf import settings
 
 class Command(BaseCommand):
 	help = "If you store Django's SECRET_KEY in a dedicated file outside of source control, this command can easily regenerate a random 50-char key and write it to your file (defaults to 'secretkey.txt' in CONF_DIR)."
@@ -13,11 +18,6 @@ class Command(BaseCommand):
 		)
 
 	def handle(self, *args, **options):
-		import os
-		import string
-		from django.utils.six.moves import input
-		from django.conf import settings
-
 		# Find the key file
 		try:
 			key_file = settings.SECRET_KEY_FILE
@@ -40,7 +40,6 @@ class Command(BaseCommand):
 		self.stdout.write('')
 
 		# Generate new key
-		import random
 		char_list = string.ascii_letters + string.digits + string.punctuation
 		generated_key = ''.join([random.SystemRandom().choice(char_list) for _ in range(50)])
 		self.stdout.write("NEW SECRET KEY:      {}".format(generated_key))

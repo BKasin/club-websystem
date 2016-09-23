@@ -1,11 +1,11 @@
 # Virtual environment
-.venv/
+/.venv/
 
 # Data directory
-data/
+/data/
 
 # Config directory
-conf/
+/conf/
 
 # Temporary files
 __pycache__/

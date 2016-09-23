@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd $(dirname $0)
+
+touch ../conf/uwsgi.reload
+( cmdpid=$BASHPID; (sleep 10; kill $cmdpid) & exec tail -f -n 0 ../data/uwsgi.log )

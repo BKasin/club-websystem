@@ -2,11 +2,11 @@
 
 cd $(dirname $0)
 
-echo "Verifying executable scripts have +x..."
-chmod -v +x manage.py
-chmod -v +x m
-chmod -v +x fixattr
-chmod -v +x devserver
-chmod -v +x collectstatic
-chmod -v +x maintmode
-chmod -v +x mailer
+echo "Verifying all files with a shebang (#!/bin/executable) also have executable flag set..."
+shopt -s nullglob
+for f in *; do
+	if [ -f "$f" ]; then
+		head -n 1 "$f" | grep '^#!/'>/dev/null && chmod -v +x "$f" | grep -v "retained"
+	fi
+done
+echo "Done"

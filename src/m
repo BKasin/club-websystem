@@ -14,30 +14,20 @@ for param in "$@"; do
 done
 
 if [[ "$no_color" == "0" ]]; then
+	clr_reset="\E[0m"
 	clr_error="\E[31m"
 	clr_success="\E[32m"
-	clr_reset="\E[0m"
 fi
 
 if [[ "$VIRTUAL_ENV" = "" ]]; then
-	echo -e "\n${clr_error}Please activate your virtual environment first, by running a command like these:\n    . .venv/bin/activate\n    source .venv/bin/activate${clr_reset}"
+	echo -e "${clr_error}Please activate your virtual environment before running this command.${clr_reset}"
 	exit
 fi
-
 cd $(dirname $0)
 
 # Determine which settings file to use
-
 if [[ "$settings_provided" == "0" ]]; then
-	if [ -f ../whichenv.txt ]; then
-		read settings_file < ../whichenv.txt
-	elif [ -f ../conf/whichenv.txt ]; then
-		read settings_file < ../conf/whichenv.txt
-	else
-		settings_file=production
-		echo -e "\n${clr_error}Assuming '$settings_file' environment. To remove this assumption add the word\n'development', 'staging', or 'production' to a file named 'settings_file' in\nthe same directory as this script or one directory higher.${clr_reset}"
-	fi
-	settings_setting=" --settings=system.settings.${settings_file}"
+	settings_setting=" --settings=system.settings.$(./which_env)"
 fi
 
 # Add a --settings parameter if not provided

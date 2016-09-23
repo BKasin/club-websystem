@@ -1,7 +1,24 @@
 #!/bin/bash
 
+clr_reset="\E[0m"
+clr_error="\E[31m"
+clr_success="\E[32m"
+
+if [[ "$VIRTUAL_ENV" = "" ]]; then
+	echo -e "${clr_error}Please activate your virtual environment before running this command.${clr_reset}"
+	exit
+fi
 cd $(dirname $0)
+
+# Determine which settings file to use
+settings_file="$(./which_env)"
+if [[ "$settings_file" != "development" ]]; then
+	echo -e "${clr_error}Django's development server should only be run in a development environment.${clr_reset}"
+	exit
+fi
 
 port=$1
 [[ $port == "" ]] && port=8000
-./m runserver 0.0.0.0:$port
+cmd="python manage.py runserver 0.0.0.0:$port --settings=system.settings.$settings_file"
+echo -e "${clr_success}${cmd}${clr_reset}\n"
+$cmd

@@ -2,10 +2,10 @@ from .base import *
 CONFIG_FILE_IN_USE = get_file_name_only(__file__)  # Custom setting
 
 # Custom settings for dynamically-generated config files
-UWSGI_PORT = 9001
+UWSGI_PORT = 9000
 HTTP_PORT = 80
 HTTPS_PORT = 443
-HTTPS_ENABLED = True
+HTTPS_ENABLED = False
 
 ############################################## Basics ##############################################
 
@@ -92,7 +92,8 @@ ALLOWED_HOSTS = ['www.infosec-csusb.org']
 ############################################## Misc. ###############################################
 
 # Mark cookies as 'secure', to tell browsers to only send over HTTPS
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+if HTTPS_ENABLED:
+  SESSION_COOKIE_SECURE = True
+  CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 SECURE_BROWSER_XSS_FILTER = True

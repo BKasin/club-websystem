@@ -1,19 +1,19 @@
+import os
+import sys
+import pwd
+import grp
+from django.conf import settings
+from django.template import Context, Template
 from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
-	help = "Generate configuration files dynamically from templates using Django's settings as template context. Add a DYNCONF_DEF_FILE setting that points to a file containing your output_file=template_file list (defaults to 'dynamic_configs.conf' in CONF_DIR)."
+	help = "Generate configuration files dynamically from templates using Django's settings as template context. To use, create a definition file with a list of output_file=template_file lines. Each template file and the definition file itself will be run through Django's template engine. Optionally, add DYNCONF_DEF_FILE to your settings file to specify the full path to the definition file (defaults to '{CONF_DIR}/dynamic_configs.conf')."
 
-	def handle(self, *args, **options):
-		import os
-		import pwd
-		import grp
-		from django.conf import settings
-		from django.template import Context, Template
-
+	def _get_default_context(self):
 		# Context that all templates will receive
 		uid = os.getuid()
 		gid = os.getgid()
-		context = Context({
+		return Context({
 			'settings': settings,
 			'venv': os.environ['VIRTUAL_ENV'],
 			'username': pwd.getpwuid(uid).pw_name,
@@ -22,6 +22,29 @@ class Command(BaseCommand):
 			'gid': gid,
 		})
 
+
+	def _generate_config_file(self, output_file, template_file, context):
+		# If the filenames are not already absolute paths, assume the default directory
+		if not os.path.isabs(output_file):
+			output_file = os.path.join(self.default_dir, output_file)
+		if not os.path.isabs(template_file):
+			template_file = os.path.join(self.default_dir, template_file)
+
+		# Load the template file
+		with open(template_file, 'r') as file:
+			contents = file.read()
+		self.stdout.write("Loaded template '{}'".format(template_file))
+
+		# Render the template
+		output = Template(contents).render(context)
+
+		# Output the rendered results
+		with open(output_file, 'w') as file:
+			file.write(output)
+		self.stdout.write("    Rendered to '{}'".format(output_file))
+
+
+	def handle(self, *args, **options):
 		# Find the definitions file
 		try:
 			definition_file = settings.DYNCONF_DEF_FILE
@@ -29,54 +52,25 @@ class Command(BaseCommand):
 			# If not found, choose a default
 			definition_file = os.path.join(settings.CONF_DIR, 'dynamic_configs.conf')
 
-		# Load the definitions
-		try:
-			with open(definition_file, 'r') as file:
-				contents = file.read()
-		except Exception as e:
-			self.stderr.write("Failed to load definition file: {}".format(definition_file))
-			return
+		# Choose a default directory, in case an entry in the definitions is a relative path
+		self.default_dir = os.path.dirname(os.path.abspath(definition_file))
 
-		# Process the definitions file with the same context we'll use later for the templates
+		# Get the context that will be given to all templates
+		context = self._get_default_context();
+
+		# Load the definitions and process them through the template engine
+		with open(definition_file, 'r') as file:
+			contents = file.read()
 		output = Template(contents).render(context)
 
 		# Loop through each line
 		lines = output.split("\n")
-		default_dir = os.path.dirname(os.path.abspath(definition_file))
 		for line in lines:
 			# Skip any that aren't key=value format
 			line = line.strip()
-			if line.startswith('#') or len(line)==0: continue
+			if line.startswith('#') or len(line) == 0:
+				continue
 			parts = line.split('=')
-			if len(parts)!=2: continue
-
-			# Extract the two filenames and translate them into absolute paths
-			output_file = parts[0].strip()
-			if not output_file.startswith('/'): output_file = os.path.join(default_dir, output_file)
-			template_file = parts[1].strip()
-			if not template_file.startswith('/'): template_file = os.path.join(default_dir, template_file)
-
-			# Load the template file
-			try:
-				with open(template_file, 'r') as file:
-					contents = file.read()
-				self.stdout.write("Loaded template '{}'".format(template_file))
-			except Exception as e:
-				self.stderr.write("Failed to load template '{}': {}".format(template_file, repr(e)))
-				continue # Go on to the next config file
-
-			# Render the template
-			try:
-				output = Template(contents).render(context)
-			except Exception as e:
-				self.stderr.write("    Failed to render template '{}': {}".format(template_file, repr(e)))
-				continue # Go on to the next config file
-
-			# Output the rendered results
-			try:
-				with open(output_file, 'w') as file:
-					file.write(output)
-				self.stdout.write("    Rendered to '{}'".format(output_file))
-			except Exception as e:
-				self.stderr.write("    Failed to write new output file '{}': {}".format(output_file, repr(e)))
-				continue # Go on to the next config file
+			if len(parts) != 2:
+				continue
+			self._generate_config_file(parts[0].strip(), parts[1].strip(), context)
