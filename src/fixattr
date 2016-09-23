@@ -1,12 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 cd $(dirname $0)
 
-echo "Verifying all files with a shebang (#!/bin/executable) also have executable flag set..."
+echo "Verifying all files with a shebang (#!) also have executable flag set..."
 shopt -s nullglob
 for f in *; do
 	if [ -f "$f" ]; then
-		head -n 1 "$f" | grep '^#!/'>/dev/null && chmod -v +x "$f" | grep -v "retained"
+		head -n 1 "$f" | grep '^#!'>/dev/null && chmod -v +x "$f" | grep -v "retained"
 	fi
 done
 echo "Done"

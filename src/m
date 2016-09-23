@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Shortcut to running src/manage.py that uses the appropriate settings file for the current virtual environment
 
@@ -27,7 +27,7 @@ cd $(dirname $0)
 
 # Determine which settings file to use
 if [[ "$settings_provided" == "0" ]]; then
-	settings_setting=" --settings=system.settings.$(./which_env)"
+	settings_setting=" --settings=system.settings.$(./whichenv)"
 fi
 
 # Add a --settings parameter if not provided

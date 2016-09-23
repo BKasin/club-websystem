@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Uses django-mailer to periodically send out the scheduled/deferred emails.
 # Since this is designed to be run from a cron job, it assumes PRODUCTION environment and does not require the virtual environment to be activated first.
@@ -10,7 +10,7 @@ if [ $# -gt 0 ]; then
   # Write a header to the log
   echo -e "\n====================== $1 $(date) ======================" >> $log
 
-  # Run the mailer tool
+  # Run the mailer tool (must point directly to the virtual environment python, since $VIRTUAL_ENV won't be set
   ../.venv/bin/python manage.py $1 -c 1 --settings=system.settings.production >> $log 2>&1
 else
   echo "You must specify one parameter: either send_mail or retry_deferred"

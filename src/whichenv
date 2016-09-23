@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
 # Returns 'development', 'staging', or 'production' after determining which environment this script exists within
 # Assume production environment if ../whichenv.txt and ../conf/whichenv.txt do not exist.
