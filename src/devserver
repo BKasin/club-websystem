@@ -18,7 +18,7 @@ if [[ "$settings_file" != "development" ]]; then
 fi
 
 port=$1
-[[ $port == "" ]] && port=8000
+[[ $port == "" ]] && port=9000
 cmd="python manage.py runserver 0.0.0.0:$port --settings=system.settings.$settings_file"
 echo -e "${clr_success}${cmd}${clr_reset}\n"
 $cmd
