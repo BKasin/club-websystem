@@ -46,6 +46,9 @@ DEBUG = False
 
 # Application definition
 INSTALLED_APPS = [
+  # our core (list it first, so we have complete authority to override templates and static files in other apps)
+  'system',
+
   # bootstrap the admin (must be before django.contrib.admin)
   'django_admin_bootstrapped',
 
@@ -57,9 +60,6 @@ INSTALLED_APPS = [
   'django.contrib.messages',
   'django.contrib.sites',
   'django.contrib.staticfiles',
-
-  # our core
-  'system',
 
   # third party apps
   'crispy_forms',
