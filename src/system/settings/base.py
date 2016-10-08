@@ -147,10 +147,10 @@ LOGIN_REDIRECT_URL = '/'
 
 #DJANGO REGISTRATION REDUX SETTINGS
 REGISTRATION_OPEN = True
-ACCOUNT_ACTIVATION_DAYS = 2
+ACCOUNT_ACTIVATION_DAYS = 14
 
 # Settings for our pending email function in the clubmembers app
-PENDINGEMAIL_CONFIRMATION_DAYS = 2
+PENDINGEMAIL_CONFIRMATION_DAYS = 14
 
 
 ####################################### Internationalization #######################################
