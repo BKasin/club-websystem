@@ -4,6 +4,9 @@ CONFIG_FILE_IN_USE = get_file_name_only(__file__)  # Custom setting
 # Debug mode will help troubleshoot errors
 DEBUG = True
 
+# Custom settings for dynamically-generated config files
+PROJECT_NAME = PROJECT_NAME+'-development'
+
 # List all remote IPs you will use to access the website for dev purposes
 # This allows django.template.context_processors.debug to work
 INTERNAL_IPS = ['127.0.0.1', '10.0.2.2']

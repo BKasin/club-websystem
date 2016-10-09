@@ -33,15 +33,26 @@ class Command(BaseCommand):
 		# Load the template file
 		with open(template_file, 'r') as file:
 			contents = file.read()
-		self.stdout.write("Loaded template '{}'".format(template_file))
+		self.stdout.write("Loaded template: {}".format(template_file))
 
 		# Render the template
 		output = Template(contents).render(context)
 
-		# Output the rendered results
-		with open(output_file, 'w') as file:
-			file.write(output)
-		self.stdout.write("    Rendered to '{}'".format(output_file))
+		# Load existing output file if it exists
+		existing_output = None
+		try:
+			with open(output_file, 'r') as file:
+				existing_output = file.read()
+		except:
+			pass
+
+		# Render the new output file, but only write it to disk if it has changed
+		if output != existing_output:
+			with open(output_file, 'w') as file:
+				file.write(output)
+			self.stdout.write("    Updated: {}".format(output_file))
+		else:
+			self.stdout.write("    No change: {}".format(output_file))
 
 
 	def handle(self, *args, **options):
@@ -62,9 +73,11 @@ class Command(BaseCommand):
 		with open(definition_file, 'r') as file:
 			contents = file.read()
 		output = Template(contents).render(context)
+		self.stdout.write("Loaded definition file: {}".format(definition_file))
 
 		# Loop through each line
 		lines = output.split("\n")
+		num_configs = 0
 		for line in lines:
 			# Skip any that aren't key=value format
 			line = line.strip()
@@ -74,3 +87,7 @@ class Command(BaseCommand):
 			if len(parts) != 2:
 				continue
 			self._generate_config_file(parts[0].strip(), parts[1].strip(), context)
+			num_configs += 1
+
+		if num_configs==0:
+			self.stderr.write("No dynamic configs defined")
