@@ -49,6 +49,11 @@ INSTALLED_APPS = [
   # our core (list it first, so we have complete authority to override templates and static files in other apps)
   'system',
 
+  # simple management commands
+  'django_rotate_secret_key',
+  'django_maint_mode_toggle',
+  'django_generate_dynamic_configs',
+
   # bootstrap the admin (must be before django.contrib.admin)
   'django_admin_bootstrapped',
 

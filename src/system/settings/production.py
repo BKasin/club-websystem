@@ -13,14 +13,13 @@ HTTPS_ENABLED = False
 DEBUG = False
 
 # Import key from an external file, so it doesn't get included in version control
-key_file = os.path.join(CONF_DIR, 'secretkey.txt')
+SECRET_KEY_FILE = os.path.join(CONF_DIR, 'secretkey.txt')
 try:
-  with open(key_file, 'r') as f:
+  with open(SECRET_KEY_FILE, 'r') as f:
     SECRET_KEY = f.read().strip()
 except:
   SECRET_KEY = '*** NOT CONFIGURED ***'
-  with open(key_file, 'w') as f:
-    f.write(SECRET_KEY)
+  print("WARNING: the SECRET_KEY setting has not yet been configured!")
 
 
 # Restrict host/domain names

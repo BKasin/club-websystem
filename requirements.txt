@@ -11,5 +11,10 @@ html2text
 lockfile
 pbr
 Pillow
+
+# Non-pypi packages
+-e ../django-generate-dynamic-configs/
+-e ../django-maint-mode-toggle/
+-e ../django-rotate-secret-key/
 uWSGI
 wheel
