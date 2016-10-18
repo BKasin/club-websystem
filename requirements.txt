@@ -14,9 +14,13 @@ django-registration-redux
 django-versatileimagefield				# Dependencies: Pillow
 CommonMark
 html2text
-Pillow
 
 # Non-pypi packages
 -e ../django-generate-dynamic-configs/
 -e ../django-maint-mode-toggle/
 -e ../django-rotate-secret-key/
+
+# Dependencies
+Pillow
+lockfile
+django-model-utils
