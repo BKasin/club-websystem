@@ -1,20 +1,22 @@
-CommonMark~=0.5.4
-Django~=1.8.0
+# Include an external constraints file to limit versions where needed
+-c constraints.txt
+
+# Core
+Django
+uWSGI
+
+# Other
 django-admin-bootstrapped
 django-crispy-forms
-django-mailer
-django-model-utils
-django-quiz-app
+django-mailer							# Dependencies: lockfile
+django-quiz-app							# Dependencies: Pillow, django-model-utils
 django-registration-redux
-django-versatileimagefield
+django-versatileimagefield				# Dependencies: Pillow
+CommonMark
 html2text
-lockfile
-pbr
 Pillow
 
 # Non-pypi packages
 -e ../django-generate-dynamic-configs/
 -e ../django-maint-mode-toggle/
 -e ../django-rotate-secret-key/
-uWSGI
-wheel
