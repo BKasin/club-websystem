@@ -2,10 +2,10 @@ from .base import *
 CONFIG_FILE_IN_USE = get_file_name_only(__file__)  # Custom setting
 
 # Custom settings for dynamically-generated config files
-UWSGI_PORT = 9002
+UWSGI_PORT = 9001
 HTTP_PORT = 80
 HTTPS_PORT = 443
-HTTPS_ENABLED = False
+HTTPS_ENABLED = True
 
 ############################################## Basics ##############################################
 

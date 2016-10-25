@@ -15,14 +15,14 @@ cd $(dirname $0)
 settings_file="$(./whichenv)"
 
 # Build command string
-port=$1
-[[ $port == "" ]] && port=9000
-cmd="python manage.py runserver 0.0.0.0:$port --settings=system.settings.$settings_file"
-echo -e "${clr_success}${cmd}${clr_reset}\n"
+cmd1="export DJANGO_SETTINGS_MODULE=system.settings.$settings_file"
+cmd2="uwsgi --ini=../conf/uwsgi.ini"
+echo -e "${clr_success}${cmd1}\n${cmd2}${clr_reset}\n"
 
 # Run the command if we're in the right environment
-if [[ "$settings_file" != "development" ]]; then
-	echo -e "${clr_error}Django's development server should only be run in a development environment.${clr_reset}"
+if [[ "$settings_file" == "development" ]]; then
+	echo -e "${clr_error}The UWSGI server should only be used for staging and production environments.${clr_reset}"
 	exit
 fi
-$cmd
+$cmd1
+$cmd2

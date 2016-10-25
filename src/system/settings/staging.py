@@ -1,11 +1,9 @@
 from .production import *
 CONFIG_FILE_IN_USE = get_file_name_only(__file__)  # Custom setting
 
-DEBUG = True
-
 # Custom settings for dynamically-generated config files
 PROJECT_NAME = PROJECT_NAME+'-staging'
-UWSGI_PORT = 9001
+UWSGI_PORT = 9002
 HTTP_PORT = 81
 HTTPS_PORT = 444
 
