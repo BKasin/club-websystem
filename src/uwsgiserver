@@ -16,7 +16,7 @@ settings_file="$(./whichenv)"
 
 # Build command string
 cmd1="export DJANGO_SETTINGS_MODULE=system.settings.$settings_file"
-cmd2="uwsgi --ini=../conf/uwsgi.ini"
+cmd2="uwsgi --ini=../conf/generated/uwsgi.ini"
 echo -e "${clr_success}${cmd1}\n${cmd2}${clr_reset}\n"
 
 # Run the command if we're in the right environment

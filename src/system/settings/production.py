@@ -13,7 +13,7 @@ HTTPS_ENABLED = True
 DEBUG = False
 
 # Import key from an external file, so it doesn't get included in version control
-SECRET_KEY_FILE = os.path.join(CONF_DIR, 'secretkey.txt')
+SECRET_KEY_FILE = os.path.join(CONF_DIR, 'secret', 'secretkey.txt')
 try:
   with open(SECRET_KEY_FILE, 'r') as f:
     SECRET_KEY = f.read().strip()

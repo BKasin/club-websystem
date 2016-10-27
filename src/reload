@@ -2,7 +2,7 @@
 
 cd $(dirname $0)
 
-touch ../conf/uwsgi.reload
+touch ../data/uwsgi.reload
 echo "Triggered reload, now running 'tail -f ../data/uwsgi.log' for 10 seconds..."
 
 # This line is bash-specific command
