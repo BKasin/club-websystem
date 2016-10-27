@@ -13,7 +13,7 @@ class MemberAdmin(UserAdmin):
 
   # Fields to show when editing a user
   fieldsets = (
-    ('Authentication', {'fields': ('username', 'password', 'pin_hash', 'last_login',)}),
+    ('Authentication', {'fields': ('username', 'password', 'pin_hash', 'date_joined', 'last_login',)}),
     ('Personal', {'fields': ('name_first', 'name_last', 'coyote_id',)}),
     ('Contact', {'fields': ('email', 'email_pending', 'phone', 'texting_ok',)}),
     ('Photo', {'fields': ('photo',)}),
@@ -21,6 +21,7 @@ class MemberAdmin(UserAdmin):
     ('Other', {'fields': ('shirt_size',)}),
     ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions',)}),
   )
+  readonly_fields = ('date_joined',)
 
   # Fields that should use a split selected & unselected interface, instead of the default Ctrl+Click to multi-select
   filter_horizontal = ('groups', 'user_permissions',)
@@ -33,11 +34,12 @@ class MemberAdmin(UserAdmin):
   }),)
 
   # Fields that show on the admin page as columns
-  list_display = ('username', 'name_first', 'name_last', 'coyote_id', 'email', 'phone', 'is_active', 'is_staff')
+  list_display = ('username', 'name_first', 'name_last', 'coyote_id', 'email', 'phone', 'is_active', 'is_staff', 'date_joined', 'last_login')
 
   # Filters available along the right side
   list_filter = (
     'groups',
+    'date_joined', 'last_login',
     'is_active', 'is_staff',
     'acad_major', 'acad_minor', 'acad_concentration', 'acad_grad_qtr',
   )
@@ -46,7 +48,7 @@ class MemberAdmin(UserAdmin):
   search_fields = ('username', 'name_first', 'name_last', 'coyote_id', 'email', 'phone')
 
   # Default sort order of the list
-  ordering = ('name_last', 'name_first',)
+  ordering = ('-date_joined', 'name_last', 'name_first',)
 
 
 
