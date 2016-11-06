@@ -34,12 +34,12 @@ class MemberAdmin(UserAdmin):
   }),)
 
   # Fields that show on the admin page as columns
-  list_display = ('username', 'name_first', 'name_last', 'coyote_id', 'email', 'phone', 'is_active', 'is_staff', 'date_joined', 'last_login')
+  list_display = ('username', 'name_first', 'name_last', 'coyote_id', 'email', 'is_active', 'is_staff', 'date_joined')
 
   # Filters available along the right side
   list_filter = (
     'groups',
-    'date_joined', 'last_login',
+    'date_joined',
     'is_active', 'is_staff',
     'acad_major', 'acad_minor', 'acad_concentration', 'acad_grad_qtr',
   )
