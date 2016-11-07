@@ -22,9 +22,6 @@ except:
   print("WARNING: the SECRET_KEY setting has not yet been configured!")
 
 
-# Restrict host/domain names
-ALLOWED_HOSTS = ['www.' + DOMAIN_NAME]
-
 ############################################# Modules ##############################################
 
 # Make django cache the templates to increase speed (still testing this one; not ready for production yet)
@@ -70,7 +67,7 @@ MAILER_EMAIL_BACKEND = EMAIL_BACKEND
 EMAIL_BACKEND = 'mailer.backend.DbBackend'
 
 # All outbound email will have this as the From: header, unless overridden
-DEFAULT_FROM_EMAIL = '"Information Security Club" <support@infosec-csusb.org>'
+DEFAULT_FROM_EMAIL = '"Information Security Club" <support@' + DOMAIN_NAME + '>'
 
 # Messages submitted through the contact page will be sent to these addresses
 GENERIC_CONTACT_EMAIL = ['csusb.infosec.club@gmail.com']
@@ -85,7 +82,8 @@ SITE_ID = 8001
 ############################################### URLs ###############################################
 
 # Restrict connections to a list of hosts (required if DEBUG=False)
-ALLOWED_HOSTS = ['www.infosec-csusb.org']
+ALLOWED_HOSTS = ['www.' + DOMAIN_NAME, DOMAIN_NAME]
+PREPEND_WWW = True
 
 
 ############################################## Misc. ###############################################
