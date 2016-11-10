@@ -16,6 +16,7 @@ urlpatterns = [
   # URLConfs from apps
   url(r'^events/', include('events.urls')),
   url(r'^member/', include('clubmembers.urls')),
+  url(r'^membership/', include('membership.urls')),
 
   # Django apps
   url(r'^admin/', include(admin.site.urls)),

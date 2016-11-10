@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Memberships | {{ block.super }}{% endblock %}
+
+{% block content %}
+<h1>Memberships</h1>
+
+<h2>All</h2>
+<ul>
+{% for member in members %}
+<li>{{member.list}}, {{member.most_recent_membership}} - {{ member }}</li>
+{% endfor %}
+</ul>
+
+{% endblock %}

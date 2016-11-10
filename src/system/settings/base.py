@@ -75,6 +75,7 @@ INSTALLED_APPS = [
   # our apps
   'clubdata',
   'clubmembers',
+  'membership',
   'contentblocks',
   'events',
   'regbackend',
