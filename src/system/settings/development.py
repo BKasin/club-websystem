@@ -55,3 +55,26 @@ SITE_ID = 8001
 STATIC_URL = '/static/'
 
 ############################################## Misc. ###############################################
+
+LOGGING = {
+	'version': 1,
+  'disable_existing_loggers': False,
+  'handlers': {
+    'console': {
+      'level': 'DEBUG',
+      'class': 'logging.StreamHandler',
+    },
+    'file': {
+      'level': 'DEBUG',
+      'class': 'logging.FileHandler',
+      'filename': os.path.join(DATA_DIR, 'django.log'),
+    },
+  },
+  'loggers': {
+    'django.db.backends': {
+      'level': 'DEBUG',
+      'handlers': ['console'],
+      'propagate': True,
+    },
+  },
+}
