@@ -23,23 +23,11 @@ DATABASES = {
 ############################################## Email ###############################################
 
 # Pretend email server for development use
-if True:
+if False:
   EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
   EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-  EMAIL_FILE_PATH = os.path.join(os.path.dirname(BASE_DIR), 'emails_filebased')
-
-# All outbound email will have this as the From: header, unless overridden
-DEFAULT_FROM_EMAIL = '"Test Club" <support@test-club.org>'
-
-# Messages submitted through the contact page will be sent to these addresses
-GENERIC_CONTACT_EMAIL = ['test-club@gmail.com']
-
-
-############################################### Site ###############################################
-
-# Settings for django.sites
-SITE_ID = 8001
+  EMAIL_FILE_PATH = os.path.join(DATA_DIR, 'emails')
 
 
 ############################################### URLs ###############################################
