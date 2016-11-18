@@ -1,4 +1,11 @@
-#Django~=1.8.0	# Don't automatically update Django to 1.9, since that would require extensive testing
-Django<1.8.16	# Their security fix for CVE-2016-9014 requires us now to always specify ALLOWED_HOSTS. But how do we then make the development settings file generic for the various developers?
-CommonMark<0.6	# Holding this one back due to undiagnosed errors in v0.6
-django-registration-redux<1.4	# Holding this one back due to conflicts with their commit eb8fb0f29f on 2/19/16
+# Don't automatically update Django to 1.9, since that would require extensive testing
+#Django~=1.8.0
+
+# This version fixes CVE-2016-9014 by requiring us now to always specify ALLOWED_HOSTS. This is a problem for us, since we access the development VM from an 'external' IP that may be different depending on which which dev environment is in use. We can hold this back temporarily, since this version is not critical.
+Django<1.8.16
+
+# This version causes errors that I have not gotten around to diagnosing yet
+CommonMark<0.6
+
+# This version 'cleanup up' some function definitions (commit eb8fb0f29f 2/19/16), but broke compatibility with our code in the process. Hold it back until we can find a solution.
+django-registration-redux<1.4
