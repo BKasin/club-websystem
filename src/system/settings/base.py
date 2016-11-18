@@ -124,22 +124,26 @@ AUTHENTICATION_BACKENDS = ('clubmembers.models.MemberAuthenticationBackend',)
 
 ############################################## Email ###############################################
 
-# Specify the default backend
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = '127.0.0.1'
-EMAIL_PORT = 25
-
 # All outbound email will have this as the From: header, unless overridden
-#DEFAULT_FROM_EMAIL = ''      # You must define this in your custom settings file
+DEFAULT_FROM_EMAIL = '"Information Security Club" <support@' + DOMAIN_NAME + '>'
+
+# Use the same email for error messages sent to admins specified in ADMINS
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 # Messages submitted through the contact page will be sent to these addresses
-#GENERIC_CONTACT_EMAIL = []   # You must define this in your custom settings file
+GENERIC_CONTACT_EMAIL = ['csusb.infosec.club@gmail.com']
+
+# People who should receive error notifications
+ADMINS = (
+  ('Kenneth', 'kenpilot@gmail.com'),
+)
+MANAGERS = ADMINS
 
 
 ############################################### Site ###############################################
 
 # Settings for django.sites
-SITE_ID = 1 # You must define this in your custom settings file
+SITE_ID = 8001
 
 
 ############################################### URLs ###############################################

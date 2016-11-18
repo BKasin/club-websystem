@@ -2,25 +2,28 @@
 -c constraints.txt
 
 # Core
-Django
-uWSGI
+Django									# https://docs.djangoproject.com/en/1.8/releases/
+uWSGI									# https://uwsgi-docs.readthedocs.io/en/latest/#stable-releases
 
 # Other
-django-admin-bootstrapped
-django-crispy-forms
-django-mailer							# Dependencies: lockfile
-django-quiz-app							# Dependencies: Pillow, django-model-utils
-django-registration-redux
-django-versatileimagefield				# Dependencies: Pillow
-CommonMark
-html2text
+django-admin-bootstrapped				# https://github.com/django-admin-bootstrapped/django-admin-bootstrapped/blob/master/CHANGELOG
+django-crispy-forms						# https://github.com/django-crispy-forms/django-crispy-forms/blob/dev/CHANGELOG.md
+django-mailer							# https://github.com/pinax/django-mailer/blob/master/CHANGES.rst
+	# Dependencies: lockfile
+django-quiz-app							# No changelog available
+	# Dependencies: Pillow, django-model-utils
+django-registration-redux				# https://github.com/macropin/django-registration/blob/master/CHANGELOG
+django-versatileimagefield				# https://github.com/respondcreate/django-versatileimagefield/releases
+	# Dependencies: Pillow
+CommonMark								# https://github.com/rtfd/CommonMark-py/blob/master/CHANGELOG.md
+html2text								# https://github.com/Alir3z4/html2text/blob/master/ChangeLog.rst
 
 # Non-pypi packages
 -e ../django-generate-dynamic-configs/
 -e ../django-maint-mode-toggle/
 -e ../django-rotate-secret-key/
 
-# Dependencies
+# Dependencies (we list them here so we'll obtain the latest versions; otherwise, those packages that specify == instead of >= will force pip to use an older version)
 Pillow
 lockfile
 django-model-utils

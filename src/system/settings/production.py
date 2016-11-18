@@ -62,27 +62,26 @@ CONN_MAX_AGE = 300
 
 ############################################## Email ###############################################
 
-# Configure django-mailer as the primary backend, and configure it to use our original backend
-MAILER_EMAIL_BACKEND = EMAIL_BACKEND
+# All mail will be queued with django-mailer instead of sent right away
 EMAIL_BACKEND = 'mailer.backend.DbBackend'
 
-# All outbound email will have this as the From: header, unless overridden
-DEFAULT_FROM_EMAIL = '"Information Security Club" <support@' + DOMAIN_NAME + '>'
+# Configure django-mailer to use the original backend when manage.py send_mail is called
+MAILER_EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-# Messages submitted through the contact page will be sent to these addresses
-GENERIC_CONTACT_EMAIL = ['csusb.infosec.club@gmail.com']
-
-
-############################################### Site ###############################################
-
-# Settings for django.sites
-SITE_ID = 8001
+# Forward emails through postfix installed on the same server
+EMAIL_HOST = '127.0.0.1'
+EMAIL_PORT = 25
 
 
 ############################################### URLs ###############################################
 
-# Restrict connections to a list of hosts (required if DEBUG=False)
-ALLOWED_HOSTS = ['www.' + DOMAIN_NAME, DOMAIN_NAME]
+# Specify the domain names Django will respond to
+ALLOWED_HOSTS = [
+  'www.' + DOMAIN_NAME,
+  DOMAIN_NAME,  # This one is required for PREPEND_WWW to work
+]
+
+# If the domain name doesn't start with "www." then add it
 PREPEND_WWW = True
 
 

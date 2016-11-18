@@ -1,2 +1,8 @@
-Django~=1.8.0		# Don't automatically Django, since that would require extensive testing
-CommonMark~=0.5.0	# Holding this one back due to undiagnosed errors in v0.6
+# Don't automatically update Django to 1.9, since that would require extensive testing
+Django~=1.8.0
+
+# This version causes errors that I have not gotten around to diagnosing yet
+CommonMark<0.6
+
+# This version 'cleanup up' some function definitions (commit eb8fb0f29f 2/19/16), but broke compatibility with our code in the process. Hold it back until we can find a solution.
+django-registration-redux<1.4
