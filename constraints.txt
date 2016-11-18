@@ -1,8 +1,5 @@
 # Don't automatically update Django to 1.9, since that would require extensive testing
-#Django~=1.8.0
-
-# This version fixes CVE-2016-9014 by requiring us now to always specify ALLOWED_HOSTS. This is a problem for us, since we access the development VM from an 'external' IP that may be different depending on which which dev environment is in use. We can hold this back temporarily, since this version is not critical.
-Django<1.8.16
+Django~=1.8.0
 
 # This version causes errors that I have not gotten around to diagnosing yet
 CommonMark<0.6

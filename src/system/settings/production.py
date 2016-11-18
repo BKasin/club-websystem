@@ -81,8 +81,13 @@ SITE_ID = 8001
 
 ############################################### URLs ###############################################
 
-# Restrict connections to a list of hosts (required if DEBUG=False)
-ALLOWED_HOSTS = ['www.' + DOMAIN_NAME, DOMAIN_NAME]
+# Specify the domain names Django will respond to
+ALLOWED_HOSTS = [
+  'www.' + DOMAIN_NAME,
+  DOMAIN_NAME,  # This one is required for PREPEND_WWW to work
+]
+
+# If the domain name doesn't start with "www." then add it
 PREPEND_WWW = True
 
 

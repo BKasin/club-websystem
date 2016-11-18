@@ -7,10 +7,6 @@ DEBUG = True
 # Custom settings for dynamically-generated config files
 PROJECT_NAME = PROJECT_NAME+'-development'
 
-# List all remote IPs you will use to access the website for dev purposes
-# This allows django.template.context_processors.debug to work
-INTERNAL_IPS = ['127.0.0.1', '10.0.2.2']
-
 # Must have some key, so we'll just use bogus one
 SECRET_KEY = '00000000000000000000000000000000000000000000000000'
 
@@ -47,6 +43,12 @@ SITE_ID = 8001
 
 
 ############################################### URLs ###############################################
+
+# Specify the domain names Django will respond to
+ALLOWED_HOSTS = [
+  'localhost', '127.0.0.1',   # Access from same machine
+  '192.168.0.26', '192.168.224.102',  # Development virtual machine
+]
 
 # Since manage.py runserver does not understand the static files layout we
 # use at production (static files and django served out of the same root, but using
