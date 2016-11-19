@@ -27,7 +27,7 @@ class RegistrationView(BaseRegistrationView):
   success_url = 'registration_complete'
 
   @transaction.atomic   # A database transaction is used for this entire function
-  def register(self, request, form):
+  def register(self, form):
     # Create a new Member instance
     if hasattr(form, 'save'):
       # FYI: This skips our custom MemberManager
@@ -43,7 +43,7 @@ class RegistrationView(BaseRegistrationView):
     # We also use a different template name (instead of activation_email.html), so
     #   send_template_email won't inadvertently pull in the original template
     if self.send_email:
-      send_template_email(request,
+      send_template_email(self.request,
         template_prefix='registration/registration_complete_email',
         to=[new_user_instance.email],
         extra_context={
@@ -56,29 +56,30 @@ class RegistrationView(BaseRegistrationView):
     # Send the signal that a user has been registered
     signals.user_registered.send(sender=self.__class__,
                    user=new_user_instance,
-                   request=request)
+                   request=self.request)
     return new_user_instance
 
-  def registration_allowed(self, request):
+  def registration_allowed(self):
     return getattr(settings, 'REGISTRATION_OPEN', True)
 
 
 class ActivationView(BaseActivationView):
   @transaction.atomic   # A database transaction is used for this entire function
-  def activate(self, request, activation_key):
+  def activate(self, *args, **kwargs):
     # Attempt to activate the user
+    activation_key = kwargs.get('activation_key', '')
     activated_user = RegistrationProfile.objects.activate_user(activation_key)
 
     if activated_user:
       # Automatically log the user in
-      signals.login_user(self, activated_user, request)
+      signals.login_user(self, activated_user, self.request)
 
       # Send the signal that user has been activated
       signals.user_activated.send(sender=self.__class__,
                     user=activated_user,
-                    request=request)
+                    request=self.request)
 
     return activated_user
 
-  def get_success_url(self, request, user):
+  def get_success_url(self, user):
     return ('registration_activation_complete', (), {})
