@@ -95,6 +95,7 @@ MIDDLEWARE_CLASSES = [
   'django.contrib.messages.middleware.MessageMiddleware',
   'django.middleware.clickjacking.XFrameOptionsMiddleware',
   'django.middleware.security.SecurityMiddleware',
+  'django.middleware.common.BrokenLinkEmailsMiddleware',  # Notify MANAGERS of 404 errors, when DEBUG=False and the request includes a referer. Must come before any middleware that intercepts 404 errors, such as LocaleMiddleware or FlatpageFallbackMiddleware
 ]
 
 # Templates

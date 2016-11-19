@@ -3,6 +3,3 @@ Django~=1.8.0
 
 # This version causes errors that I have not gotten around to diagnosing yet
 CommonMark<0.6
-
-# This version 'cleanup up' some function definitions (commit eb8fb0f29f 2/19/16), but broke compatibility with our code in the process. Hold it back until we can find a solution.
-django-registration-redux<1.4
