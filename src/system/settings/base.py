@@ -31,6 +31,9 @@ DATA_DIR = os.path.join(os.path.dirname(BASE_DIR), 'data')
 PROJECT_NAME = 'infosec'
 DOMAIN_NAME = 'infosec-csusb.org'
 
+# Messages submitted through the contact page will be sent to these addresses
+GENERIC_CONTACT_EMAIL = ['csusb.infosec.club@gmail.com']
+
 
 ############################################## Basics ##############################################
 
@@ -127,17 +130,16 @@ AUTHENTICATION_BACKENDS = ('clubmembers.models.MemberAuthenticationBackend',)
 # All outbound email will have this as the From: header, unless overridden
 DEFAULT_FROM_EMAIL = '"Information Security Club" <support@' + DOMAIN_NAME + '>'
 
-# Use the same email for error messages sent to admins specified in ADMINS
-SERVER_EMAIL = DEFAULT_FROM_EMAIL
-
-# Messages submitted through the contact page will be sent to these addresses
-GENERIC_CONTACT_EMAIL = ['csusb.infosec.club@gmail.com']
-
-# People who should receive error notifications
-ADMINS = (
+# People who should receive website error notifications
+ADMINS = [
   ('Kenneth', 'kenpilot@gmail.com'),
-)
+]
+
+# Separate list of admins who should receive broken link notifications
 MANAGERS = ADMINS
+
+# Emails sent to ADMINS and MANAGERS will come from this address
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 
 ############################################### Site ###############################################

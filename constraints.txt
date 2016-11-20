@@ -1,4 +1,4 @@
-# Don't automatically update Django to 1.9, since that would require extensive testing
+# Hold back major Django upgrades until full testing is completed
 Django~=1.8.0
 
 # This version causes errors that I have not gotten around to diagnosing yet
