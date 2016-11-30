@@ -245,7 +245,6 @@ LOGGING = {
       'formatter': 'verbose',
     },
     'log_file': {
-      'filters': ['require_debug_true'],
       'class': 'logging.FileHandler',
       'filename': os.path.join(DATA_DIR, 'django.log'),
       'formatter': 'verbose',
