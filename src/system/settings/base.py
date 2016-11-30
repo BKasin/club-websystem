@@ -221,6 +221,68 @@ TIME_INPUT_FORMATS = (
 
 ############################################## Misc. ###############################################
 
+LOGGING = {
+  'version': 1,
+  'disable_existing_loggers': True,
+  'formatters': {
+    'verbose': {
+      # See https://docs.python.org/3/library/logging.html#logrecord-attributes
+      'format': '%(asctime)s %(levelname)s %(name)s %(filename)s:%(lineno)s............... %(message)s'
+    },
+  },
+  'filters': {
+    'require_debug_false': {
+      '()': 'django.utils.log.RequireDebugFalse',
+    },
+    'require_debug_true': {
+      '()': 'django.utils.log.RequireDebugTrue',
+    },
+  },
+  'handlers': {
+    'console': {
+      'filters': ['require_debug_true'],
+      'class': 'logging.StreamHandler',
+      'formatter': 'verbose',
+    },
+    'log_file': {
+      'filters': ['require_debug_true'],
+      'class': 'logging.FileHandler',
+      'filename': os.path.join(DATA_DIR, 'django.log'),
+      'formatter': 'verbose',
+    },
+    'mail_admins': {
+      'level': 'ERROR',
+      'filters': ['require_debug_false'],
+      'class': 'django.utils.log.AdminEmailHandler'
+    }
+  },
+  'loggers': {
+    'django': {
+      'level': 'WARNING',
+      'handlers': ['console', 'log_file'],
+    },
+    'django.request': {
+      'level': 'ERROR',
+      'handlers': ['mail_admins'],
+      'propagate': True,
+    },
+    # 'django.security': {
+    #   'level': 'ERROR',
+    #   'handlers': ['mail_admins'],
+    #   'propagate': True,
+    # },
+    'django.db.backends': {
+      'level': 'DEBUG',
+      'handlers': ['log_file'],
+      'propagate': False,
+    },
+    'py.warnings': {
+      'level': 'DEBUG',
+      'handlers': ['console'],
+    },
+  }
+}
+
 # Customize the CSS classses for the django.contrib.messages framework
 from django.contrib import messages
 MESSAGE_TAGS = {
