@@ -19,9 +19,9 @@ CommonMark								# https://github.com/rtfd/CommonMark-py/blob/master/CHANGELOG.
 html2text								# https://github.com/Alir3z4/html2text/blob/master/ChangeLog.rst
 
 # Non-pypi packages
--e ../django-generate-dynamic-configs/
--e ../django-maint-mode-toggle/
--e ../django-rotate-secret-key/
+-e custom-packages/django-generate-dynamic-configs/
+-e custom-packages/django-maint-mode-toggle/
+-e custom-packages/django-rotate-secret-key/
 
 # Dependencies (we list them here so we'll obtain the latest versions; otherwise, those packages that specify == instead of >= will force pip to use an older version)
 Pillow

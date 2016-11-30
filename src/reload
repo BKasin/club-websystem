@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-cd $(dirname $0)
-
-touch ../data/uwsgi.reload
-echo "Triggered reload, now running 'tail -f ../data/uwsgi.log' for 10 seconds..."
-
-# This line is bash-specific command
-( cmdpid=$BASHPID; (sleep 10; kill $cmdpid) & exec tail -f -n 0 ../data/uwsgi.log )

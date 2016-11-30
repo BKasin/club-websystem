@@ -1,6 +1,6 @@
 {% extends "base_simple.html" %}
 
 {% block content2 %}
-<h1>Error Occured</h1>
-<p class='lead'>Error 404 has occurred: Page not found.</h1>
+<h1>Error 404</h1>
+<p class='lead'>The page <a href="{{request_path}}">{{request_path}}</a> does not exist on this website. The details have been emailed to the site admins.</h1>
 {% endblock %}

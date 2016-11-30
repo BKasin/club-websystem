@@ -151,7 +151,11 @@ def calendarpage(request):
 ####################################################################################################
 
 def event_view(request, eventid):
-  event = Event.objects.get(id=eventid)
+  try:
+    event = Event.objects.get(id=eventid)
+  except Event.DoesNotExist:
+    raise Http404("That event no longer exists.")
+
   context = {
     'event': event
   }
