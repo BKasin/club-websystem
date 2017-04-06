@@ -13,14 +13,6 @@ from .models import Block
 from .forms import BlockForm
 
 NAVBAR_BLOCK_ID = 'navbar'
-navdata = None
-
-def get_navdata():
-  return navdata
-
-def set_navdata(nd):
-  global navdata
-  navdata = nd
 
 
 
@@ -97,12 +89,6 @@ def contentblock_edit(request, page):
 
     if form.is_valid():
       form.instance.save()
-
-      # If we just changed the navbar, trigger a refresh of it
-      # TODO: we need a more club-neutral way of doing this
-      if page == NAVBAR_BLOCK_ID:
-        global navdata
-        navdata = None
 
       messages.success(request, "Changes made successfully.")
       return redirect(contentblock_view, page)

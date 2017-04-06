@@ -3,7 +3,7 @@ import fnmatch
 
 from contentblocks.models import Block
 
-from contentblocks.views import NAVBAR_BLOCK_ID, get_navdata, set_navdata, wrap_blob_with_editablediv, render_blob
+from contentblocks.views import NAVBAR_BLOCK_ID, wrap_blob_with_editablediv, render_blob
 
 from django import template
 register = template.Library()
@@ -35,20 +35,16 @@ def _generate_navbar(nd, curpage):
 
 @register.simple_tag(takes_context=True)
 def generate_navbar(context):
-  navdata = get_navdata()
-  if navdata is None:
-    try:
-      # Because Block has a custom manager, the results are filtered already even before adding this filter
-      contentblock = Block.objects.get(uniquetitle=NAVBAR_BLOCK_ID, datatype=Block.JSON)
-    except Block.DoesNotExist:
-      navdata = [['{Cannot find block with a unique title of "%s"}' % NAVBAR_BLOCK_ID, '/']]
+  try:
+    # Because Block has a custom manager, the results are filtered already even before adding this filter
+    contentblock = Block.objects.get(uniquetitle=NAVBAR_BLOCK_ID, datatype=Block.JSON)
+  except Block.DoesNotExist:
+    navdata = [['{Cannot find block with a unique title of "%s"}' % NAVBAR_BLOCK_ID, '/']]
 
-    try:
-      navdata = json.loads(contentblock.blob)
-    except:
-      navdata = [['{Error processing block "%s"}' % NAVBAR_BLOCK_ID, '/']]
-
-    set_navdata(navdata)
+  try:
+    navdata = json.loads(contentblock.blob)
+  except:
+    navdata = [['{Error processing block "%s"}' % NAVBAR_BLOCK_ID, '/']]
 
   return _generate_navbar(navdata, context.request.path_info)
 
