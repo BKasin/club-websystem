@@ -38,11 +38,9 @@ def generate_navbar(context):
   try:
     # Because Block has a custom manager, the results are filtered already even before adding this filter
     contentblock = Block.objects.get(uniquetitle=NAVBAR_BLOCK_ID, datatype=Block.JSON)
+    navdata = json.loads(contentblock.blob)
   except Block.DoesNotExist:
     navdata = [['{Cannot find block with a unique title of "%s"}' % NAVBAR_BLOCK_ID, '/']]
-
-  try:
-    navdata = json.loads(contentblock.blob)
   except:
     navdata = [['{Error processing block "%s"}' % NAVBAR_BLOCK_ID, '/']]
 
