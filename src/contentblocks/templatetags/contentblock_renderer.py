@@ -52,15 +52,22 @@ def generate_navbar(context):
 
 @register.simple_tag(takes_context=True)
 def load_contentblock(context, uniquetitle):
+  user = context.request.user
+  user_auth = user.is_authenticated()
+
   try:
     contentblock = Block.objects.get(uniquetitle=uniquetitle)
-  except Block.DoesNotExist:
-    blob = '{Cannot find block with a unique title of "%s"}' % uniquetitle
-  else:
-    blob = render_blob(contentblock.blob, contentblock.datatype)
 
-  user = context.request.user
-  if user.is_authenticated() and user.may_edit_blocks:
+    # Certain blocks may be marked as auth_required
+    if contentblock.auth_required and not user_auth:
+      blob = "<span style='color:red'>ERROR: You must be logged in to view this block</span>"
+    else:
+      blob = render_blob(contentblock.blob, contentblock.datatype)
+
+  except Block.DoesNotExist:
+    blob = "<span style='color:red'>ERROR: Cannot find block with a unique title of '%s'</span>" % uniquetitle
+
+  if user_auth and user.may_edit_blocks:
     blob = wrap_blob_with_editablediv(blob, uniquetitle)
 
   return blob

@@ -52,6 +52,9 @@ class Block(models.Model):
   published             = models.BooleanField('Published?',
                             help_text='If true, this content will be visible to regular users of the site. False will hide the content without needing to delete it.',
                             default=False)
+  auth_required         = models.BooleanField('Login required?',
+                            help_text='If true, user must be logged in to view this block.',
+                            default=False)
   created_date          = models.DateTimeField('Created on',
                             null=True,  # Blank is stored as Null
                             blank=True, # Field is optional

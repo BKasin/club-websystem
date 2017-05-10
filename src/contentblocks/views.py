@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import redirect_to_login
 from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.http import Http404
@@ -17,10 +19,7 @@ NAVBAR_BLOCK_ID = 'navbar'
 
 
 def wrap_blob_with_editablediv(blob, uniquetitle):
-  return ("<div class='editableblock'><a class='editblockbutton' href='" +
-          reverse('contentblock_edit', args=(uniquetitle,)) +
-          "'>edit this block</a>" +
-          blob + "</div>")
+  return ("<div class='editableblock'><a class='editblockbutton' href='{}'>edit the '{}' block</a>".format(reverse('contentblock_edit', args=(uniquetitle,)), uniquetitle) + blob + "</div>")
 
 def render_blob(blob, datatype):
   # This must return a string that is ready to insert directly into the page, without any further escaping
@@ -46,22 +45,30 @@ def render_blob(blob, datatype):
 
 def contentblock_view(request, page):
   user = request.user
-  may_edit = request.user.is_authenticated() and request.user.may_edit_blocks
+  user_auth = user.is_authenticated()
+  may_edit = user_auth and user.may_edit_blocks
 
   try:
     # Because Block has a custom manager, the results are filtered already even before adding this filter
     contentblock = Block.objects.get(uniquetitle=page)
   except Block.DoesNotExist:
     if may_edit:
+      # Only users who may edit blocks may create a new one
       return redirect(contentblock_edit, page)
     else:
       raise Http404()
 
+  # If a block is not yet published, the user should not even know it exists
   if not contentblock.published:
     if may_edit:
       messages.warning(request, "This block has not yet been published.")
     else:
       raise Http404()
+
+  # Certain blocks may be marked as auth_required
+  if contentblock.auth_required and not user_auth:
+    messages.warning(request, "You must be logged in to view that page.")
+    return redirect_to_login(request.path)
 
   blob = render_blob(contentblock.blob, contentblock.datatype)
   if may_edit: blob = wrap_blob_with_editablediv(blob, page)
@@ -75,7 +82,8 @@ def contentblock_view(request, page):
 
 @login_required
 def contentblock_edit(request, page):
-  if not request.user.may_edit_blocks:  # No need to check is_authenticated, since login is already required
+  user = request.user
+  if not user.may_edit_blocks:  # No need to check is_authenticated here, since @login_required is already specified above
     raise Http404("You do not have privileges to edit content blocks.")
 
   if request.method == 'POST':
@@ -88,6 +96,8 @@ def contentblock_edit(request, page):
     form = BlockForm(request.POST, instance=contentblock)
 
     if form.is_valid():
+      # messages.success(request, str(form.instance.available_to_groups) + " <-> " + str(form.cleaned_data['available_to_groups']))
+      # form.instance.available_to_groups = form.cleaned_data['available_to_groups']
       form.instance.save()
 
       messages.success(request, "Changes made successfully.")
