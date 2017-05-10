@@ -5,4 +5,7 @@ from .models import Block
 class BlockForm(forms.ModelForm):
   class Meta:
     model = Block
-    fields = ['datatype', 'published', 'blob']
+    fields = ['description', 'datatype', 'published', 'blob']
+    widgets = {
+      'description':forms.TextInput(attrs={'size': '100'}),
+    }

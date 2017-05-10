@@ -18,12 +18,26 @@
   {% endfor %}
   {% endif %}
 
+  <h1>Content Block '{{ uniquetitle }}'</h1>
+
   <form method="post">
     {% csrf_token %}
 
-    <div class="row">
+    <div class="row form-group">
+      <div class="control-label col-md-2">{{ form.description.label_tag }}</div>
+      <div class="controls col-md-10">{{ form.description }}</div>
+    </div>
+    <div class="row form-group">
+      <div class="control-label col-md-2">{{ form.published.label_tag }}</div>
+      <div class="controls col-md-10">{{ form.published }}</div>
+    </div>
+    <div class="row form-group">
+      <div class="control-label col-md-2">{{ form.datatype.label_tag }}</div>
+      <div class="controls col-md-10">{{ form.datatype }}</div>
+    </div>
+    <div class="row form-group">
       <div class="col-xs-6 showresizehandle">
-        <p class="sv-heading">{{ form.datatype }}&nbsp;&nbsp;&nbsp;{{ form.published.label_tag }} {{ form.published }}</p>
+        <p class="sv-heading">Source</p>
         <textarea name="blob" id="sv-textarea" class="sv-textarea">{{ blob|safe }}</textarea>
       </div>
       <div class="col-xs-6">
