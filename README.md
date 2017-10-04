@@ -2,6 +2,8 @@
 
 The aim of the project is to build a new website for the CSUSB Information Security Club. It will provide a central place to manage club membership, club events and RSVPs, projects and project sign-ups, etc. We are building this loosely according to the original database diagram located on Google Drive here (you must have the free [Draw.IO](https://www.draw.io) plugin installed first): [New Multi-club Website - Data Model](https://drive.google.com/file/d/0B2eX_I6RM9VBVVdONXYyRGpzSWs/view?usp=sharing). If you would like write-access to this diagram, contact Kenneth Johnson.
 
+This project is currently running at <https://www.infosec-csusb.org/>, though it will eventually be replaced by a [new version](https://github.com/InfoSec-CSUSB/Website-v2) based on Django 1.11 instead of Django 1.8.
+
 ## Key goals
 
 * Easy to contribute to - At any time, an interested person should be able to easily clone the repo, use this Readme to setup a development environment, and begin contributing right away. So keep this Readme up-to-date.
@@ -73,7 +75,7 @@ Make a directory and clone the repository into it:
 
     $ mkdir ~/club-websystem
     $ cd ~/club-websystem
-    $ git clone git@github.com:Alofoxx/club-websystem.git ./
+    $ git clone git@github.com:InfoSec-CSUSB/club-websystem.git ./
 
 Before you do anything else, create a virtual environment and activate it:
 
