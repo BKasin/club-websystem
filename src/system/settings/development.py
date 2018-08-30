@@ -5,7 +5,8 @@ CONFIG_FILE_IN_USE = get_file_name_only(__file__)  # Custom setting
 DEBUG = True
 
 # Custom settings for dynamically-generated config files
-PROJECT_NAME = PROJECT_NAME+'-development'
+PROJECT_NAME = 'infosec-development'
+FRIENDLY_NAME = 'InfoSec Club Website (Development)'
 
 # Must have some key, so we'll just use bogus one
 SECRET_KEY = '00000000000000000000000000000000000000000000000000'
