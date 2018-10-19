@@ -10,11 +10,11 @@ from .views import home, events_preview, about_contact
 urlpatterns = [
   # Main site
   url(r'^$', home, {'event_preview_days': 14}, name='home'),
-  url(r'^events_preview/$', events_preview, {'event_preview_days': 14}, name='eventspreview'),
+  # url(r'^events_preview/$', events_preview, {'event_preview_days': 14}, name='eventspreview'),
   url(r'^about_contact/$', about_contact, name='about_contact'),
 
   # URLConfs from apps
-  url(r'^events/', include('events.urls')),
+  # url(r'^events/', include('events.urls')),
   url(r'^member/', include('clubmembers.urls')),
 
   # Django apps
