@@ -12,11 +12,12 @@ from clubmembers.models import Member
 from events.models import Event
 
 def _get_preview_of_events(event_preview_days):
-  if not event_preview_days: event_preview_days=7
-  now = timezone.now()
-  range_start = now - timedelta(days=1)
-  range_end = now + timedelta(days=event_preview_days)
-  return Event.objects.filter(start__gte=range_start, start__lte=range_end)
+  return []
+  # if not event_preview_days: event_preview_days=7
+  # now = timezone.now()
+  # range_start = now - timedelta(days=1)
+  # range_end = now + timedelta(days=event_preview_days)
+  # return Event.objects.filter(start__gte=range_start, start__lte=range_end)
 
 def home(request, event_preview_days=None):
   context = {
@@ -26,12 +27,13 @@ def home(request, event_preview_days=None):
   return render(request, "home.html", context)
 
 def events_preview(request, event_preview_days=None):
-  context = {
-    'events': _get_preview_of_events(event_preview_days),
-    'event_preview_days': event_preview_days,
-    'is_popup': True,
-  }
-  return render(request, "home_eventpreview1.html", context)
+  raise Http404()
+  # context = {
+  #   'events': _get_preview_of_events(event_preview_days),
+  #   'event_preview_days': event_preview_days,
+  #   'is_popup': True,
+  # }
+  # return render(request, "home_eventpreview1.html", context)
 
 def about_contact(request):
   if request.user.is_anonymous():

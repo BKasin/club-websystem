@@ -12,11 +12,6 @@
   </div>
   <div class="col-md-6">
     {% load_contentblock 'home_part3' %}
-    <h2>Upcoming events</h2>
-    <div class="panel panel-default">
-      {% include 'home_eventpreview2.html' %}
-      <div class='eventtablefooter'>View this list on its <a href="{% url 'eventspreview' %}">own page.</a> Visit our <a href="{% url 'events' %}">Events Page</a> for the full list.</div>
-    </div>
   </div>
 </div>
 {% endblock %}
