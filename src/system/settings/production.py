@@ -77,12 +77,11 @@ EMAIL_PORT = 25
 
 # Specify the domain names Django will respond to
 ALLOWED_HOSTS = [
-  'www.' + DOMAIN_NAME,
-  DOMAIN_NAME,  # This one is required for PREPEND_WWW to work
+  DOMAIN_NAME,
 ]
 
 # If the domain name doesn't start with "www." then add it
-PREPEND_WWW = True
+PREPEND_WWW = False
 
 
 ############################################## Misc. ###############################################

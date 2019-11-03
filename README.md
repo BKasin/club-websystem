@@ -1,8 +1,8 @@
 # About this project
 
-The aim of the project is to build a new website for the CSUSB Information Security Club. It will provide a central place to manage club membership, club events and RSVPs, projects and project sign-ups, etc. We are building this loosely according to the original database diagram located on Google Drive here (you must have the free [Draw.IO](https://www.draw.io) plugin installed first): [New Multi-club Website - Data Model](https://drive.google.com/file/d/0B2eX_I6RM9VBVVdONXYyRGpzSWs/view?usp=sharing). If you would like write-access to this diagram, contact Kenneth Johnson.
+The aim of the project is to build a new website for the Cyber Intelligence & Security Organization (formerly known as the Information Security Club). It will provide a central place to manage club membership, club events and RSVPs, projects and project sign-ups, etc. We are building this loosely according to the original database diagram located on Google Drive here (you must have the free [Draw.IO](https://www.draw.io) plugin installed first): [New Multi-club Website - Data Model](https://drive.google.com/file/d/0B2eX_I6RM9VBVVdONXYyRGpzSWs/view?usp=sharing). If you would like write-access to this diagram, contact Kenneth Johnson.
 
-This project is currently running at <https://www.ciso-csusb.org/>, though it will eventually be replaced by a [new version](https://github.com/InfoSec-CSUSB/Website-v2) based on Django 1.11 instead of Django 1.8.
+This project is currently running at <https://ciso-csusb.org/>, though it will eventually be replaced by a [new version](https://github.com/InfoSec-CSUSB/Website-v2) based on Django 1.11 instead of Django 1.8.
 
 ## Key goals
 
@@ -11,7 +11,7 @@ This project is currently running at <https://www.ciso-csusb.org/>, though it wi
 * Well-documented - This codebase will be handed down to future students, so it must be self-explanatory. Use code comments liberally.
 * Secure - As a cybersecurity club, our website must have security included from the beginning. So while programming, keep your hacker hat on!
 * Cross-platform and mobile-friendly - While programming, test your code on multiple browsers, operating systems, and devices.
-* Supports multiple clubs - While it is currently used only by the CISO club (formerly InfoSec Club), it originally was intended as a multi-club codebase, with independent front-ends (templates, static content) for each club. Let's keep it that way, in case a club wants to join in the future.
+* Supports multiple clubs - While it is currently used only by the Cyber Intelligence & Security Organization, it originally was intended as a multi-club codebase, with independent front-ends (templates, static content) for each club. Let's keep it that way, in case a club wants to join in the future.
 
 ## Developers
 
@@ -146,15 +146,6 @@ Each development day should start by activating your virtual environment and pul
     $ cd ~/club-websystem/src
     $ source ../bin/activate
 
-
-
-
-
-
-
-
-
-
 When you pull the recent commits, you have two choices...
 
 1. Pulling the latest database from the repo will overwrite any changes you may have made. If you would rather keep the data in your database and simply use migrations to upgrade the models, do this as your `git pull`:
@@ -168,15 +159,6 @@ When you pull the recent commits, you have two choices...
 
         $ mv -i db.sqlite3{,.bak}
         $ git pull
-
-
-
-
-
-
-
-
-
 
 After pulling recent changes, you should verify the latest migrations have been applied:
 
@@ -203,7 +185,7 @@ For development purposes only, the Django superuser is `root` with a password of
 
 ## Web server
 
-[Need details]
+The current web server is hosted on Digital Ocean, using a static IP. DNS records are managed on CloudFlare by a current CSUSB student.
 
 ## Setting up the production environment
 
@@ -222,7 +204,78 @@ If you get a "decoder zip not available" when uploading a new profile photo, tak
     $ pip uninstall Pillow
     $ pip install --no-cache-dir $(grep ^Pillow requirements.txt)
 
-For email to work in production, you must add django-mailer to the server's crontab. Since django-mailer puts all outbound email into the database instead of immediately sending it, we use its `send_mail` command to actually send out the emails. Any email that fails will be changed to priority `deferred`. The `retry_deferred` command will mark all deferred emails as medium priority, so the next pass of `send_mail` will attempt to send them again.
+## SSL certificates
+
+SSL is provided for free by Let's Encrypt:
+
+    # apt-get install certbot python-certbot-nginx
+
+This will install a systemd service (/lib/systemd/system/certbot.service) and a timer (/lib/systemd/system/certbot.timer) to run that service twice daily. If any certificate in /etc/letsencrypt/renewal/ can be renewed, it will do so and save the new certificates into /etc/letsencrypt/live/. So all we had to do was perform the initial certificate generation and then point the nginx config files to these certificates:
+
+    # certbot certonly --nginx -d ciso-csusb.org
+    # certbot certonly --nginx --cert-name redirects -d www.ciso-csusb.org,ciso-csusb.com,www.ciso-csusb.com,infosec-csusb.org,www.infosec-csusb.org
+
+## Email
+
+Rather than manage the email reputation for ciso-csusb.org ourselves, we're using SendGrid.com as a relay for all outgoing email. Django sends email to 127.0.0.1:25, and postfix forwards that on to SendGrid. The recipient will see the emails as coming from one of SendGrid's dynamic IPs instead of ours.
+
+First, we configured the Sender Authentication feature of SendGrid, which involved adding a few DNS records so they'll handle the SPF, DKIM, DMARC, etc. and allow us to send emails *from* @ciso-csusb.org without (hopefully) getting marked as spam.
+
+Then we gave postfix a username/password to our SendGrid account. Actually, it's just an API key with permissions to send email and do nothing else:
+
+    # nano /etc/postfix/main.cf
+    ...
+    smtp_sasl_auth_enable = yes
+    smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+    smtp_sasl_security_options = noanonymous
+    smtp_sasl_tls_security_options = noanonymous
+    smtp_tls_security_level = encrypt
+    header_size_limit = 4096000
+    relayhost = [smtp.sendgrid.net]:587
+    ...
+
+    # nano /etc/postfix/sasl_passwd
+    [smtp.sendgrid.net]:587 apikey:<API_KEY_HERE>
+
+    # postmap /etc/postfix/sasl_passwd
+    # systemctl restart postfix
+
+We also have several aliases configured in postfix, so officers don't have to hand out their real email addresses:
+
+    # nano /etc/postfix/main.cf
+    ...
+    virtual_alias_maps = hash:/etc/postfix/virtual
+    ...
+
+    # nano /etc/postfix/virtual
+    ...
+    president@ciso-csusb.org        real.email@here.com
+    vice-president@ciso-csusb.org   real.email@here.com
+    ...
+    officers@ciso-csusb.org         president@ciso-csusb.org, vice-president@ciso-csusb.org, ...
+    ...
+    support@ciso-csusb.org          real.email@here.com
+    webadmin@ciso-csusb.org         real.email@here.com
+    ...
+
+    # postmap /etc/postfix/virtual
+    # systemctl restart postfix
+
+Lastly, we're starting to use SendGrid's [Unsubscribe Groups](https://sendgrid.com/docs/ui/sending-email/unsubscribe-groups/) to allow recipients to unsubscribe from emails by type rather than resorting to a global unsubscribe from all ciso-csusb.org emails. To do this, our Django app will need to use SendGrid's Email API to send emails with some X headers to identify the groups. For now, though, we've simply configured postfix to send *all* emails using a particular group ID:
+    
+
+    # nano /etc/postfix/master.cf
+    ...
+    smtp      unix  -       -       n       -       -       smtp
+        -o smtp_header_checks=regexp:/etc/postfix/sendgrid_header
+    ...
+
+    # nano /etc/postfix/sendgrid_header
+    /^From:/ PREPEND X-SMTPAPI: {"asm_group_id": 15278}
+
+    # systemctl restart postfix
+
+Within Django, we use django-mailer to manage outgoing email. For email to work in production, you must add django-mailer to the server's crontab. Since django-mailer puts all outbound email into the database instead of immediately sending it, we use its `send_mail` command to actually send out the emails. Any email that fails will be changed to priority `deferred`. The `retry_deferred` command will mark all deferred emails as medium priority, so the next pass of `send_mail` will attempt to send them again.
 
 As an example, to send mail each 5 minutes and queue the failed emails for retry each 20 minutes, add this to the server's crontab:
 
