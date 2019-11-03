@@ -2,7 +2,7 @@
 
 The aim of the project is to build a new website for the CSUSB Information Security Club. It will provide a central place to manage club membership, club events and RSVPs, projects and project sign-ups, etc. We are building this loosely according to the original database diagram located on Google Drive here (you must have the free [Draw.IO](https://www.draw.io) plugin installed first): [New Multi-club Website - Data Model](https://drive.google.com/file/d/0B2eX_I6RM9VBVVdONXYyRGpzSWs/view?usp=sharing). If you would like write-access to this diagram, contact Kenneth Johnson.
 
-This project is currently running at <https://www.infosec-csusb.org/>, though it will eventually be replaced by a [new version](https://github.com/InfoSec-CSUSB/Website-v2) based on Django 1.11 instead of Django 1.8.
+This project is currently running at <https://www.ciso-csusb.org/>, though it will eventually be replaced by a [new version](https://github.com/InfoSec-CSUSB/Website-v2) based on Django 1.11 instead of Django 1.8.
 
 ## Key goals
 
@@ -11,7 +11,7 @@ This project is currently running at <https://www.infosec-csusb.org/>, though it
 * Well-documented - This codebase will be handed down to future students, so it must be self-explanatory. Use code comments liberally.
 * Secure - As a cybersecurity club, our website must have security included from the beginning. So while programming, keep your hacker hat on!
 * Cross-platform and mobile-friendly - While programming, test your code on multiple browsers, operating systems, and devices.
-* Supports multiple clubs - While it is currently used only by the InfoSec Club, it originally was intended as a multi-club codebase, with independent front-ends (templates, static content) for each club. Let's keep it that way, in case a club wants to join in the future.
+* Supports multiple clubs - While it is currently used only by the CISO club (formerly InfoSec Club), it originally was intended as a multi-club codebase, with independent front-ends (templates, static content) for each club. Let's keep it that way, in case a club wants to join in the future.
 
 ## Developers
 

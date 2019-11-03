@@ -29,8 +29,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 CONF_DIR = os.path.join(os.path.dirname(BASE_DIR), 'conf')
 DATA_DIR = os.path.join(os.path.dirname(BASE_DIR), 'data')
 PROJECT_NAME = 'infosec'
-FRIENDLY_NAME = 'InfoSec Club Website'
-DOMAIN_NAME = 'infosec-csusb.org'
+FRIENDLY_NAME = 'CISO Website'
+DOMAIN_NAME = 'ciso-csusb.org'
 
 # Messages submitted through the contact page will be sent to these addresses
 GENERIC_CONTACT_EMAIL = ['csusb.infosec.club@gmail.com']
