@@ -6,7 +6,7 @@ DEBUG = True
 
 # Custom settings for dynamically-generated config files
 PROJECT_NAME = 'infosec-development'
-FRIENDLY_NAME = 'InfoSec Club Website (Development)'
+FRIENDLY_NAME = 'CISO Website (Development)'
 
 # Must have some key, so we'll just use bogus one
 SECRET_KEY = '00000000000000000000000000000000000000000000000000'
